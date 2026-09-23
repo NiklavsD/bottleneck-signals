@@ -53,7 +53,7 @@
         rows.forEach((r) => body.appendChild(r));
       };
       th.addEventListener("click", sort);
-      th.addEventListener("keydown", (e) => { if (e.key === "Enter") sort(); });
+      th.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); sort(); } });
     });
   });
 

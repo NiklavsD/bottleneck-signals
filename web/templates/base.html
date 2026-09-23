@@ -27,10 +27,10 @@
     <div class="head-actions">
       <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle dark mode">{{ icon('moon') }}</button>
       {% if user %}
-      <a class="btn btn-ghost btn-sm" href="/alerts">{{ icon('bell') }}<span class="btn-label">My alerts</span></a>
+      <a class="btn btn-ghost btn-sm" href="/alerts" aria-label="My alerts">{{ icon('bell') }}<span class="btn-label">My alerts</span></a>
       {% else %}
       <a class="btn btn-ghost btn-sm" href="/login" aria-label="Sign in">{{ icon('sign-in') }}<span class="btn-label">Sign in</span></a>
-      <a class="btn btn-primary btn-sm" href="/signup">{{ icon('bell') }}<span class="btn-label">Get alerts</span></a>
+      <a class="btn btn-primary btn-sm" href="/signup" aria-label="Get alerts">{{ icon('bell') }}<span class="btn-label">Get alerts</span></a>
       {% endif %}
       <button class="icon-btn menu-btn" type="button" data-menu aria-label="Menu" aria-expanded="false">{{ icon('list') }}</button>
     </div>

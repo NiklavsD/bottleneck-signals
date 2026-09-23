@@ -4,7 +4,7 @@
 {%- set c = t.call -%}
 {%- if c == "IN" or c == "OVERWEIGHT" -%}<span class="chip good">{{ "In" if c == "IN" else "Overweight" }}</span>
 {%- elif c == "OUT" or c == "UNDERWEIGHT" -%}<span class="chip bad">{{ "Out" if c == "OUT" else "Underweight" }}</span>
-{%- else -%}<span class="chip" title="{{ t.reason or 'No validated rule yet' }}">Monitoring</span>{%- endif -%}
+{%- else -%}<span class="chip-quiet" title="{{ t.reason or 'No validated rule yet' }}">Monitoring</span>{%- endif -%}
 {%- endmacro %}
 
 {% macro pressure_word(C) -%}

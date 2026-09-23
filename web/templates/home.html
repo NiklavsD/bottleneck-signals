@@ -12,7 +12,7 @@
       <p class="lede">Every AI boom turns into a hardware problem: memory, optics, transformers, actuators. Leadtime tracks those bottlenecks in free, dated data like supplier revenue, customs flows and import values. It turns them into tested calls and keeps a public record nobody can edit.</p>
       <div class="hero-cta">
         <a class="btn btn-accent" href="/map">Open the bottleneck map {{ icon('arrow-right') }}</a>
-        <a class="btn btn-ghost" href="{{ '/alerts' if user else '/signup' }}">{{ icon('bell') }} Alerts on Discord, Telegram, SMS…</a>
+        <a class="btn btn-ghost" href="{{ '/alerts' if user else '/signup' }}">{{ icon('bell') }} Get alerts</a>
       </div>
       <div class="hero-proof">
         <div><b>{{ themes|length }}</b><span>bottlenecks tracked</span></div>
@@ -32,7 +32,7 @@
         <span style="text-align:right">{{ call_chip(t) }}</span>
       </a>
       {% endfor %}
-      <div class="board-foot"><span>Bar = pressure index (tight right, easing left)</span><a href="/map">All {{ themes|length }} {{ icon('arrow-right') }}</a></div>
+      <div class="board-foot"><span class="legend-note">Bar = pressure index (tight right, easing left)</span><a href="/map">All {{ themes|length }} {{ icon('arrow-right') }}</a></div>
     </div>
   </div>
 </section>
@@ -85,10 +85,9 @@
       <p class="eyebrow">Alerts where you already are</p>
       <h3 style="margin:10px 0 14px">A message when a call changes or a new bottleneck lights up</h3>
       <div class="legend" style="gap:18px;color:var(--ink-2);font-size:.95rem">
-        <span>{{ icon('discord-logo') }} Discord</span><span>{{ icon('telegram-logo') }} Telegram</span><span>{{ icon('chat-text') }} SMS</span>
-        <span>{{ icon('envelope-simple') }} Email</span><span>{{ icon('device-mobile') }} Phone push</span><span>{{ icon('slack-logo') }} Slack</span><span>{{ icon('webhooks-logo') }} Webhook</span>
+        {% for ch in channels_live %}<span>{{ icon(ch.icon) }} {{ ch.name }}</span>{% endfor %}
       </div>
-      <p class="small muted" style="margin:16px 0">Choose the bottlenecks you care about and how sensitive discovery alerts should be. Free while in beta.</p>
+      <p class="small muted" style="margin:16px 0">Choose the bottlenecks you care about and how sensitive discovery alerts should be. Free while in beta.{% if channels_soon %} Coming soon: {{ channels_soon|map(attribute='name')|join(', ') }}.{% endif %}</p>
       <a class="btn btn-primary" href="{{ '/alerts' if user else '/signup' }}">{{ icon('bell') }} Set up alerts</a>
     </div>
   </div>

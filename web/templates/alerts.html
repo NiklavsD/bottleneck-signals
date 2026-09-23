@@ -35,7 +35,7 @@
     <h2 style="font-size:1.45rem;margin-bottom:12px">Add a channel</h2>
     <div class="channel-grid">
     {% set on = [] %}{% set off = [] %}{% for ch in catalog %}{% if status[ch.kind].available %}{% set _ = on.append(ch) %}{% else %}{% set _ = off.append(ch) %}{% endif %}{% endfor %}
-    {% for ch in on + off %}{% set st = status[ch.kind] %}
+    {% for ch in on %}{% set st = status[ch.kind] %}
       <div class="card ch {{ '' if st.available else 'off' }}">
         <div class="ch-head">{{ icon(ch.icon) }}<b>{{ ch.name }}</b>{% if not st.available %}<span class="chip" style="margin-left:auto">Coming soon</span>{% endif %}</div>
         <p class="small muted" style="margin:0">{{ ch.help }}</p>
@@ -51,10 +51,11 @@
             <button class="btn btn-ghost btn-sm" type="submit" style="justify-self:start">{{ icon('plus') }} Add &amp; send test</button>
           </form>
           {% endif %}
-        {% else %}<p class="small" style="margin:0;color:var(--ink-3)">Not switched on yet on this server.</p>{% endif %}
+        {% endif %}
       </div>
     {% endfor %}
     </div>
+    {% if off %}<p class="small soon-line">Coming soon: {{ off|map(attribute="name")|join(", ") }}.</p>{% endif %}
   </section>
 
   <section style="margin-bottom:34px">

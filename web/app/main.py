@@ -123,8 +123,10 @@ def check_csrf(request: Request, token: str):
 def render(request: Request, name: str, **ctx):
     tok = csrf_token(request)
     d = snap()
+    st = notify.channel_status()
     ctx.update(request=request, user=current_user(request), csrf=tok, snap=d, site_url=SITE_URL,
-               path=request.url.path)
+               path=request.url.path, channels_live=[c for c in CHANNELS if st[c["kind"]]["available"]],
+               channels_soon=[c for c in CHANNELS if not st[c["kind"]]["available"]])
     resp = templates.TemplateResponse(request, name, ctx)
     if request.cookies.get("lt_csrf") != tok:
         resp.set_cookie("lt_csrf", tok, httponly=True, samesite="lax", secure=SITE_URL.startswith("https"))
