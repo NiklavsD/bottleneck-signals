@@ -12,3 +12,4 @@ data/processed/prices.csv
 # local env
 .venv/
 __pycache__/
+work/
