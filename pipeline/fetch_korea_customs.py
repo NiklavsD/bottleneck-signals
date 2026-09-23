@@ -31,7 +31,19 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 PROC = ROOT / "data/processed"
 START = "2013-01"
-HS_CODES = ("8542", "854232")
+VALIDATED_CODES = ("8542", "854232")  # cross-checked against UN Comtrade
+
+
+def _theme_codes():
+    """Korean export HS codes listed in config/themes.json (added to the fetch, not to the Comtrade validation)."""
+    import json as _json
+    p = Path(__file__).resolve().parent.parent / "config/themes.json"
+    if not p.exists():
+        return ()
+    return tuple(sorted({c["hs"] for t in _json.load(open(p)) for c in t.get("kr_export_hs", [])}))
+
+
+HS_CODES = tuple(dict.fromkeys(VALIDATED_CODES + _theme_codes()))
 
 
 def utc_now():
@@ -181,7 +193,7 @@ def validate(rows, reference):
         print(f"Reference has missing months (excluded from comparisons): {missing_reference}",
               file=sys.stderr)
     comparisons, summary = [], {}
-    for hs in HS_CODES:
+    for hs in VALIDATED_CODES:
         signed, absolute, differences = [], [], []
         for month in expected:
             if month not in ref:

@@ -1,0 +1,1927 @@
+[
+  {
+    "slug": "lithography-fab-tools",
+    "name": "Lithography & fab tools",
+    "universe": "ai",
+    "layer": "Wafer fabrication",
+    "thesis": "Leading-edge wafer output depends on scarce lithography systems, deposition and etch tools, and metrology capacity. Tool assembly, installation and process qualification take longer than chip demand can change.",
+    "watch": "Longer equipment delivery and installation queues, rising service utilization, and sustained orders for leading-edge fab equipment.",
+    "invalidate": "Cancelled tool orders, shorter installation queues, and lower fab utilization despite installed capacity growth.",
+    "basket": [
+      {
+        "ticker": "ASML",
+        "name": "ASML Holding",
+        "country": "NL",
+        "role": "EUV and DUV lithography systems"
+      },
+      {
+        "ticker": "AMAT",
+        "name": "Applied Materials",
+        "country": "US",
+        "role": "Deposition and materials engineering tools"
+      },
+      {
+        "ticker": "LRCX",
+        "name": "Lam Research",
+        "country": "US",
+        "role": "Etch and deposition process equipment"
+      },
+      {
+        "ticker": "KLAC",
+        "name": "KLA",
+        "country": "US",
+        "role": "Wafer inspection and process control"
+      },
+      {
+        "ticker": "8035.T",
+        "name": "Tokyo Electron",
+        "country": "JP",
+        "role": "Coat develop etch deposition tools"
+      },
+      {
+        "ticker": "ASM.AS",
+        "name": "ASM International",
+        "country": "NL",
+        "role": "Atomic layer deposition equipment"
+      },
+      {
+        "ticker": "3131.TWO",
+        "name": "Grand Process Technology",
+        "country": "TW",
+        "role": "Wet processing and cleaning equipment"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "3131",
+        "name": "Grand Process Technology"
+      },
+      {
+        "code": "3583",
+        "name": "Scientech"
+      }
+    ],
+    "us_import_hs6": [
+      {
+        "hs": "848620",
+        "desc": "Machines for manufacturing semiconductor devices or electronic integrated circuits; broad fab-equipment proxy."
+      }
+    ],
+    "kr_export_hs": [],
+    "benchmark": "SOXX"
+  },
+  {
+    "slug": "semiconductor-materials",
+    "name": "Semiconductor materials",
+    "universe": "ai",
+    "layer": "Fab consumables",
+    "thesis": "High-purity wafers, chemicals and contamination-control consumables must be qualified for each process. Expanding purification and crystal-growth capacity does not immediately create usable leading-edge supply.",
+    "watch": "Longer qualified-wafer lead times, higher materials prices, and accelerating consumable revenue alongside wafer starts.",
+    "invalidate": "Falling wafer utilization, excess inventories, and shorter qualification-adjusted material delivery times.",
+    "basket": [
+      {
+        "ticker": "ENTG",
+        "name": "Entegris",
+        "country": "US",
+        "role": "Ultrapure filtration and handling consumables"
+      },
+      {
+        "ticker": "4063.T",
+        "name": "Shin-Etsu Chemical",
+        "country": "JP",
+        "role": "Silicon wafers and photoresist materials"
+      },
+      {
+        "ticker": "3436.T",
+        "name": "SUMCO",
+        "country": "JP",
+        "role": "High purity silicon wafer production"
+      },
+      {
+        "ticker": "6488.TWO",
+        "name": "GlobalWafers",
+        "country": "TW",
+        "role": "Semiconductor silicon wafer manufacturing"
+      },
+      {
+        "ticker": "1560.TW",
+        "name": "KINIK",
+        "country": "TW",
+        "role": "Wafer reclaim and diamond conditioners"
+      },
+      {
+        "ticker": "3680.TWO",
+        "name": "Gudeng Precision Industrial",
+        "country": "TW",
+        "role": "Reticle and wafer contamination control"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "1560",
+        "name": "KINIK"
+      },
+      {
+        "code": "3680",
+        "name": "Gudeng Precision Industrial"
+      }
+    ],
+    "us_import_hs6": [
+      {
+        "hs": "381800",
+        "desc": "Doped chemical elements and compounds for electronics, in discs or wafers; broader than silicon wafer demand."
+      }
+    ],
+    "kr_export_hs": [],
+    "benchmark": "SOXX"
+  },
+  {
+    "slug": "foundry-logic",
+    "name": "Foundry logic",
+    "universe": "ai",
+    "layer": "Wafer fabrication",
+    "thesis": "Logic chips require qualified process capacity with acceptable yield, and the newest nodes are concentrated in very few fabs. Buildings alone cannot remove shortages of trained operators, installed tools and working process recipes.",
+    "watch": "Rising node-specific utilization, wafer pricing and capacity commitments, with sustained foundry revenue growth.",
+    "invalidate": "Falling utilization and wafer prices, order deferrals, or new qualified capacity exceeding wafer demand.",
+    "basket": [
+      {
+        "ticker": "TSM",
+        "name": "Taiwan Semiconductor Manufacturing",
+        "country": "TW",
+        "role": "Leading edge logic foundry capacity"
+      },
+      {
+        "ticker": "UMC",
+        "name": "United Microelectronics",
+        "country": "TW",
+        "role": "Mature node specialty logic foundry"
+      },
+      {
+        "ticker": "GFS",
+        "name": "GlobalFoundries",
+        "country": "KY",
+        "role": "Specialty logic and connectivity foundry"
+      },
+      {
+        "ticker": "INTC",
+        "name": "Intel",
+        "country": "US",
+        "role": "Logic fabrication and external foundry"
+      },
+      {
+        "ticker": "5347.TWO",
+        "name": "Vanguard International Semiconductor",
+        "country": "TW",
+        "role": "Specialty mature node foundry capacity"
+      },
+      {
+        "ticker": "6770.TW",
+        "name": "Powerchip Semiconductor Manufacturing",
+        "country": "TW",
+        "role": "Mature node logic foundry capacity"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "2330",
+        "name": "Taiwan Semiconductor Manufacturing"
+      },
+      {
+        "code": "2303",
+        "name": "United Microelectronics"
+      },
+      {
+        "code": "5347",
+        "name": "Vanguard International Semiconductor"
+      },
+      {
+        "code": "6770",
+        "name": "Powerchip Semiconductor Manufacturing"
+      }
+    ],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "SOXX"
+  },
+  {
+    "slug": "advanced-packaging-hbm",
+    "name": "Advanced packaging & HBM",
+    "universe": "ai",
+    "layer": "Compute & memory",
+    "thesis": "AI accelerators need high-yield HBM stacks and advanced packages that connect memory to logic. TSV processing, bonding, interposers and package testing can constrain shipments even when logic wafers are available.",
+    "watch": "Longer advanced-package reservations, rising HBM contract prices, and tighter bonding and package-test capacity.",
+    "invalidate": "HBM inventories rise, packaging reservations are released, and yields or new qualified lines remove delivery queues.",
+    "basket": [
+      {
+        "ticker": "000660.KS",
+        "name": "SK hynix",
+        "country": "KR",
+        "role": "High bandwidth memory stack production"
+      },
+      {
+        "ticker": "005930.KS",
+        "name": "Samsung Electronics",
+        "country": "KR",
+        "role": "HBM fabrication and advanced packaging"
+      },
+      {
+        "ticker": "MU",
+        "name": "Micron Technology",
+        "country": "US",
+        "role": "High bandwidth memory stack production"
+      },
+      {
+        "ticker": "ASX",
+        "name": "ASE Technology Holding",
+        "country": "TW",
+        "role": "Advanced semiconductor assembly and packaging"
+      },
+      {
+        "ticker": "AMKR",
+        "name": "Amkor Technology",
+        "country": "US",
+        "role": "Advanced outsourced packaging and test"
+      },
+      {
+        "ticker": "BESI.AS",
+        "name": "BE Semiconductor Industries",
+        "country": "NL",
+        "role": "Advanced die attach and hybrid bonding"
+      },
+      {
+        "ticker": "042700.KS",
+        "name": "Hanmi Semiconductor",
+        "country": "KR",
+        "role": "Thermocompression bonding equipment for HBM"
+      },
+      {
+        "ticker": "2449.TW",
+        "name": "King Yuan Electronics",
+        "country": "TW",
+        "role": "High performance chip testing capacity"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "3711",
+        "name": "ASE Technology Holding"
+      },
+      {
+        "code": "2449",
+        "name": "King Yuan Electronics"
+      },
+      {
+        "code": "6239",
+        "name": "Powertech Technology"
+      }
+    ],
+    "us_import_hs6": [],
+    "kr_export_hs": [
+      {
+        "hs": "854232",
+        "desc": "Electronic integrated circuits: memories; includes all memory types, not a separate HBM series."
+      }
+    ],
+    "benchmark": "SOXX"
+  },
+  {
+    "slug": "memory",
+    "name": "Memory",
+    "universe": "ai",
+    "layer": "Compute & memory",
+    "thesis": "DRAM and NAND supply depends on long fab cycles, process yields and allocation of wafer capacity to HBM. Storage drives and controller suppliers in this required basket are adjacent demand indicators rather than direct DRAM capacity.",
+    "watch": "Rising DRAM and NAND contract prices, lower supplier inventories, and stronger Taiwan memory and controller revenue.",
+    "invalidate": "Falling contract prices, rising inventory days, and wafer additions outpacing bit demand.",
+    "basket": [
+      {
+        "ticker": "MU",
+        "name": "Micron Technology",
+        "country": "US",
+        "role": "DRAM NAND and HBM manufacturing"
+      },
+      {
+        "ticker": "WDC",
+        "name": "Western Digital",
+        "country": "US",
+        "role": "Hard drive storage demand adjacency"
+      },
+      {
+        "ticker": "STX",
+        "name": "Seagate Technology Holdings",
+        "country": "IE",
+        "role": "Hard drive storage demand adjacency"
+      },
+      {
+        "ticker": "000660.KS",
+        "name": "SK hynix",
+        "country": "KR",
+        "role": "DRAM NAND and HBM manufacturing"
+      },
+      {
+        "ticker": "005930.KS",
+        "name": "Samsung Electronics",
+        "country": "KR",
+        "role": "DRAM NAND and HBM manufacturing"
+      },
+      {
+        "ticker": "2408.TW",
+        "name": "Nanya Technology",
+        "country": "TW",
+        "role": "Commodity and specialty DRAM fabrication"
+      },
+      {
+        "ticker": "2344.TW",
+        "name": "Winbond Electronics",
+        "country": "TW",
+        "role": "Specialty DRAM and flash fabrication"
+      },
+      {
+        "ticker": "2337.TW",
+        "name": "Macronix International",
+        "country": "TW",
+        "role": "NOR flash and specialty memory"
+      },
+      {
+        "ticker": "2451.TW",
+        "name": "Transcend Information",
+        "country": "TW",
+        "role": "Memory modules and storage products"
+      },
+      {
+        "ticker": "8299.TWO",
+        "name": "Phison Electronics",
+        "country": "TW",
+        "role": "NAND controllers and storage solutions"
+      },
+      {
+        "ticker": "3260.TWO",
+        "name": "ADATA Technology",
+        "country": "TW",
+        "role": "DRAM modules and NAND storage"
+      },
+      {
+        "ticker": "SNDK",
+        "name": "Sandisk",
+        "country": "US",
+        "role": "NAND flash and solid state storage"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "2408",
+        "name": "Nanya Technology"
+      },
+      {
+        "code": "2344",
+        "name": "Winbond Electronics"
+      },
+      {
+        "code": "2337",
+        "name": "Macronix International"
+      },
+      {
+        "code": "2451",
+        "name": "Transcend Information"
+      },
+      {
+        "code": "8299",
+        "name": "Phison Electronics"
+      },
+      {
+        "code": "3260",
+        "name": "ADATA Technology"
+      }
+    ],
+    "us_import_hs6": [],
+    "kr_export_hs": [
+      {
+        "hs": "854232",
+        "desc": "Electronic integrated circuits: memories; DRAM, NAND and other IC memories combined."
+      }
+    ],
+    "benchmark": "SOXX"
+  },
+  {
+    "slug": "storage",
+    "name": "Storage",
+    "universe": "ai",
+    "layer": "Persistent storage",
+    "thesis": "Data-center storage requires qualified NAND controllers, enterprise SSDs and high-capacity hard drives. Drive yields, controller qualification and disk component capacity limit delivered exabytes.",
+    "watch": "Rising enterprise SSD and nearline HDD prices, longer delivery times, and improving controller and module revenue.",
+    "invalidate": "Enterprise drive inventories build, price premiums fall, and qualified capacity exceeds storage demand.",
+    "basket": [
+      {
+        "ticker": "WDC",
+        "name": "Western Digital",
+        "country": "US",
+        "role": "Nearline hard disk drive production"
+      },
+      {
+        "ticker": "STX",
+        "name": "Seagate Technology Holdings",
+        "country": "IE",
+        "role": "High capacity hard drive production"
+      },
+      {
+        "ticker": "SNDK",
+        "name": "Sandisk",
+        "country": "US",
+        "role": "NAND flash and enterprise SSDs"
+      },
+      {
+        "ticker": "285A.T",
+        "name": "Kioxia Holdings",
+        "country": "JP",
+        "role": "NAND flash and enterprise SSDs"
+      },
+      {
+        "ticker": "8299.TWO",
+        "name": "Phison Electronics",
+        "country": "TW",
+        "role": "SSD controllers and firmware platforms"
+      },
+      {
+        "ticker": "2451.TW",
+        "name": "Transcend Information",
+        "country": "TW",
+        "role": "Industrial solid state storage products"
+      },
+      {
+        "ticker": "3260.TWO",
+        "name": "ADATA Technology",
+        "country": "TW",
+        "role": "Solid state drives and modules"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "8299",
+        "name": "Phison Electronics"
+      },
+      {
+        "code": "2451",
+        "name": "Transcend Information"
+      },
+      {
+        "code": "3260",
+        "name": "ADATA Technology"
+      }
+    ],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "QQQ"
+  },
+  {
+    "slug": "substrates-pcb",
+    "name": "Substrates & PCB",
+    "universe": "ai",
+    "layer": "Package & board",
+    "thesis": "Large accelerator packages and high-speed server boards need low-loss materials, fine traces and reliable multilayer fabrication. ABF substrate yields and high-layer-count PCB qualification restrict usable output.",
+    "watch": "Longer ABF and high-layer-count board lead times, firmer pricing, and growing material and substrate revenue.",
+    "invalidate": "Falling substrate utilization, easier laminate availability, and shorter board delivery times.",
+    "basket": [
+      {
+        "ticker": "3037.TW",
+        "name": "Unimicron Technology",
+        "country": "TW",
+        "role": "ABF substrates and advanced PCBs"
+      },
+      {
+        "ticker": "8046.TW",
+        "name": "Nan Ya Printed Circuit Board",
+        "country": "TW",
+        "role": "ABF package substrates and PCBs"
+      },
+      {
+        "ticker": "3189.TW",
+        "name": "Kinsus Interconnect Technology",
+        "country": "TW",
+        "role": "Fine pitch IC package substrates"
+      },
+      {
+        "ticker": "2383.TW",
+        "name": "Elite Material",
+        "country": "TW",
+        "role": "Low loss copper clad laminates"
+      },
+      {
+        "ticker": "2368.TW",
+        "name": "Gold Circuit Electronics",
+        "country": "TW",
+        "role": "High layer count server PCBs"
+      },
+      {
+        "ticker": "4062.T",
+        "name": "Ibiden",
+        "country": "JP",
+        "role": "High performance IC package substrates"
+      },
+      {
+        "ticker": "TTMI",
+        "name": "TTM Technologies",
+        "country": "US",
+        "role": "Advanced multilayer and high frequency PCBs"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "3037",
+        "name": "Unimicron Technology"
+      },
+      {
+        "code": "8046",
+        "name": "Nan Ya Printed Circuit Board"
+      },
+      {
+        "code": "3189",
+        "name": "Kinsus Interconnect Technology"
+      },
+      {
+        "code": "2383",
+        "name": "Elite Material"
+      },
+      {
+        "code": "2368",
+        "name": "Gold Circuit Electronics"
+      },
+      {
+        "code": "6274",
+        "name": "Taiwan Union Technology"
+      }
+    ],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "SOXX"
+  },
+  {
+    "slug": "photonics-optics",
+    "name": "Photonics & optics",
+    "universe": "ai",
+    "layer": "Optical links",
+    "thesis": "High-speed cluster links depend on qualified lasers, optical engines and precision optical assembly. Yield and packaging at higher transmission rates can restrict usable transceiver supply.",
+    "watch": "Longer high-speed optical module lead times, rising laser orders, and broad-based Taiwan optical component revenue growth.",
+    "invalidate": "Transceiver inventories rise, component delivery times shorten, and price erosion exceeds manufacturing cost reductions.",
+    "basket": [
+      {
+        "ticker": "COHR",
+        "name": "Coherent",
+        "country": "US",
+        "role": "Lasers and optical transceiver components"
+      },
+      {
+        "ticker": "CIEN",
+        "name": "Ciena",
+        "country": "US",
+        "role": "Coherent optical transport network systems"
+      },
+      {
+        "ticker": "FN",
+        "name": "Fabrinet",
+        "country": "KY",
+        "role": "Precision optical module contract manufacturing"
+      },
+      {
+        "ticker": "AAOI",
+        "name": "Applied Optoelectronics",
+        "country": "US",
+        "role": "Data center optical transceiver manufacturing"
+      },
+      {
+        "ticker": "LITE",
+        "name": "Lumentum Holdings",
+        "country": "US",
+        "role": "Optical lasers and photonic components"
+      },
+      {
+        "ticker": "VIAV",
+        "name": "VIAVI Solutions",
+        "country": "US",
+        "role": "Optical network test and measurement"
+      },
+      {
+        "ticker": "2455.TW",
+        "name": "Visual Photonics Epitaxy",
+        "country": "TW",
+        "role": "Compound semiconductor optical epitaxial wafers"
+      },
+      {
+        "ticker": "3163.TWO",
+        "name": "Browave",
+        "country": "TW",
+        "role": "Passive fiber optic communications components"
+      },
+      {
+        "ticker": "3363.TWO",
+        "name": "FOCI Fiber Optic Communications",
+        "country": "TW",
+        "role": "Fiber optic components and packaging"
+      },
+      {
+        "ticker": "3081.TWO",
+        "name": "LandMark Optoelectronics",
+        "country": "TW",
+        "role": "Laser epitaxial wafers for communications"
+      },
+      {
+        "ticker": "2345.TW",
+        "name": "Accton Technology",
+        "country": "TW",
+        "role": "Switch platforms with optical connectivity"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "3081",
+        "name": "LandMark Optoelectronics"
+      },
+      {
+        "code": "2455",
+        "name": "Visual Photonics Epitaxy"
+      },
+      {
+        "code": "3163",
+        "name": "Browave"
+      },
+      {
+        "code": "3363",
+        "name": "FOCI Fiber Optic Communications"
+      },
+      {
+        "code": "2345",
+        "name": "Accton Technology"
+      }
+    ],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "QQQ"
+  },
+  {
+    "slug": "networking-interconnect",
+    "name": "Networking & interconnect",
+    "universe": "ai",
+    "layer": "Cluster fabric",
+    "thesis": "AI clusters require switches, high-speed interface silicon and qualified systems to keep accelerators fed. Switch ASIC supply and system validation can cap the number of interconnected accelerators.",
+    "watch": "Longer high-radix switch delivery times, rising switch orders and stronger networking ODM revenue.",
+    "invalidate": "Switch inventories accumulate, lead times normalize, and port prices fall despite higher link speeds.",
+    "basket": [
+      {
+        "ticker": "ANET",
+        "name": "Arista Networks",
+        "country": "US",
+        "role": "High speed data center switches"
+      },
+      {
+        "ticker": "AVGO",
+        "name": "Broadcom",
+        "country": "US",
+        "role": "Switch ASICs and network interfaces"
+      },
+      {
+        "ticker": "MRVL",
+        "name": "Marvell Technology",
+        "country": "US",
+        "role": "Network processing and interconnect silicon"
+      },
+      {
+        "ticker": "CSCO",
+        "name": "Cisco Systems",
+        "country": "US",
+        "role": "Ethernet switches and routing platforms"
+      },
+      {
+        "ticker": "2345.TW",
+        "name": "Accton Technology",
+        "country": "TW",
+        "role": "Data center switch contract manufacturing"
+      },
+      {
+        "ticker": "NVDA",
+        "name": "NVIDIA",
+        "country": "US",
+        "role": "InfiniBand Ethernet and accelerator networking"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "2345",
+        "name": "Accton Technology"
+      }
+    ],
+    "us_import_hs6": [
+      {
+        "hs": "851762",
+        "desc": "Machines receiving, converting and transmitting or regenerating data, including switching and routing; includes non-data-center equipment."
+      }
+    ],
+    "kr_export_hs": [],
+    "benchmark": "QQQ"
+  },
+  {
+    "slug": "connectors-cables",
+    "name": "Connectors & cables",
+    "universe": "ai",
+    "layer": "Rack interconnect",
+    "thesis": "Dense racks need reliable high-current connectors and high-speed copper cable assemblies. Precision contact manufacture, signal integrity and customer qualification limit substitution.",
+    "watch": "Longer connector and cable assembly lead times, stronger orders and rising qualified supplier revenue.",
+    "invalidate": "Second sources qualify, connector inventory builds, and assembly lead times and pricing decline.",
+    "basket": [
+      {
+        "ticker": "APH",
+        "name": "Amphenol",
+        "country": "US",
+        "role": "High speed connectors and cable assemblies"
+      },
+      {
+        "ticker": "TEL",
+        "name": "TE Connectivity",
+        "country": "IE",
+        "role": "Power and high speed connectors"
+      },
+      {
+        "ticker": "BELFA",
+        "name": "Bel Fuse",
+        "country": "US",
+        "role": "Connectivity components and cable assemblies"
+      },
+      {
+        "ticker": "3533.TW",
+        "name": "LOTES",
+        "country": "TW",
+        "role": "Server sockets and precision connectors"
+      },
+      {
+        "ticker": "3605.TW",
+        "name": "Aces Electronics",
+        "country": "TW",
+        "role": "High speed connectors and cable assemblies"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "3533",
+        "name": "LOTES"
+      },
+      {
+        "code": "3605",
+        "name": "Aces Electronics"
+      }
+    ],
+    "us_import_hs6": [
+      {
+        "hs": "853669",
+        "desc": "Electrical plugs and sockets for voltages not exceeding 1,000 V; broad connector proxy, not AI-specific."
+      }
+    ],
+    "kr_export_hs": [],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "ai-servers",
+    "name": "AI servers",
+    "universe": "ai",
+    "layer": "Server assembly",
+    "thesis": "Accelerator servers need synchronized delivery of boards, power assemblies and thermal systems, followed by rack-level testing. Integration capacity and component shortages can delay shipments beyond accelerator availability.",
+    "watch": "Growing server ODM revenue, longer rack acceptance queues, and orders rising faster than shipments.",
+    "invalidate": "Rack delivery times shorten, cancelled orders increase, and finished-goods inventory rises.",
+    "basket": [
+      {
+        "ticker": "DELL",
+        "name": "Dell Technologies",
+        "country": "US",
+        "role": "Accelerator servers and rack integration"
+      },
+      {
+        "ticker": "HPE",
+        "name": "Hewlett Packard Enterprise",
+        "country": "US",
+        "role": "AI server and supercomputer integration"
+      },
+      {
+        "ticker": "SMCI",
+        "name": "Super Micro Computer",
+        "country": "US",
+        "role": "Accelerator servers and rack integration"
+      },
+      {
+        "ticker": "2382.TW",
+        "name": "Quanta Computer",
+        "country": "TW",
+        "role": "Cloud and AI server manufacturing"
+      },
+      {
+        "ticker": "3231.TW",
+        "name": "Wistron",
+        "country": "TW",
+        "role": "AI server and board manufacturing"
+      },
+      {
+        "ticker": "6669.TW",
+        "name": "Wiwynn",
+        "country": "TW",
+        "role": "Hyperscale server and rack integration"
+      },
+      {
+        "ticker": "2317.TW",
+        "name": "Hon Hai Precision Industry",
+        "country": "TW",
+        "role": "AI server manufacturing and integration"
+      },
+      {
+        "ticker": "2356.TW",
+        "name": "Inventec",
+        "country": "TW",
+        "role": "Cloud server contract manufacturing"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "2382",
+        "name": "Quanta Computer"
+      },
+      {
+        "code": "3231",
+        "name": "Wistron"
+      },
+      {
+        "code": "6669",
+        "name": "Wiwynn"
+      },
+      {
+        "code": "2317",
+        "name": "Hon Hai Precision Industry"
+      },
+      {
+        "code": "2356",
+        "name": "Inventec"
+      }
+    ],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "QQQ"
+  },
+  {
+    "slug": "cooling-thermal",
+    "name": "Cooling & thermal",
+    "universe": "ai",
+    "layer": "Rack cooling",
+    "thesis": "High-density racks require liquid cooling, cold plates and adequate heat rejection at the site. Qualified coolant distribution units, pumps and installation labor can limit powered rack deployment.",
+    "watch": "Longer liquid-cooling equipment lead times, growing thermal supplier revenue, and cooling orders exceeding deliveries.",
+    "invalidate": "Cooling equipment backlogs shrink, new vendors qualify, and site heat-rejection capacity catches up.",
+    "basket": [
+      {
+        "ticker": "VRT",
+        "name": "Vertiv Holdings",
+        "country": "US",
+        "role": "Data center thermal management systems"
+      },
+      {
+        "ticker": "MOD",
+        "name": "Modine Manufacturing",
+        "country": "US",
+        "role": "Data center cooling and chillers"
+      },
+      {
+        "ticker": "TT",
+        "name": "Trane Technologies",
+        "country": "IE",
+        "role": "Chillers and site heat rejection"
+      },
+      {
+        "ticker": "3017.TW",
+        "name": "Asia Vital Components",
+        "country": "TW",
+        "role": "Server thermal modules and liquid cooling"
+      },
+      {
+        "ticker": "3324.TWO",
+        "name": "Auras Technology",
+        "country": "TW",
+        "role": "Server thermal modules and liquid cooling"
+      },
+      {
+        "ticker": "6230.TW",
+        "name": "Nidec Chaun-Choung Technology",
+        "country": "TW",
+        "role": "Heat pipes and thermal modules"
+      },
+      {
+        "ticker": "2421.TW",
+        "name": "Sunonwealth Electric Machine Industry",
+        "country": "TW",
+        "role": "Cooling fans and thermal solutions"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "3017",
+        "name": "Asia Vital Components"
+      },
+      {
+        "code": "3324",
+        "name": "Auras Technology"
+      },
+      {
+        "code": "6230",
+        "name": "Nidec Chaun-Choung Technology"
+      },
+      {
+        "code": "2421",
+        "name": "Sunonwealth Electric Machine Industry"
+      }
+    ],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "power-electronics",
+    "name": "Power electronics",
+    "universe": "ai",
+    "layer": "Power conversion",
+    "thesis": "Accelerator racks need efficient AC-to-DC conversion and tightly regulated high-current power delivery. Qualified power semiconductors, magnetics and high-density power supplies limit rack power capacity.",
+    "watch": "Longer high-density power supply lead times, stronger conversion module orders, and rising Taiwan power electronics revenue.",
+    "invalidate": "Power module capacity expands, delivery times shorten, and qualified alternative designs reduce pricing pressure.",
+    "basket": [
+      {
+        "ticker": "2308.TW",
+        "name": "Delta Electronics",
+        "country": "TW",
+        "role": "Server power supplies and conversion"
+      },
+      {
+        "ticker": "2301.TW",
+        "name": "Lite-On Technology",
+        "country": "TW",
+        "role": "Server power supplies and modules"
+      },
+      {
+        "ticker": "IFX.DE",
+        "name": "Infineon Technologies",
+        "country": "DE",
+        "role": "Power semiconductors and gate drivers"
+      },
+      {
+        "ticker": "MPWR",
+        "name": "Monolithic Power Systems",
+        "country": "US",
+        "role": "High current point of load conversion"
+      },
+      {
+        "ticker": "VICR",
+        "name": "Vicor",
+        "country": "US",
+        "role": "High density power conversion modules"
+      },
+      {
+        "ticker": "ON",
+        "name": "ON Semiconductor",
+        "country": "US",
+        "role": "Power switching and conversion semiconductors"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "2308",
+        "name": "Delta Electronics"
+      },
+      {
+        "code": "2301",
+        "name": "Lite-On Technology"
+      }
+    ],
+    "us_import_hs6": [
+      {
+        "hs": "850440",
+        "desc": "Static converters, including power supplies and inverters; broad conversion proxy with substantial non-server demand."
+      }
+    ],
+    "kr_export_hs": [],
+    "benchmark": "SOXX"
+  },
+  {
+    "slug": "accelerators-custom-silicon",
+    "name": "Accelerators & custom silicon",
+    "universe": "ai",
+    "layer": "Compute design",
+    "thesis": "Useful AI compute depends on accelerator designs that can be taped out, fabricated and packaged at acceptable yield. Scarce design teams, validated IP and access to leading-edge manufacturing limit deployable silicon.",
+    "watch": "Longer custom ASIC project queues, rising design service revenue, and accelerator demand exceeding qualified production.",
+    "invalidate": "Custom programs are delayed or cancelled, accelerator inventories rise, and qualified supply grows faster than demand.",
+    "basket": [
+      {
+        "ticker": "NVDA",
+        "name": "NVIDIA",
+        "country": "US",
+        "role": "GPU accelerators and compute platforms"
+      },
+      {
+        "ticker": "AMD",
+        "name": "Advanced Micro Devices",
+        "country": "US",
+        "role": "GPU accelerators and server processors"
+      },
+      {
+        "ticker": "AVGO",
+        "name": "Broadcom",
+        "country": "US",
+        "role": "Custom AI accelerator ASIC design"
+      },
+      {
+        "ticker": "MRVL",
+        "name": "Marvell Technology",
+        "country": "US",
+        "role": "Custom data center compute silicon"
+      },
+      {
+        "ticker": "3443.TW",
+        "name": "Global Unichip",
+        "country": "TW",
+        "role": "Advanced node custom ASIC design"
+      },
+      {
+        "ticker": "3035.TW",
+        "name": "Faraday Technology",
+        "country": "TW",
+        "role": "Custom ASIC design and implementation"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "3443",
+        "name": "Global Unichip"
+      },
+      {
+        "code": "3035",
+        "name": "Faraday Technology"
+      }
+    ],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "SOXX"
+  },
+  {
+    "slug": "ai-cloud-neoclouds",
+    "name": "AI cloud & neoclouds",
+    "universe": "ai",
+    "layer": "Compute services",
+    "thesis": "Cloud GPU capacity is constrained by energized sites, accelerator deliveries and operating infrastructure. Contracted electrical capacity only becomes usable compute after construction, networking and commissioning.",
+    "watch": "Longer waits for GPU clusters, firm rental rates, and contracted demand exceeding commissioned capacity; monitoring-only theme.",
+    "invalidate": "GPU rental prices fall, utilization weakens, and newly energized capacity consistently exceeds customer commitments.",
+    "basket": [
+      {
+        "ticker": "MSFT",
+        "name": "Microsoft",
+        "country": "US",
+        "role": "Azure AI compute infrastructure operator"
+      },
+      {
+        "ticker": "AMZN",
+        "name": "Amazon.com",
+        "country": "US",
+        "role": "AWS accelerator cloud infrastructure operator"
+      },
+      {
+        "ticker": "GOOGL",
+        "name": "Alphabet",
+        "country": "US",
+        "role": "Google Cloud GPU and TPU infrastructure"
+      },
+      {
+        "ticker": "ORCL",
+        "name": "Oracle",
+        "country": "US",
+        "role": "Large scale GPU cloud infrastructure"
+      },
+      {
+        "ticker": "CRWV",
+        "name": "CoreWeave",
+        "country": "US",
+        "role": "Dedicated accelerator cloud infrastructure operator"
+      },
+      {
+        "ticker": "NBIS",
+        "name": "Nebius Group",
+        "country": "NL",
+        "role": "Dedicated AI cloud infrastructure operator"
+      },
+      {
+        "ticker": "IREN",
+        "name": "IREN",
+        "country": "AU",
+        "role": "Power sites and GPU cloud operator"
+      }
+    ],
+    "tw_signals": [],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "QQQ"
+  },
+  {
+    "slug": "rare-earths-magnets",
+    "name": "Rare earths & magnets",
+    "universe": "ai",
+    "layer": "Critical materials",
+    "thesis": "High-performance motors and compact actuators require rare-earth magnet materials that pass demanding purity and performance tests. Separation, metal refining and qualified magnet production are concentrated and slow to expand.",
+    "watch": "Longer NdFeB delivery times, higher separated oxide and magnet prices, and tighter export availability alongside end-market orders.",
+    "invalidate": "New separation and qualified magnet capacity ramps, delivery restrictions ease, and inventories rebuild across the chain.",
+    "basket": [
+      {
+        "ticker": "MP",
+        "name": "MP Materials",
+        "country": "US",
+        "role": "Rare earth mining and magnet production"
+      },
+      {
+        "ticker": "LYC.AX",
+        "name": "Lynas Rare Earths",
+        "country": "AU",
+        "role": "Rare earth mining and separation"
+      },
+      {
+        "ticker": "600111.SS",
+        "name": "China Northern Rare Earth",
+        "country": "CN",
+        "role": "Rare earth separation and materials"
+      },
+      {
+        "ticker": "300748.SZ",
+        "name": "JL MAG Rare-Earth",
+        "country": "CN",
+        "role": "Sintered rare earth permanent magnets"
+      },
+      {
+        "ticker": "600366.SS",
+        "name": "Ningbo Yunsheng",
+        "country": "CN",
+        "role": "High performance rare earth permanent magnets"
+      }
+    ],
+    "tw_signals": [],
+    "us_import_hs6": [
+      {
+        "hs": "850511",
+        "desc": "Permanent magnets of metal; includes rare-earth and other metal magnets, so not a pure rare-earth series."
+      }
+    ],
+    "kr_export_hs": [],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "gas-turbines-generation",
+    "name": "Gas turbines & generation equipment",
+    "universe": "power",
+    "layer": "Dispatchable generation",
+    "thesis": "New gas-fired capacity needs turbine manufacturing slots, high-temperature components and commissioning crews. Forgings, castings and hot-section parts cannot be replaced quickly when order books fill.",
+    "watch": "Longer turbine reservation queues, larger equipment backlogs, rising service demand and firm contract pricing.",
+    "invalidate": "Turbine slot availability improves, component bottlenecks clear, and orders or project starts slow.",
+    "basket": [
+      {
+        "ticker": "GEV",
+        "name": "GE Vernova",
+        "country": "US",
+        "role": "Heavy duty gas turbine systems"
+      },
+      {
+        "ticker": "ENR.DE",
+        "name": "Siemens Energy",
+        "country": "DE",
+        "role": "Industrial and utility gas turbines"
+      },
+      {
+        "ticker": "7011.T",
+        "name": "Mitsubishi Heavy Industries",
+        "country": "JP",
+        "role": "Large gas turbines and power systems"
+      },
+      {
+        "ticker": "7012.T",
+        "name": "Kawasaki Heavy Industries",
+        "country": "JP",
+        "role": "Industrial gas turbines and cogeneration"
+      },
+      {
+        "ticker": "RR.L",
+        "name": "Rolls-Royce Holdings",
+        "country": "GB",
+        "role": "Gas generator sets and backup power"
+      },
+      {
+        "ticker": "BWEN",
+        "name": "Broadwind",
+        "country": "US",
+        "role": "Precision gearing for gas turbines"
+      }
+    ],
+    "tw_signals": [],
+    "us_import_hs6": [
+      {
+        "hs": "841182",
+        "desc": "Gas turbines other than turbojets or turbopropellers, of power exceeding 5,000 kW; stationary generation equipment proxy."
+      }
+    ],
+    "kr_export_hs": [],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "transformers",
+    "name": "Transformers",
+    "universe": "power",
+    "layer": "Grid transformation",
+    "thesis": "Grid connections require transformers sized and tested for the specific voltage and load. Electrical steel, windings, skilled assembly and high-voltage testing capacity constrain deliveries.",
+    "watch": "Longer transformer delivery quotes, growing order backlogs and Taiwan electrical-equipment revenue, with import values checked against prices.",
+    "invalidate": "Delivery quotes shorten, factory and test capacity expands, and backlog conversion exceeds new orders.",
+    "basket": [
+      {
+        "ticker": "ETN",
+        "name": "Eaton",
+        "country": "IE",
+        "role": "Distribution transformers and electrical distribution"
+      },
+      {
+        "ticker": "HUBB",
+        "name": "Hubbell",
+        "country": "US",
+        "role": "Transformer components and utility connections"
+      },
+      {
+        "ticker": "POWL",
+        "name": "Powell Industries",
+        "country": "US",
+        "role": "Transformer connected electrical distribution systems"
+      },
+      {
+        "ticker": "SIE.DE",
+        "name": "Siemens",
+        "country": "DE",
+        "role": "Transformer adjacent grid electrification systems"
+      },
+      {
+        "ticker": "ABBN.SW",
+        "name": "ABB",
+        "country": "CH",
+        "role": "Transformer adjacent electrification and controls"
+      },
+      {
+        "ticker": "SU.PA",
+        "name": "Schneider Electric",
+        "country": "FR",
+        "role": "Distribution transformers and power management"
+      },
+      {
+        "ticker": "6501.T",
+        "name": "Hitachi",
+        "country": "JP",
+        "role": "Power transformers through Hitachi Energy"
+      },
+      {
+        "ticker": "1519.TW",
+        "name": "Fortune Electric",
+        "country": "TW",
+        "role": "Power and distribution transformer manufacturing"
+      },
+      {
+        "ticker": "1503.TW",
+        "name": "Shihlin Electric & Engineering",
+        "country": "TW",
+        "role": "Power and distribution transformer manufacturing"
+      },
+      {
+        "ticker": "1513.TW",
+        "name": "Chung-Hsin Electric & Machinery",
+        "country": "TW",
+        "role": "Grid transformer and substation equipment"
+      },
+      {
+        "ticker": "1514.TW",
+        "name": "Allis Electric",
+        "country": "TW",
+        "role": "Distribution transformers and power equipment"
+      },
+      {
+        "ticker": "VRT",
+        "name": "Vertiv Holdings",
+        "country": "US",
+        "role": "Transformer adjacent data center power systems"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "1519",
+        "name": "Fortune Electric"
+      },
+      {
+        "code": "1503",
+        "name": "Shihlin Electric & Engineering"
+      },
+      {
+        "code": "1513",
+        "name": "Chung-Hsin Electric & Machinery"
+      },
+      {
+        "code": "1514",
+        "name": "Allis Electric"
+      }
+    ],
+    "us_import_hs6": [
+      {
+        "hs": "850421",
+        "desc": "Liquid dielectric transformers, power handling capacity not exceeding 650 kVA."
+      },
+      {
+        "hs": "850422",
+        "desc": "Liquid dielectric transformers, power handling capacity exceeding 650 kVA but not exceeding 10,000 kVA."
+      },
+      {
+        "hs": "850423",
+        "desc": "Liquid dielectric transformers, power handling capacity exceeding 10,000 kVA."
+      }
+    ],
+    "kr_export_hs": [
+      {
+        "hs": "850423",
+        "desc": "Liquid dielectric transformers, power handling capacity exceeding 10,000 kVA."
+      }
+    ],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "switchgear-grid-equipment",
+    "name": "Switchgear & grid equipment",
+    "universe": "power",
+    "layer": "Grid switching",
+    "thesis": "Energizing new load requires switchgear, protection and substation equipment certified for the local grid. Breaker components, assembly capacity and testing queues limit complete switchboard deliveries.",
+    "watch": "Longer switchgear lead times, growing electrical backlogs, and stronger Taiwan substation-equipment revenue.",
+    "invalidate": "Switchgear queues shorten, qualified breaker supply expands, and electrical-equipment inventories build.",
+    "basket": [
+      {
+        "ticker": "ETN",
+        "name": "Eaton",
+        "country": "IE",
+        "role": "Medium and low voltage switchgear"
+      },
+      {
+        "ticker": "HUBB",
+        "name": "Hubbell",
+        "country": "US",
+        "role": "Utility protection and grid connection equipment"
+      },
+      {
+        "ticker": "POWL",
+        "name": "Powell Industries",
+        "country": "US",
+        "role": "Custom medium voltage switchgear systems"
+      },
+      {
+        "ticker": "SU.PA",
+        "name": "Schneider Electric",
+        "country": "FR",
+        "role": "Switchgear and electrical protection equipment"
+      },
+      {
+        "ticker": "ABBN.SW",
+        "name": "ABB",
+        "country": "CH",
+        "role": "Medium voltage switchgear and protection"
+      },
+      {
+        "ticker": "1513.TW",
+        "name": "Chung-Hsin Electric & Machinery",
+        "country": "TW",
+        "role": "Gas insulated switchgear and substations"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "1513",
+        "name": "Chung-Hsin Electric & Machinery"
+      },
+      {
+        "code": "1514",
+        "name": "Allis Electric"
+      }
+    ],
+    "us_import_hs6": [
+      {
+        "hs": "853720",
+        "desc": "Boards, panels and other bases for electrical control or distribution, for voltage exceeding 1,000 V."
+      }
+    ],
+    "kr_export_hs": [],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "transmission-cables",
+    "name": "Transmission cables",
+    "universe": "power",
+    "layer": "Grid conductors",
+    "thesis": "High-voltage transmission projects need long qualified cable runs, accessories and specialized installation. Extrusion lines, testing facilities and cable-laying capacity are difficult to expand quickly.",
+    "watch": "High-voltage cable order books lengthen, installation slots tighten, and cable prices rise beyond metal-cost pass-through.",
+    "invalidate": "New qualified lines and vessels enter service, backlog delivery accelerates, and project cancellations release slots.",
+    "basket": [
+      {
+        "ticker": "PRY.MI",
+        "name": "Prysmian",
+        "country": "IT",
+        "role": "High voltage land and submarine cables"
+      },
+      {
+        "ticker": "NEX.PA",
+        "name": "Nexans",
+        "country": "FR",
+        "role": "High voltage transmission cable systems"
+      },
+      {
+        "ticker": "NKT.CO",
+        "name": "NKT",
+        "country": "DK",
+        "role": "High voltage cables and installation"
+      },
+      {
+        "ticker": "5802.T",
+        "name": "Sumitomo Electric Industries",
+        "country": "JP",
+        "role": "High voltage power cable systems"
+      },
+      {
+        "ticker": "5801.T",
+        "name": "Furukawa Electric",
+        "country": "JP",
+        "role": "Transmission cables and power accessories"
+      },
+      {
+        "ticker": "001440.KS",
+        "name": "Taihan Cable & Solution",
+        "country": "KR",
+        "role": "Extra high voltage transmission cable systems"
+      }
+    ],
+    "tw_signals": [],
+    "us_import_hs6": [
+      {
+        "hs": "854460",
+        "desc": "Other electric conductors, for a voltage exceeding 1,000 V; includes medium-voltage as well as transmission cables."
+      }
+    ],
+    "kr_export_hs": [],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "nuclear-smr",
+    "name": "Nuclear & SMR",
+    "universe": "power",
+    "layer": "Firm generation equipment",
+    "thesis": "Nuclear deployment needs qualified fuel, nuclear-grade components and licensed designs before construction can become operating capacity. Enrichment and large-component qualification take years, while SMR designs also face first-unit execution constraints.",
+    "watch": "Fuel conversion or enrichment contracts tighten, component backlogs grow, and funded projects pass licensing milestones; monitoring-only theme.",
+    "invalidate": "Fuel and component capacity expands, delivery queues shorten, or project cancellations reduce committed demand.",
+    "basket": [
+      {
+        "ticker": "BWXT",
+        "name": "BWX Technologies",
+        "country": "US",
+        "role": "Nuclear reactor components and fuel services"
+      },
+      {
+        "ticker": "CCJ",
+        "name": "Cameco",
+        "country": "CA",
+        "role": "Uranium fuel and reactor services"
+      },
+      {
+        "ticker": "LEU",
+        "name": "Centrus Energy",
+        "country": "US",
+        "role": "Uranium enrichment and HALEU development"
+      },
+      {
+        "ticker": "SMR",
+        "name": "NuScale Power",
+        "country": "US",
+        "role": "Small modular reactor design commercialization"
+      },
+      {
+        "ticker": "OKLO",
+        "name": "Oklo",
+        "country": "US",
+        "role": "Advanced reactor and fuel development"
+      },
+      {
+        "ticker": "RR.L",
+        "name": "Rolls-Royce Holdings",
+        "country": "GB",
+        "role": "Small modular reactor design development"
+      }
+    ],
+    "tw_signals": [],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "batteries-storage",
+    "name": "Batteries & storage",
+    "universe": "power",
+    "layer": "Grid flexibility",
+    "thesis": "Grid storage requires safe battery cells, qualified conversion systems and integrated enclosures. Fire testing, manufacturing yields and interconnection work constrain commissioned storage more than announced cell capacity.",
+    "watch": "Longer grid-storage delivery and commissioning queues, stronger contracted backlog, and firm system prices despite cell price changes.",
+    "invalidate": "Qualified system output rises, commissioned projects catch up with orders, and excess cell or inverter inventory accumulates.",
+    "basket": [
+      {
+        "ticker": "300750.SZ",
+        "name": "Contemporary Amperex Technology",
+        "country": "CN",
+        "role": "Lithium ion cells and storage systems"
+      },
+      {
+        "ticker": "373220.KS",
+        "name": "LG Energy Solution",
+        "country": "KR",
+        "role": "Battery cells and stationary storage"
+      },
+      {
+        "ticker": "006400.KS",
+        "name": "Samsung SDI",
+        "country": "KR",
+        "role": "Lithium ion cells for stationary storage"
+      },
+      {
+        "ticker": "FLNC",
+        "name": "Fluence Energy",
+        "country": "US",
+        "role": "Grid scale battery storage integration"
+      },
+      {
+        "ticker": "TSLA",
+        "name": "Tesla",
+        "country": "US",
+        "role": "Megapack grid scale storage systems"
+      },
+      {
+        "ticker": "6674.T",
+        "name": "GS Yuasa",
+        "country": "JP",
+        "role": "Industrial batteries and stationary storage"
+      }
+    ],
+    "tw_signals": [],
+    "us_import_hs6": [
+      {
+        "hs": "850760",
+        "desc": "Lithium-ion accumulators; includes vehicle and consumer batteries, not just stationary storage."
+      }
+    ],
+    "kr_export_hs": [
+      {
+        "hs": "850760",
+        "desc": "Lithium-ion accumulators; broad battery exports including EV cells and packs."
+      }
+    ],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "power-producers",
+    "name": "Power producers",
+    "universe": "power",
+    "layer": "Energized capacity",
+    "thesis": "Data centers need firm electricity at the right location and hour, not merely annual energy output. Transmission congestion, interconnection queues and plant availability restrict deliverable megawatts.",
+    "watch": "Rising firm-power contract premiums, longer interconnection waits, and tightening local reserve margins; monitoring-only theme.",
+    "invalidate": "New generation and grid capacity enter service, local reserve margins recover, and firm-power contract premiums fall.",
+    "basket": [
+      {
+        "ticker": "CEG",
+        "name": "Constellation Energy",
+        "country": "US",
+        "role": "Nuclear led firm electricity generation"
+      },
+      {
+        "ticker": "VST",
+        "name": "Vistra",
+        "country": "US",
+        "role": "Dispatchable generation and retail electricity"
+      },
+      {
+        "ticker": "NRG",
+        "name": "NRG Energy",
+        "country": "US",
+        "role": "Dispatchable generation and electricity retailing"
+      },
+      {
+        "ticker": "TLN",
+        "name": "Talen Energy",
+        "country": "US",
+        "role": "Nuclear and thermal power generation"
+      },
+      {
+        "ticker": "NEE",
+        "name": "NextEra Energy",
+        "country": "US",
+        "role": "Utility generation and renewable power development"
+      },
+      {
+        "ticker": "SO",
+        "name": "Southern Company",
+        "country": "US",
+        "role": "Regulated nuclear and thermal generation"
+      }
+    ],
+    "tw_signals": [],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "XLU"
+  },
+  {
+    "slug": "construction-mep",
+    "name": "Construction & MEP",
+    "universe": "power",
+    "layer": "Site delivery",
+    "thesis": "Data centers and grid projects need skilled electricians, mechanical installation and coordinated commissioning. Labor availability and project sequencing can prevent completed equipment from becoming energized capacity.",
+    "watch": "Electrical and mechanical contractor backlogs rise, labor costs increase, and completion dates extend despite equipment deliveries; Taiwan signals primarily reflect fab-facility work.",
+    "invalidate": "Labor availability improves, construction schedules shorten, and backlog burn exceeds new awards.",
+    "basket": [
+      {
+        "ticker": "PWR",
+        "name": "Quanta Services",
+        "country": "US",
+        "role": "Grid construction and electrical infrastructure"
+      },
+      {
+        "ticker": "EME",
+        "name": "EMCOR Group",
+        "country": "US",
+        "role": "Electrical mechanical installation and services"
+      },
+      {
+        "ticker": "FIX",
+        "name": "Comfort Systems USA",
+        "country": "US",
+        "role": "Mechanical electrical and modular construction"
+      },
+      {
+        "ticker": "STRL",
+        "name": "Sterling Infrastructure",
+        "country": "US",
+        "role": "Data center site development construction"
+      },
+      {
+        "ticker": "6139.TW",
+        "name": "L&K Engineering",
+        "country": "TW",
+        "role": "Cleanroom mechanical and electrical engineering"
+      },
+      {
+        "ticker": "6196.TW",
+        "name": "Marketech International",
+        "country": "TW",
+        "role": "Fab facility and utility systems integration"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "6139",
+        "name": "L&K Engineering"
+      },
+      {
+        "code": "6196",
+        "name": "Marketech International"
+      }
+    ],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "precision-motion-actuators",
+    "name": "Precision motion & actuators",
+    "universe": "robotics",
+    "layer": "Motion components",
+    "thesis": "Robots need repeatable motion from low-backlash reducers, precision bearings, ball screws and servo drives. Machining tolerances, heat treatment and lifetime qualification limit reliable actuator output.",
+    "watch": "Longer reducer and linear-motion lead times, higher utilization, and sustained precision-motion supplier revenue growth.",
+    "invalidate": "New qualified capacity reduces delivery times, component inventories rise, and precision-motion prices weaken.",
+    "basket": [
+      {
+        "ticker": "6324.T",
+        "name": "Harmonic Drive Systems",
+        "country": "JP",
+        "role": "Precision strain wave gear reducers"
+      },
+      {
+        "ticker": "6268.T",
+        "name": "Nabtesco",
+        "country": "JP",
+        "role": "Precision cycloidal robot gear reducers"
+      },
+      {
+        "ticker": "6481.T",
+        "name": "THK",
+        "country": "JP",
+        "role": "Linear motion guides and ball screws"
+      },
+      {
+        "ticker": "6506.T",
+        "name": "Yaskawa Electric",
+        "country": "JP",
+        "role": "Precision servo motors and motion drives"
+      },
+      {
+        "ticker": "2049.TW",
+        "name": "HIWIN Technologies",
+        "country": "TW",
+        "role": "Linear guides ball screws and actuators"
+      },
+      {
+        "ticker": "4583.TW",
+        "name": "Apex Dynamics",
+        "country": "TW",
+        "role": "Precision planetary gearboxes and reducers"
+      },
+      {
+        "ticker": "4576.TW",
+        "name": "HIWIN Mikrosystem",
+        "country": "TW",
+        "role": "Linear motors and motion control systems"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "2049",
+        "name": "HIWIN Technologies"
+      },
+      {
+        "code": "4583",
+        "name": "Apex Dynamics"
+      },
+      {
+        "code": "4576",
+        "name": "HIWIN Mikrosystem"
+      }
+    ],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "sensing-vision",
+    "name": "Sensing & vision",
+    "universe": "robotics",
+    "layer": "Perception",
+    "thesis": "Robot perception requires industrial cameras, precise sensors and reliable real-time inspection. Optical alignment, specialized image sensors and application qualification restrict deployable sensing systems.",
+    "watch": "Longer industrial sensor and camera lead times, rising vision-system orders, and stronger machine-vision computing revenue; Advantech revenue is a diversified industrial-computing proxy.",
+    "invalidate": "Camera and sensor lead times shorten, qualified alternatives proliferate, and customer inventories rise.",
+    "basket": [
+      {
+        "ticker": "CGNX",
+        "name": "Cognex",
+        "country": "US",
+        "role": "Industrial machine vision and inspection"
+      },
+      {
+        "ticker": "6861.T",
+        "name": "Keyence",
+        "country": "JP",
+        "role": "Industrial vision and precision sensors"
+      },
+      {
+        "ticker": "TDY",
+        "name": "Teledyne Technologies",
+        "country": "US",
+        "role": "Industrial imaging sensors and cameras"
+      },
+      {
+        "ticker": "BSL.DE",
+        "name": "Basler",
+        "country": "DE",
+        "role": "Industrial cameras and machine vision"
+      },
+      {
+        "ticker": "6645.T",
+        "name": "OMRON",
+        "country": "JP",
+        "role": "Industrial sensing and machine vision"
+      },
+      {
+        "ticker": "2395.TW",
+        "name": "Advantech",
+        "country": "TW",
+        "role": "Industrial machine vision computing platforms"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "2395",
+        "name": "Advantech"
+      }
+    ],
+    "us_import_hs6": [],
+    "kr_export_hs": [],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "industrial-robots-automation",
+    "name": "Industrial robots & automation",
+    "universe": "robotics",
+    "layer": "Factory deployment",
+    "thesis": "Factory automation requires robots, controllers and safety systems integrated into a working production cell. Application engineering, commissioning and reliable component supply constrain installed throughput.",
+    "watch": "Robot and factory-control orders exceed shipments, integrator backlogs grow, and industrial computing revenue strengthens.",
+    "invalidate": "Automation order books shrink, commissioning labor becomes available, and controller inventories normalize.",
+    "basket": [
+      {
+        "ticker": "6954.T",
+        "name": "FANUC",
+        "country": "JP",
+        "role": "Industrial robots and CNC controls"
+      },
+      {
+        "ticker": "6506.T",
+        "name": "Yaskawa Electric",
+        "country": "JP",
+        "role": "Industrial robots and motion control"
+      },
+      {
+        "ticker": "ABBN.SW",
+        "name": "ABB",
+        "country": "CH",
+        "role": "Factory automation and motion control"
+      },
+      {
+        "ticker": "ROK",
+        "name": "Rockwell Automation",
+        "country": "US",
+        "role": "Factory controllers and automation systems"
+      },
+      {
+        "ticker": "6645.T",
+        "name": "OMRON",
+        "country": "JP",
+        "role": "Factory sensing control and robotics"
+      },
+      {
+        "ticker": "2395.TW",
+        "name": "Advantech",
+        "country": "TW",
+        "role": "Industrial computing and automation platforms"
+      }
+    ],
+    "tw_signals": [
+      {
+        "code": "2395",
+        "name": "Advantech"
+      }
+    ],
+    "us_import_hs6": [
+      {
+        "hs": "847950",
+        "desc": "Industrial robots, not elsewhere specified or included; excludes many service robots and complete specialized machines."
+      }
+    ],
+    "kr_export_hs": [],
+    "benchmark": "XLI"
+  },
+  {
+    "slug": "robot-platforms",
+    "name": "Robot platforms",
+    "universe": "robotics",
+    "layer": "Embodied systems",
+    "thesis": "Commercial robot platforms need integrated motion, perception and safety that survive real operating environments. Reliability testing and repeatable assembly constrain the transition from demonstrations to deployed fleets.",
+    "watch": "Paid deployments and repeat orders grow faster than qualified assembly and service capacity; industrial-robot imports cover only the industrial subset.",
+    "invalidate": "Field reliability improves and production outpaces orders, or pilot cancellations reveal insufficient demand for scaled deployment.",
+    "basket": [
+      {
+        "ticker": "TER",
+        "name": "Teradyne",
+        "country": "US",
+        "role": "Collaborative and autonomous mobile robot platforms"
+      },
+      {
+        "ticker": "9880.HK",
+        "name": "UBTECH Robotics",
+        "country": "CN",
+        "role": "Humanoid and service robot platforms"
+      },
+      {
+        "ticker": "277810.KQ",
+        "name": "Rainbow Robotics",
+        "country": "KR",
+        "role": "Collaborative and mobile humanoid robot platforms"
+      },
+      {
+        "ticker": "454910.KS",
+        "name": "Doosan Robotics",
+        "country": "KR",
+        "role": "Collaborative robot arms and application platforms"
+      },
+      {
+        "ticker": "6954.T",
+        "name": "FANUC",
+        "country": "JP",
+        "role": "Industrial robot hardware and control platforms"
+      }
+    ],
+    "tw_signals": [],
+    "us_import_hs6": [
+      {
+        "hs": "847950",
+        "desc": "Industrial robots, not elsewhere specified or included; proxy for industrial manipulators only, not the full humanoid or service-robot market."
+      }
+    ],
+    "kr_export_hs": [],
+    "benchmark": "XLI"
+  }
+]

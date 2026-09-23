@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}Method · Leadtime{% endblock %}
+{% block main %}
+{% set repo = snap.track.repo %}
+{% set es = snap.discovery.event_study or {} %}
+<div class="page-head"><div class="wrap">
+  <p class="eyebrow"><span class="dot"></span>Method</p>
+  <h1>How the calls are made, and how they can fail</h1>
+  <p class="lede">Leadtime reads bottlenecks from company revenue and customs data, not from headlines. Every rule is written down and published before we compute its results, and every call goes into a public log that can't be edited.</p>
+</div></div>
+<div class="wrap prose-wrap" style="padding-top:26px">
+<nav class="toc card card-pad small" aria-label="On this page">
+  <a href="#pressure">Pressure index</a><a href="#calls">Calls</a><a href="#discovery">Discovery scanner</a><a href="#sources">Data sources</a><a href="#honesty">Pre-registration</a><a href="#limits">Limits</a>
+</nav>
+<article class="prose">
+  <h2 id="pressure">1. The pressure index</h2>
+  <p>A bottleneck shows up in the numbers before it shows up in the news. When memory runs short, Taiwanese memory makers' monthly revenue and Korea's chip exports rise faster than their own history suggests. Each theme lists the companies and customs codes that sit on its supply chain.</p>
+  <ul>
+    <li><b>Components:</b> Taiwan monthly revenue for the listed companies (MOPS, from 2005), US imports for listed HS6 codes (Census, from 2013), and Korea exports for listed HS codes (Korea Customs).</li>
+    <li><b>Per component:</b> year-on-year growth of the trailing three-month sum, turned into a z-score against its own history up to that month (at least 24 months, never using the future).</li>
+    <li><b>C, the pressure level:</b> the average of the available z-scores. Above zero means tighter than usual.</li>
+    <li><b>M, the momentum:</b> the three-month change in C, using only components present at both dates. This keeps a new data source from creating a fake jump.</li>
+    <li><b>Timing:</b> each month's data counts only from the date it would really have been public: the 16th of the next month for Taiwan and Korea, two months later for US imports.</li>
+  </ul>
+
+  <h2 id="calls">2. Calls</h2>
+  <p>The model makes the calls. Nobody at Leadtime overrides them. If we ever disagree, we log that separately and label it as a human view.</p>
+  <ul>
+    <li><b>Memory, IN / OUT (Rule M):</b> stay IN unless pressure is high <i>and</i> falling (C &gt; 0 and M &lt; 0). Tested out of sample, 2008–2017, before any live call was made.</li>
+    <li><b>Other themes, OVERWEIGHT / UNDERWEIGHT vs a benchmark:</b> overweight when C &gt; 0. A theme gets a call only if this tilt beat always-overweight, out of sample, in the pre-registered window (2008–2017, which needs Taiwan revenue data).</li>
+    <li><b>Monitoring:</b> every theme that fails or can't be tested yet. We show its pressure readings, but it gets no call and no call alerts.</li>
+  </ul>
+
+  <h2 id="discovery">3. Discovery scanner</h2>
+  <p>The scanner flags any listed Taiwanese company, or any US/Korea trade code, whose sales jump far outside their own pattern. Rule v5: growth z-score ≥ 2, YoY growth ≥ 30%, rising three-month momentum, and revenue above NT$300m (US$50m for trade codes). A company can be flagged at most once every six months.</p>
+  {% if es.OOS %}
+  <div class="stat-row">
+    <div class="card card-pad"><p class="eyebrow">Out of sample 2008–16 · 6 mo vs market</p><p class="big num">{{ '%+.1f'|format(es.OOS['6m'].mean_pct) }}%</p><p class="small muted">average excess return · median {{ '%+.1f'|format(es.OOS['6m'].median_pct) }}% · {{ es.OOS['6m'].hit_rate_pct }}% beat the market · {{ '{:,}'.format(es.OOS['6m'].n_events) }} flags</p></div>
+    <div class="card card-pad"><p class="eyebrow">2017–now · 6 mo vs market</p><p class="big num">{{ '%+.1f'|format(es.IS['6m'].mean_pct) }}%</p><p class="small muted">average excess return · median {{ '%+.1f'|format(es.IS['6m'].median_pct) }}% · {{ es.IS['6m'].hit_rate_pct }}% beat the market · {{ '{:,}'.format(es.IS['6m'].n_events) }} flags</p></div>
+  </div>
+  {% endif %}
+  <div class="notice warn">{{ icon('warning') }}<span><b>How to read a flag:</b> the typical flagged stock does about as well as the market, or worse. The average is positive because a few flags become very large winners, like the memory names in 2025. A flag is a lead to research, not a buy signal.</span></div>
+  <p class="small muted">We removed {{ es.bad_ticks_removed or 677 }} bad price ticks (closes below 0.2× or above 5× the one-year median) after one broken quote inflated the first result. That fix is disclosed in the repo.</p>
+
+  <h2 id="sources">4. Data sources</h2>
+  <p>All sources are free and public, and the code that fetches them is in the <a href="{{ repo }}" rel="noopener">repository</a>.</p>
+  <ul>
+    <li><b>Taiwan MOPS:</b> monthly revenue for every listed company, 2005 on.</li>
+    <li><b>US Census international trade API:</b> monthly imports by HS6 code, 2013 on.</li>
+    <li><b>Korea Customs Service trade statistics:</b> monthly exports by HS code.</li>
+    <li><b>FRED:</b> producer price indexes (e.g. transformers, switchgear).</li>
+    <li><b>SEC XBRL and UN Comtrade:</b> cross-checks.</li>
+    <li><b>Yahoo Finance:</b> daily closes for baskets and benchmarks.</li>
+  </ul>
+
+  <h2 id="honesty">5. Pre-registration and the log</h2>
+  <p>Before we test a rule, we write it down, hash it and push it to GitHub. Rules that fail stay public. Each month the calls are appended to <code>signal_log.jsonl</code>, where every entry carries the SHA-256 of the one before it. See the <a href="/track-record">track record</a>.</p>
+  <ul class="plain">
+    {% for f, d in [("PREREGISTRATION.md","v1: first index"),("PREREGISTRATION_v2.md","v2: IN/OUT rules"),("PREREGISTRATION_v3_power.md","v3: power from imports (failed)"),("PREREGISTRATION_v4.md","v4: like-for-like momentum, tilts"),("PREREGISTRATION_v5_discovery.md","v5: discovery scanner"),("PREREGISTRATION_v6_universe.md","v6: all 28 themes")] %}
+    <li><a href="{{ repo }}/blob/main/backtest/{{ f }}" rel="noopener">{{ icon('file-text') }} {{ d }}</a></li>{% endfor %}
+  </ul>
+
+  <h2 id="limits">6. Limits</h2>
+  <ul>
+    <li><b>Few live calls:</b> the live log started in September 2026. Backtests aren't a track record.</li>
+    <li><b>Survivorship:</b> baskets list companies that exist today, which flatters old backtest returns.</li>
+    <li><b>Taiwan-heavy:</b> the best monthly company data is Taiwanese. Themes without Taiwanese suppliers rely on trade data that only starts in 2013, so most of them stay in Monitoring.</li>
+    <li><b>Mislabelled codes:</b> customs codes mix products, and an HS code can move for reasons unrelated to AI.</li>
+    <li><b>No costs:</b> returns ignore trading costs, taxes and currency.</li>
+  </ul>
+  <p class="small muted">Leadtime is research, not investment advice. It doesn't know your circumstances. Do your own work before you trade.</p>
+</article>
+</div>
+{% endblock %}

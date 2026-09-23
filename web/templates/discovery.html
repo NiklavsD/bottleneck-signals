@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, pct %}
+{% block title %}Discovery feed · Leadtime{% endblock %}
+{% block main %}
+{% set ev = snap.discovery.event_study %}
+<div class="page-head"><div class="wrap">
+  <p class="eyebrow"><span class="dot"></span>Discovery</p>
+  <h1>Breakouts the scanner found</h1>
+  <p class="lede">Every month we check all 1,850+ Taiwan-listed companies and thousands of US import product codes. A flag means revenue or trade value is growing much faster than the series' own history (≥2σ, ≥30% YoY, and accelerating). New bottlenecks usually show up here first.</p>
+  <div class="notice {{ 'ok' if ev.PASS else '' }}" style="margin-top:18px;max-width:880px">{{ icon('flask') }}
+    <div><b>Tested before launch.</b> In 2008–2016 data the rules had never seen, flagged companies beat the Taiwan index by <b class="num">{{ '%+.1f'|format(ev.OOS['6m'].mean_pct) }}%</b> on average over the next 6 months (median {{ '%+.1f'|format(ev.OOS['6m'].median_pct) }}%, t = {{ ev.OOS['6m'].t_clustered }}, {{ ev.OOS['6m'].n_events }} flags). <b>Since 2017 it's weaker:</b> the average is {{ '%+.1f'|format(ev.IS['6m'].mean_pct) }}%, but the median flag trailed by {{ '%.1f'|format(-ev.IS['6m'].median_pct) }}%. The gains come from a few big winners, so read flags as leads to research, not buy signals. <a href="/method#discovery">Details</a></div>
+  </div>
+</div></div>
+<div class="wrap" style="padding-top:28px">
+  <div class="filters">
+    <div class="seg" role="group" aria-label="Filter by type">
+      <a href="?kind=all&theme={{ theme_filter }}" aria-current="{{ 'true' if kind == 'all' else 'false' }}">All</a>
+      <a href="?kind=company&theme={{ theme_filter }}" aria-current="{{ 'true' if kind == 'company' else 'false' }}">Companies</a>
+      <a href="?kind=trade&theme={{ theme_filter }}" aria-current="{{ 'true' if kind == 'trade' else 'false' }}">Trade flows</a>
+    </div>
+    <div class="seg" role="group" aria-label="Filter by theme">
+      <a href="?kind={{ kind }}" aria-current="{{ 'true' if not theme_filter else 'false' }}">Any theme</a>
+      <a href="?kind={{ kind }}&theme=mapped" aria-current="{{ 'true' if theme_filter == 'mapped' else 'false' }}">Mapped to a bottleneck</a>
+      <a href="?kind={{ kind }}&theme=unmapped" aria-current="{{ 'true' if theme_filter == 'unmapped' else 'false' }}">Unmapped (new?)</a>
+    </div>
+  </div>
+  {% set items = snap.discovery['items'] %}
+  {% if kind != "all" %}{% set items = items|selectattr("kind", "equalto", kind)|list %}{% endif %}
+  {% if theme_filter == "mapped" %}{% set items = items|selectattr("themes")|list %}{% elif theme_filter == "unmapped" %}{% set items = items|rejectattr("themes")|list %}{% endif %}
+  {% for month, group in items|groupby("month")|reverse %}
+    <h2 style="font-size:1.35rem;margin:26px 0 10px">{{ month[:7] }} <span class="muted small" style="font-family:var(--sans)">· {{ group|length }} flags · published {{ group[0].published }}</span></h2>
+    <div class="card">
+    {% for f in group|sort(attribute="z", reverse=True) %}
+      <div class="flag">
+        <div class="when">{% if f.kind == "company" %}{{ f.ticker }}{% else %}HS {{ f.hs }}<br>{{ "US imports" if f.source == "us_imports" else "KR exports" }}{% endif %}</div>
+        <div>
+          <div class="what">{% if f.kind == "company" %}{{ f.name }}{% if f.name_local and f.name_local != f.name %} <span class="muted small">{{ f.name_local }}</span>{% endif %}{% else %}{{ f.desc or ("HS " ~ f.hs) }}{% endif %}</div>
+          <div class="why">{% if f.kind == "company" %}{{ f.industry }} · 3-mo revenue NT${{ '{:,.0f}'.format(f.rev3_twd_m) }}m{% else %}3-mo value ${{ '{:,.0f}'.format(f.value3_usd_m) }}m{% endif %}
+            {% if f.themes %} · {% for s in f.themes %}<a class="tag" href="/t/{{ s }}">{{ snap.by_slug[s].name }}</a>{{ ", " if not loop.last }}{% endfor %}{% else %} · <span class="chip warn" style="font-size:.66rem">Unmapped</span>{% endif %}</div>
+        </div>
+        <div class="stats">{{ pct(f.yoy3, 0) }} <span class="muted small">YoY</span><br><span class="small"><span class="zbar" style="width:{{ ([f.z, 8]|min * 6)|round|int }}px"></span>{{ '%.1f'|format(f.z) }}σ</span>{% if f.kind == "company" and f.r3m is defined %}<br><span class="small muted">stock 3 mo {{ pct(f.r3m) }}</span>{% endif %}</div>
+      </div>
+    {% endfor %}
+    </div>
+  {% else %}<p class="muted">No flags match these filters.</p>{% endfor %}
+</div>
+{% endblock %}

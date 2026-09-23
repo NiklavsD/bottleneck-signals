@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, pct, call_chip %}
+{% block title %}{{ c.name }} ({{ c.ticker }}) · Leadtime{% endblock %}
+{% block main %}
+<div class="page-head"><div class="wrap">
+  <p class="crumbs"><a href="/companies">Companies</a> / {{ c.ticker }}</p>
+  <h1>{{ c.name }}</h1>
+  <p class="lede"><span class="tick">{{ c.ticker }}</span> · {{ c.country }}{% if c.last is not none %} · last <span class="num">{{ '{:,.2f}'.format(c.last) }}</span> ({{ c.asof }}){% endif %}</p>
+  <div class="legend" style="margin-top:10px;gap:22px;font-size:.92rem;color:var(--ink-2)"><span>1 mo {{ pct(c.r1m) }}</span><span>3 mo {{ pct(c.r3m) }}</span><span>YTD {{ pct(c.ytd) }}</span><span>1 yr {{ pct(c.r1y) }}</span></div>
+</div></div>
+<div class="wrap" style="padding-top:28px">
+  <h2 style="font-size:1.4rem;margin-bottom:12px">Bottlenecks it sits in</h2>
+  <div class="card">
+  {% for th in c.themes %}{% set t = snap.by_slug[th.slug] %}
+    <div class="flag" style="grid-template-columns:1fr auto">
+      <div><a class="what" href="/t/{{ t.slug }}">{{ t.name }}</a><div class="why">{{ th.role }} · {{ t.thesis }}</div></div>
+      <div class="stats">{{ call_chip(t) }}{% if t.C is not none %}<br><span class="small muted">pressure {{ '%+.2f'|format(t.C) }}</span>{% endif %}</div>
+    </div>
+  {% endfor %}
+  </div>
+  {% if flags %}
+  <h2 style="font-size:1.4rem;margin:28px 0 12px">Discovery flags</h2>
+  <div class="card">{% for f in flags %}<div class="flag"><div class="when">{{ f.month[:7] }}</div><div><div class="what">Revenue {{ '%+.0f'|format(f.yoy3) }}% YoY (3-mo)</div><div class="why">{{ '%.1f'|format(f.z) }}σ vs own history · accelerating {{ '%+.0f'|format(f.accel_pp) }} pp</div></div><div></div></div>{% endfor %}</div>
+  {% endif %}
+  <p class="small muted" style="margin-top:24px">Not a recommendation. A company appears because of its role in a supply chain, not because of a view on its valuation.</p>
+</div>
+{% endblock %}

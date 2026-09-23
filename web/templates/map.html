@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, call_chip, momentum, pressure_word, heat_color, pct %}
+{% block title %}Bottleneck map · Leadtime{% endblock %}
+{% block main %}
+<div class="page-head"><div class="wrap">
+  <p class="eyebrow"><span class="dot"></span>Bottleneck map</p>
+  <h1>{{ snap.themes|length }} bottlenecks, one reading each</h1>
+  <p class="lede">Colour shows the pressure index: orange is tightening against its own history, blue is easing. The chip is the model's call where a rule has passed its out-of-sample test. Otherwise it says <i>monitoring</i>.</p>
+  <div class="legend" style="margin-top:16px"><span>Easing</span><span class="ramp" aria-hidden="true"></span><span>Tight</span><span style="margin-left:12px">{{ icon('trend-up') }} momentum rising · {{ icon('trend-down') }} slowing</span></div>
+</div></div>
+<div class="wrap" style="padding-top:36px">
+{% for u in snap.universes %}
+  {% set ts = snap.themes|selectattr("universe", "equalto", u.slug)|list %}
+  <section class="universe reveal" id="{{ u.slug }}">
+    <div class="universe-head"><div><h2>{{ u.name }}</h2><span class="muted small">{{ u.tagline }}</span></div><span class="mono small muted">{{ ts|length }} themes</span></div>
+    <div class="tiles">
+    {% for t in ts|sort(attribute="layer") %}
+      <a class="tile" href="/t/{{ t.slug }}">
+        <span class="heat" style="background:{{ heat_color(t.C) }}"></span>
+        <div class="tile-top"><div><div class="layer">{{ t.layer }}</div><h3>{{ t.name }}</h3></div>{{ call_chip(t) }}</div>
+        <div class="tile-bot">
+          <div>{% if t.C is not none %}<div class="metric">{{ '%+.2f'|format(t.C) }}<small>{{ pressure_word(t.C) }}</small></div><div class="small">{{ momentum(t.M) }}</div>{% else %}<div class="small muted">Basket only, no physical series yet</div>{% endif %}</div>
+          <div class="small" style="text-align:right"><span class="muted">basket 3 mo</span><br>{{ pct(t.basket_stats.r3m) }}</div>
+        </div>
+      </a>
+    {% endfor %}
+    </div>
+  </section>
+{% endfor %}
+</div>
+{% endblock %}

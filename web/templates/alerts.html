@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}Your alerts · Leadtime{% endblock %}
+{% block main %}
+<div class="page-head"><div class="wrap">
+  <p class="eyebrow"><span class="dot"></span>Alerts · {{ user.email }}</p>
+  <h1>Where and when we reach you</h1>
+  <p class="lede">Add one or more channels, then pick the bottlenecks and events you care about. Each new channel gets a test message straight away.</p>
+</div></div>
+<div class="wrap" style="padding-top:24px">
+  {% if welcome %}<div class="notice ok" style="margin-bottom:14px">{{ icon('check-circle') }}<span>Account created. Add a channel below to start getting alerts.</span></div>{% endif %}
+  {% if msg %}<div class="notice ok" role="status" style="margin-bottom:14px">{{ icon('check-circle') }}<span>{{ msg }}</span></div>{% endif %}
+  {% if err %}<div class="notice err" role="alert" style="margin-bottom:14px">{{ icon('warning') }}<span>{{ err }}</span></div>{% endif %}
+
+  <section style="margin-bottom:34px">
+    <h2 style="font-size:1.45rem;margin-bottom:12px">Your channels</h2>
+    <div class="card">
+    {% for c in channels %}{% set spec = (catalog|selectattr("kind","equalto",c.kind)|first) %}
+      <div class="mine">
+        <span>{{ icon(spec.icon) }}</span>
+        <div><b>{{ c.label or spec.name }}</b> <span class="muted small mono">{{ c.display }}</span><br>
+          <span class="small {{ 'down' if c.last_error else 'muted' }}">{% if c.last_error %}Last test failed: {{ c.last_error }}{% elif c.last_ok_at %}Working · last delivery OK{% else %}Not tested yet{% endif %}</span></div>
+        <div style="display:flex;gap:8px">
+          <form method="post" action="/alerts/channel/{{ c.id }}/test"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="btn btn-ghost btn-sm" type="submit">{{ icon('paper-plane-tilt') }} Test</button></form>
+          <form method="post" action="/alerts/channel/{{ c.id }}/delete"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="btn btn-danger btn-sm" type="submit" aria-label="Remove {{ spec.name }}">{{ icon('trash') }}</button></form>
+        </div>
+      </div>
+    {% else %}
+      <p class="card-pad muted" style="margin:0">No channels yet. Add one below. Discord or phone push take under a minute.</p>
+    {% endfor %}
+    </div>
+  </section>
+
+  <section style="margin-bottom:34px">
+    <h2 style="font-size:1.45rem;margin-bottom:12px">Add a channel</h2>
+    <div class="channel-grid">
+    {% set on = [] %}{% set off = [] %}{% for ch in catalog %}{% if status[ch.kind].available %}{% set _ = on.append(ch) %}{% else %}{% set _ = off.append(ch) %}{% endif %}{% endfor %}
+    {% for ch in on + off %}{% set st = status[ch.kind] %}
+      <div class="card ch {{ '' if st.available else 'off' }}">
+        <div class="ch-head">{{ icon(ch.icon) }}<b>{{ ch.name }}</b>{% if not st.available %}<span class="chip" style="margin-left:auto">Coming soon</span>{% endif %}</div>
+        <p class="small muted" style="margin:0">{{ ch.help }}</p>
+        {% if st.available %}
+          {% if ch.kind == "telegram" %}
+            {% if tg_link %}<a class="btn btn-primary btn-sm" href="{{ tg_link }}" rel="noopener" style="justify-self:start">{{ icon('telegram-logo') }} Connect Telegram</a><span class="small muted">Tap, then press <b>Start</b> in Telegram. The link is valid for 1 hour.</span>{% endif %}
+          {% else %}
+          <form class="form" method="post" action="/alerts/channel" style="gap:8px">
+            <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="kind" value="{{ ch.kind }}">
+            <input type="{{ 'email' if ch.kind == 'email' else 'tel' if ch.kind == 'sms' else 'text' }}" name="value" placeholder="{{ ch.placeholder }}" required aria-label="{{ ch.name }} {{ ch.field }}">
+            {% if ch.kind == "webhook" %}<input type="text" name="secret" placeholder="Signing secret (optional)" aria-label="Webhook signing secret">{% endif %}
+            <input type="text" name="label" placeholder="Label (optional)" maxlength="40" aria-label="Label">
+            <button class="btn btn-ghost btn-sm" type="submit" style="justify-self:start">{{ icon('plus') }} Add &amp; send test</button>
+          </form>
+          {% endif %}
+        {% else %}<p class="small" style="margin:0;color:var(--ink-3)">Not switched on yet on this server.</p>{% endif %}
+      </div>
+    {% endfor %}
+    </div>
+  </section>
+
+  <section style="margin-bottom:34px">
+    <h2 style="font-size:1.45rem;margin-bottom:12px">What to send</h2>
+    <form class="card card-pad form" method="post" action="/alerts/prefs">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px 28px">
+        <label class="check"><input type="checkbox" name="ev_calls" {{ 'checked' if prefs.ev_calls }}><span><b>Call changes</b><br><span class="small muted">When a validated call flips, e.g. memory IN → OUT, or a tilt changes.</span></span></label>
+        <label class="check"><input type="checkbox" name="ev_discovery" {{ 'checked' if prefs.ev_discovery }}><span><b>Discovery flags</b><br><span class="small muted">When the scanner flags a company or trade flow in your bottlenecks.</span></span></label>
+        <label class="check"><input type="checkbox" name="ev_digest" {{ 'checked' if prefs.ev_digest }}><span><b>Monthly digest</b><br><span class="small muted">One summary after the monthly data run (around the 17th).</span></span></label>
+      </div>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px 28px;margin-top:6px">
+        <label class="f">Discovery sensitivity
+          <select name="discovery_min_z">
+            {% for z, lab in [(2.0, "All flags (≥2σ)"), (3.0, "Strong only (≥3σ), recommended"), (4.0, "Only extreme (≥4σ)")] %}<option value="{{ z }}" {{ 'selected' if (prefs.discovery_min_z - z)|abs < 0.01 }}>{{ lab }}</option>{% endfor %}
+          </select></label>
+        <label class="check" style="align-self:end"><input type="checkbox" name="discovery_themed_only" {{ 'checked' if prefs.discovery_themed_only }}><span>Only flags mapped to a bottleneck I follow</span></label>
+      </div>
+      <fieldset style="border:0;padding:0;margin:8px 0 0">
+        <legend style="font-weight:600;margin-bottom:8px">Bottlenecks</legend>
+        <label class="check" style="margin-bottom:10px"><input type="checkbox" name="all_themes" {{ 'checked' if prefs.themes == ['*'] }}><span>All bottlenecks, including ones added later</span></label>
+        <details class="more" {{ 'open' if prefs.themes != ['*'] }}><summary>Or choose specific ones</summary>
+          {% for u in snap.universes %}<p class="eyebrow" style="margin:14px 0 8px">{{ u.name }}</p>
+          <div class="theme-picks">{% for t in snap.themes|selectattr("universe","equalto",u.slug) %}
+            <label class="check"><input type="checkbox" name="themes" value="{{ t.slug }}" {{ 'checked' if t.slug in prefs.themes }}><span>{{ t.name }}</span></label>{% endfor %}</div>{% endfor %}
+        </details>
+      </fieldset>
+      <div><button class="btn btn-primary" type="submit">Save preferences</button></div>
+    </form>
+  </section>
+
+  <section class="two" style="align-items:start;margin-bottom:10px">
+    <div class="card card-pad">
+      <h3>Sign out</h3>
+      <form method="post" action="/logout" style="margin-top:12px"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="btn btn-ghost btn-sm" type="submit">{{ icon('sign-out') }} Sign out</button></form>
+    </div>
+    <div class="card card-pad">
+      <h3>Delete account</h3>
+      <p class="small muted" style="margin:8px 0">Removes your account, channels and preferences for good. Type your email to confirm.</p>
+      <form class="form" method="post" action="/account/delete" style="grid-template-columns:1fr auto;gap:8px"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="text" name="confirm" placeholder="{{ user.email }}" aria-label="Confirm email"><button class="btn btn-danger btn-sm" type="submit" style="height:40px">Delete</button></form>
+    </div>
+  </section>
+</div>
+{% endblock %}

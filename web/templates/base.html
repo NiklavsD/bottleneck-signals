@@ -1,0 +1,61 @@
+{% from "_macros.html" import icon %}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Leadtime: see the shortage before the stock does{% endblock %}</title>
+<meta name="description" content="{% block desc %}Leadtime tracks the physical bottlenecks behind AI, power and robotics in free, dated data, and keeps a tamper-evident public record of every call.{% endblock %}">
+<meta name="theme-color" content="#f5f3ee">
+<meta property="og:title" content="{{ self.title() }}">
+<meta property="og:description" content="{{ self.desc() }}">
+<meta property="og:type" content="website">
+<link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/static/fonts/IBMPlexSans-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/css/app.css?v=1">
+<script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("lt-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Leadtime home"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span><span class="word">Leadtime</span></a>
+    <nav class="nav" aria-label="Main">
+      {% for href, label in [("/map", "Bottleneck map"), ("/discovery", "Discovery"), ("/companies", "Companies"), ("/track-record", "Track record"), ("/method", "Method")] %}
+      <a href="{{ href }}" {% if path.startswith(href) %}aria-current="page"{% endif %}>{{ label }}</a>
+      {% endfor %}
+    </nav>
+    <div class="head-actions">
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle dark mode">{{ icon('moon') }}</button>
+      {% if user %}
+      <a class="btn btn-ghost btn-sm" href="/alerts">{{ icon('bell') }}<span class="btn-label">My alerts</span></a>
+      {% else %}
+      <a class="btn btn-ghost btn-sm" href="/login" aria-label="Sign in">{{ icon('sign-in') }}<span class="btn-label">Sign in</span></a>
+      <a class="btn btn-primary btn-sm" href="/signup">{{ icon('bell') }}<span class="btn-label">Get alerts</span></a>
+      {% endif %}
+      <button class="icon-btn menu-btn" type="button" data-menu aria-label="Menu" aria-expanded="false">{{ icon('list') }}</button>
+    </div>
+  </div>
+</header>
+<main id="main">{% block main %}{% endblock %}</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="/" style="margin-bottom:10px"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span><span class="word">Leadtime</span></a>
+        <p>Physical bottlenecks behind AI, power and robotics, measured in free, dated data. Every rule is published before it is tested, and every call is logged in a hash chain.</p>
+      </div>
+      <div>
+        <b class="small" style="color:var(--ink)">Research</b>
+        <a href="/map">Bottleneck map</a><a href="/discovery">Discovery feed</a><a href="/companies">Companies</a><a href="/track-record">Track record</a>
+      </div>
+      <div>
+        <b class="small" style="color:var(--ink)">About</b>
+        <a href="/method">Method &amp; data sources</a><a href="{{ snap.track.repo }}" rel="noopener">{{ icon('github-logo') }} Public repo &amp; signal log</a><a href="/api/snapshot">Open data (JSON)</a>
+      </div>
+    </div>
+    <p class="disclaimer"><b>Not investment advice.</b> Leadtime publishes general, impersonal research on a regular schedule. Nothing here is a personal recommendation or an offer to buy or sell any security. Model calls are mechanical outputs of published rules. Back-tested results are hypothetical and past performance does not predict future returns. You can lose money. Market data is delayed and may contain errors. Data as of {{ snap.prices_asof }}; snapshot built {{ snap.generated_at[:16].replace('T', ' ') }} UTC.</p>
+  </div>
+</footer>
+<script src="/static/js/app.js?v=1" defer></script>
+</body>
+</html>

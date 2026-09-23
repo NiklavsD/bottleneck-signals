@@ -1,0 +1,40 @@
+{% macro icon(name, cls="") -%}<svg class="icon {{ cls }}" aria-hidden="true"><use href="/static/icons/sprite.svg#i-{{ name }}"/></svg>{%- endmacro %}
+
+{% macro call_chip(t) -%}
+{%- set c = t.call -%}
+{%- if c == "IN" or c == "OVERWEIGHT" -%}<span class="chip good">{{ "In" if c == "IN" else "Overweight" }}</span>
+{%- elif c == "OUT" or c == "UNDERWEIGHT" -%}<span class="chip bad">{{ "Out" if c == "OUT" else "Underweight" }}</span>
+{%- else -%}<span class="chip" title="{{ t.reason or 'No validated rule yet' }}">Monitoring</span>{%- endif -%}
+{%- endmacro %}
+
+{% macro pressure_word(C) -%}
+{%- if C is none -%}No data{%- elif C >= 2 -%}Very tight{%- elif C >= 1 -%}Tight{%- elif C >= 0 -%}Firming{%- elif C >= -1 -%}Loosening{%- else -%}Easing{%- endif -%}
+{%- endmacro %}
+
+{% macro gauge(C) -%}
+{%- if C is none -%}<div class="gauge" aria-hidden="true"></div>
+{%- else -%}{%- set w = (([C|abs, 6]|min) / 6) ** 0.5 * 50 -%}
+<div class="gauge" role="img" aria-label="Pressure {{ '%+.2f'|format(C) }}">
+  <i style="{% if C >= 0 %}left:50%;background:var(--tight){% else %}right:50%;background:var(--ease){% endif %};width:{{ '%.1f'|format(w) }}%"></i>
+</div>{%- endif -%}
+{%- endmacro %}
+
+{% macro momentum(M) -%}
+{%- if M is none -%}<span class="muted">—</span>
+{%- elif M > 0.05 -%}<span class="up" title="Momentum {{ '%+.2f'|format(M) }}">{{ icon('trend-up') }} rising</span>
+{%- elif M < -0.05 -%}<span class="down" title="Momentum {{ '%+.2f'|format(M) }}">{{ icon('trend-down') }} slowing</span>
+{%- else -%}<span class="muted">{{ icon('minus') }} flat</span>{%- endif -%}
+{%- endmacro %}
+
+{% macro heat_color(C) -%}
+{%- if C is none -%}var(--rule-2){%- elif C >= 0 -%}color-mix(in srgb, var(--tight) {{ ([C, 3]|min / 3 * 100)|round|int }}%, var(--mid)){%- else -%}color-mix(in srgb, var(--ease) {{ ([C|abs, 3]|min / 3 * 100)|round|int }}%, var(--mid)){%- endif -%}
+{%- endmacro %}
+
+{% macro pct(v, dp=1) -%}
+{%- if v is none -%}<span class="muted">—</span>{%- else -%}<span class="num {{ 'up' if v > 0 else 'down' if v < 0 else '' }}">{{ ('%+.' ~ dp ~ 'f')|format(v) }}%</span>{%- endif -%}
+{%- endmacro %}
+
+{% macro chart(spec, cls="") -%}
+<div class="chart {{ cls }}" data-chart><script type="application/json">{{ spec|tojson }}</script>
+<noscript><p class="small muted">Chart needs JavaScript. The data is available at <a href="/api/snapshot">/api/snapshot</a>.</p></noscript></div>
+{%- endmacro %}

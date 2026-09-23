@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, call_chip, momentum, pressure_word, gauge, pct, chart %}
+{% block title %}{{ t.name }} · Leadtime{% endblock %}
+{% block desc %}{{ t.thesis }}{% endblock %}
+{% block main %}
+<div class="page-head"><div class="wrap theme-hero">
+  <div>
+    <p class="crumbs"><a href="/map">Bottleneck map</a> / <a href="/map#{{ t.universe }}">{{ (snap.universes|selectattr("slug","equalto",t.universe)|first).name }}</a> / {{ t.layer }}</p>
+    <h1>{{ t.name }}</h1>
+    <p class="lede">{{ t.thesis }}</p>
+    <dl class="kv" style="margin-top:18px;max-width:70ch">
+      <dt>Tightening looks like</dt><dd>{{ t.watch }}</dd>
+      <dt>Easing looks like</dt><dd>{{ t.invalidate }}</dd>
+    </dl>
+  </div>
+  <aside class="callbox">
+    <div class="callbox-top">
+      <span class="eyebrow">Model call</span>
+      <div class="state">{% if t.call %}{{ call_chip(t) }}{% else %}<span class="chip">Monitoring</span>{% endif %}</div>
+      <p class="small muted" style="margin:6px 0 0">{% if t.status == "validated" %}{{ t.rule }}{% else %}{{ t.reason }}{% endif %}</p>
+    </div>
+    <dl class="kv">
+      <dt>Pressure</dt><dd>{% if t.C is not none %}<span class="num">{{ '%+.2f'|format(t.C) }}</span> · {{ pressure_word(t.C) }}{% else %}—{% endif %}</dd>
+      <dt>Momentum</dt><dd>{% if t.M is not none %}<span class="num">{{ '%+.2f'|format(t.M) }}</span> · {{ momentum(t.M) }}{% else %}—{% endif %}</dd>
+      <dt>Data month</dt><dd class="num">{{ t.data_month[:7] if t.data_month else "—" }}</dd>
+      <dt>Decided</dt><dd class="num">{{ t.decision_date or "—" }}</dd>
+      <dt>Benchmark</dt><dd class="num">{{ t.benchmark }}</dd>
+      <dt>Basket 3 mo</dt><dd>{{ pct(t.basket_stats.r3m) }} <span class="muted small">vs {{ pct(t.basket_stats.bench_r3m) }}</span></dd>
+    </dl>
+    <div style="padding:0 20px 18px"><a class="btn btn-primary btn-sm" href="{{ '/alerts' if user else '/signup' }}">{{ icon('bell') }} Alert me when this changes</a></div>
+  </aside>
+</div></div>
+
+<div class="wrap" style="padding:32px 24px 0">
+  {% if t.index_series %}
+  <div class="two">
+    <div class="card chart-card">
+      <h3>Pressure index</h3><p class="sub">Composite z-score, plotted on the date each reading became usable. Shading marks months when the reading was positive.</p>
+      {% set bands = [] %}
+      {% set ns = namespace(start=none) %}
+      {% for p in t.index_series %}{% if p[1] > 0 and ns.start is none %}{% set ns.start = p[0] %}{% elif p[1] <= 0 and ns.start is not none %}{% set _ = bands.append([ns.start, p[0], "--accent-soft"]) %}{% set ns.start = none %}{% endif %}{% endfor %}
+      {% if ns.start is not none %}{% set _ = bands.append([ns.start, t.index_series[-1][0], "--accent-soft"]) %}{% endif %}
+      {{ chart({"label": "Pressure index", "zero": true, "dp": 2, "bands": bands, "series": [{"name": "Pressure", "color": "--ink", "data": t.index_series}]}) }}
+    </div>
+    <div class="card chart-card">
+      <h3>Basket vs {{ t.benchmark }}</h3><p class="sub">Equal-weight basket, weekly, rebased to 100 in Jan 2016. The basket is today's list, so earlier years flatter it.</p>
+      <div class="chart-legend"><span><i style="background:var(--accent)"></i>Basket</span><span><i style="background:var(--ink-3)"></i>{{ t.benchmark }}</span></div>
+      {% set pb = [] %}{% set pm = [] %}{% for p in t.perf_series %}{% set _ = pb.append([p[0], p[1]]) %}{% set _ = pm.append([p[0], p[2]]) %}{% endfor %}
+      {{ chart({"label": "Basket vs benchmark", "log": true, "dp": 0, "series": [{"name": "Basket", "color": "--accent", "data": pb}, {"name": t.benchmark, "color": "--ink-3", "data": pm, "width": 1.5}]}) }}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if t.components %}
+  <section style="margin-top:28px">
+    <div class="section-head" style="margin-bottom:12px"><div><h2>Evidence</h2><p class="muted">The physical series behind the index. Each is public, dated and re-computable.</p></div></div>
+    <div class="card">
+    {% for c in t.components %}
+      <div class="comp">
+        <div>
+          <div class="eyebrow">{{ c.source }}</div>
+          <h3 style="margin:8px 0 6px">{{ c.label }}: <span class="num">{{ '%+.1f'|format(c.latest_yoy) }}%</span> <span class="small muted">3-mo YoY, {{ c.latest_month[:7] }}</span></h3>
+          <p class="small muted" style="margin:0">{{ c.detail }}{% if c.latest_z is not none %} · <span class="num">{{ '%+.2f'|format(c.latest_z) }}σ</span> vs own history{% endif %} · <a href="{{ c.url }}" rel="noopener">source</a></p>
+        </div>
+        {{ chart({"label": c.label, "zero": true, "dp": 1, "tipfmt": "{v}%", "yfmt": "{v}%", "series": [{"name": "YoY", "color": "--ink-2", "data": c.series[-96:], "width": 1.6}]}, "sm") }}
+      </div>
+    {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section style="margin-top:32px">
+    <div class="section-head" style="margin-bottom:12px"><div><h2>Listed exposure</h2><p class="muted">Companies that control the constraint. Prices delayed{% if t.basket and t.basket[0].asof %} · as of {{ t.basket[0].asof }}{% endif %}.</p></div></div>
+    <div class="table-wrap">
+      <table class="data" data-sortable>
+        <thead><tr><th class="sortable">Company</th><th class="hide-sm">Role</th><th class="sortable r">Price</th><th class="sortable r">1 mo</th><th class="sortable r">3 mo</th><th class="sortable r hide-sm">1 yr</th><th class="sortable r hide-sm">Supplier rev. YoY</th></tr></thead>
+        <tbody>
+        {% for b in t.basket %}
+          <tr>
+            <td><a href="/c/{{ b.ticker }}" style="text-decoration:none"><span class="co-name">{{ b.name }}</span><br><span class="tick muted">{{ b.ticker }}</span> <span class="co-sub">{{ b.country }}</span></a></td>
+            <td class="hide-sm small">{{ b.role }}</td>
+            <td class="r num" data-v="{{ b.last if b.last is not none else '' }}">{{ '{:,.2f}'.format(b.last) if b.last is not none else '—' }}</td>
+            <td class="r" data-v="{{ b.r1m if b.r1m is not none else '' }}">{{ pct(b.r1m) }}</td>
+            <td class="r" data-v="{{ b.r3m if b.r3m is not none else '' }}">{{ pct(b.r3m) }}</td>
+            <td class="r hide-sm" data-v="{{ b.r1y if b.r1y is not none else '' }}">{{ pct(b.r1y) }}</td>
+            <td class="r hide-sm" data-v="{{ b.rev_yoy3 if b.rev_yoy3 is not none else '' }}">{{ pct(b.rev_yoy3 if b.rev_yoy3 is defined else none) }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="two" style="margin-top:32px;align-items:start">
+    <div class="card card-pad">
+      <h3>How this call is tested</h3>
+      {% if t.test and t.test.kind == "timing" %}<p class="small" style="margin-top:10px">{{ t.test.note }}</p>
+      {% elif t.test %}
+        <p class="small muted" style="margin:8px 0 12px">Tilt rule: overweight the basket vs {{ t.benchmark }} when pressure &gt; 0, underweight otherwise. Compared against always overweighting. {{ t.test.window }}.</p>
+        <div class="scroll-x"><table class="data"><thead><tr><th>Window</th><th class="r">Tilt Sharpe</th><th class="r">Always-over</th><th>Result</th></tr></thead><tbody>
+        {% for label, r in [("Out-of-sample 2008–17", t.test.oos), ("Since 2016", t.test.since_2016)] %}{% if r %}
+          <tr><td>{{ label }}</td><td class="r num">{{ r.tilt_sharpe }}</td><td class="r num">{{ r.always_sharpe }}</td><td>{% if label.startswith("Out") %}<span class="chip {{ 'good' if r.pass else 'bad' }}">{{ "Pass" if r.pass else "Fail" }}</span>{% else %}<span class="muted small">in-sample</span>{% endif %}</td></tr>
+        {% endif %}{% endfor %}
+        </tbody></table></div>
+      {% else %}<p class="small muted" style="margin-top:10px">No physical data series yet, so there is nothing to test. The basket is shown for context only.</p>{% endif %}
+      <p class="small" style="margin:14px 0 0"><a href="/method">Read the method</a></p>
+    </div>
+    <div class="card card-pad">
+      <h3>Signal history</h3>
+      {% if t.call_history %}
+      <ul class="timeline" style="margin-top:12px">{% for h in t.call_history|reverse %}<li><span class="num small">{{ h.date }}</span><span>{% if t.slug == "memory" %}Rule M → {{ h.state|title }}{% else %}Pressure turned {{ "positive" if h.state == "OVERWEIGHT" else "negative" }}{% endif %}</span></li>{% endfor %}</ul>
+      <p class="small muted" style="margin-top:10px">Back-computed from the published rule. Live calls since 23 Sep 2026 are in the <a href="/track-record">hash-chained log</a>.</p>
+      {% else %}<p class="small muted" style="margin-top:10px">No history yet.</p>{% endif %}
+    </div>
+  </section>
+</div>
+{% endblock %}

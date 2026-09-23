@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, call_chip, gauge, pressure_word, momentum, pct %}
+{% block main %}
+{% set themes = snap.themes %}
+{% set scored = themes|selectattr("C", "ne", none)|list %}
+{% set validated = themes|selectattr("status", "equalto", "validated")|list %}
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow"><span class="dot"></span>Physical supply chains · AI · Power · Robotics</p>
+      <h1 style="margin-top:18px">See the shortage <em>before</em> the stock does.</h1>
+      <p class="lede">Every AI boom turns into a hardware problem: memory, optics, transformers, actuators. Leadtime tracks those bottlenecks in free, dated data like supplier revenue, customs flows and import values. It turns them into tested calls and keeps a public record nobody can edit.</p>
+      <div class="hero-cta">
+        <a class="btn btn-accent" href="/map">Open the bottleneck map {{ icon('arrow-right') }}</a>
+        <a class="btn btn-ghost" href="{{ '/alerts' if user else '/signup' }}">{{ icon('bell') }} Alerts on Discord, Telegram, SMS…</a>
+      </div>
+      <div class="hero-proof">
+        <div><b>{{ themes|length }}</b><span>bottlenecks tracked</span></div>
+        <div><b>{{ validated|length }}</b><span>with a tested, live call</span></div>
+        <div><b>1,850+</b><span>Taiwan suppliers scanned monthly</span></div>
+      </div>
+    </div>
+    <div class="board" aria-label="Current bottleneck pressure">
+      <div class="board-head">
+        <span class="eyebrow">Pressure board</span>
+        <span class="small muted">Latest data month · {{ (scored|map(attribute='data_month')|max)[:7] if scored else '' }}</span>
+      </div>
+      {% for t in (scored|sort(attribute="C", reverse=True))[:8] %}
+      <a class="board-row" href="/t/{{ t.slug }}">
+        <span><span class="t">{{ t.name }}</span><br><span class="u">{{ pressure_word(t.C) }} · {{ momentum(t.M) }}</span></span>
+        <span class="gauge-wrap">{{ gauge(t.C) }}</span>
+        <span style="text-align:right">{{ call_chip(t) }}</span>
+      </a>
+      {% endfor %}
+      <div class="board-foot"><span>Bar = pressure index (tight right, easing left)</span><a href="/map">All {{ themes|length }} {{ icon('arrow-right') }}</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="section reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <div><p class="eyebrow">How it works</p><h2 style="margin-top:10px">From a customs form to a call</h2></div>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="n">01 · Source</span><h3>Free, dated physical data</h3><p>Monthly revenue from 1,850+ Taiwan suppliers, Korean customs exports and US import values by product code. Each value is dated to the day it became public.</p></div>
+      <div class="step"><span class="n">02 · Measure</span><h3>A pressure index per bottleneck</h3><p>Growth compared with the series' own history. It shows whether a bottleneck is tightening and whether that is speeding up or slowing down.</p></div>
+      <div class="step"><span class="n">03 · Test</span><h3>Rules published first</h3><p>Each rule is hashed and pushed publicly <i>before</i> it is tested on years it never saw. Rules that fail are marked "monitoring" and make no call.</p></div>
+      <div class="step"><span class="n">04 · Record</span><h3>A log nobody can edit</h3><p>Every monthly call is stored with its prices and chained by SHA-256 on GitHub. Misses stay on the record.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <div><p class="eyebrow">Discovery · {{ snap.discovery.latest_month[:7] }}</p><h2 style="margin-top:10px">Where demand is breaking out now</h2>
+      <p class="muted">Suppliers whose revenue is accelerating far beyond their own history. Found by the scanner, not picked by hand. Bottleneck-linked names first.</p></div>
+      <a class="btn btn-ghost" href="/discovery">Full feed {{ icon('arrow-right') }}</a>
+    </div>
+    {% set flags = snap.discovery['items']|selectattr("kind", "equalto", "company")|selectattr("month", "equalto", snap.discovery.latest_month)|list %}
+    <div class="card">
+      {% set top = ((flags|selectattr("themes")|sort(attribute="z", reverse=True)|list) + (flags|rejectattr("themes")|sort(attribute="z", reverse=True)|list))[:6] %}
+      {% for f in top %}
+      <div class="flag">
+        <div class="when">{{ f.ticker }}</div>
+        <div><div class="what">{{ f.name }}</div><div class="why">{{ f.industry }}{% if f.themes %} · {% for s in f.themes %}<a class="tag" href="/t/{{ s }}">{{ snap.by_slug[s].name }}</a>{{ ", " if not loop.last }}{% endfor %}{% endif %}</div></div>
+        <div class="stats">{{ pct(f.yoy3, 0) }} <span class="muted small">3-mo YoY</span><br><span class="small muted">{{ '%.1f'|format(f.z) }}σ vs own history</span></div>
+      </div>
+      {% else %}<p class="card-pad muted">No flags this month.</p>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section reveal">
+  <div class="wrap two" style="align-items:start">
+    <div>
+      <p class="eyebrow">Track record</p>
+      <h2 style="margin:10px 0 12px">Proof, not a model portfolio</h2>
+      <p class="muted">Most research sites show a backtest built from today's winners. We show the rule, when it was written, and every call since. The memory rule, written before testing, beat buy-and-hold on 2008–2017 data it had never seen: <b class="num" style="color:var(--ink)">15.9%</b> vs 13.0% a year, with better risk-adjusted returns.</p>
+      <div class="chain" style="margin:18px 0 22px">{{ icon('seal-check') }} Chain {{ "verified" if snap.track.chain_ok else "BROKEN" }} · {{ snap.track.entries }} entries · head <span class="hash">{{ snap.track.head[:16] }}…</span></div>
+      <a class="btn btn-ghost" href="/track-record">See every call {{ icon('arrow-right') }}</a>
+    </div>
+    <div class="card card-pad">
+      <p class="eyebrow">Alerts where you already are</p>
+      <h3 style="margin:10px 0 14px">A message when a call changes or a new bottleneck lights up</h3>
+      <div class="legend" style="gap:18px;color:var(--ink-2);font-size:.95rem">
+        <span>{{ icon('discord-logo') }} Discord</span><span>{{ icon('telegram-logo') }} Telegram</span><span>{{ icon('chat-text') }} SMS</span>
+        <span>{{ icon('envelope-simple') }} Email</span><span>{{ icon('device-mobile') }} Phone push</span><span>{{ icon('slack-logo') }} Slack</span><span>{{ icon('webhooks-logo') }} Webhook</span>
+      </div>
+      <p class="small muted" style="margin:16px 0">Choose the bottlenecks you care about and how sensitive discovery alerts should be. Free while in beta.</p>
+      <a class="btn btn-primary" href="{{ '/alerts' if user else '/signup' }}">{{ icon('bell') }} Set up alerts</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

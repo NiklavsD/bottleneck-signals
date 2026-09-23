@@ -1,0 +1,42 @@
+{
+ "bad_ticks_removed": 677,
+ "dropped_no_price": 84,
+ "total_flags": 3145,
+ "OOS": {
+  "6m": {
+   "n_events": 1610,
+   "n_months": 106,
+   "mean_pct": 8.5,
+   "median_pct": 1.33,
+   "hit_rate_pct": 53.5,
+   "t_clustered": 5.9
+  },
+  "12m": {
+   "n_events": 1610,
+   "n_months": 106,
+   "mean_pct": 9.87,
+   "median_pct": -0.2,
+   "hit_rate_pct": 49.6,
+   "t_clustered": 4.56
+  }
+ },
+ "IS": {
+  "6m": {
+   "n_events": 1317,
+   "n_months": 111,
+   "mean_pct": 4.44,
+   "median_pct": -4.09,
+   "hit_rate_pct": 42.3,
+   "t_clustered": 2.08
+  },
+  "12m": {
+   "n_events": 1237,
+   "n_months": 105,
+   "mean_pct": 1.67,
+   "median_pct": -7.49,
+   "hit_rate_pct": 41.5,
+   "t_clustered": -0.1
+  }
+ },
+ "PASS": true
+}

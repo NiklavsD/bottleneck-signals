@@ -1,5 +1,5 @@
 """English short names for Taiwan companies: TWSE open API for listed (sii), Yahoo for OTC. Cached."""
-import os, json, requests, pandas as pd, yfinance as yf
+import os, re, json, requests, pandas as pd, yfinance as yf
 from concurrent.futures import ThreadPoolExecutor
 OUT = "data/processed/tw_names_en.csv"
 old = pd.read_csv(OUT, dtype={"code": str}).set_index("code")["name_en"].to_dict() if os.path.exists(OUT) else {}
@@ -8,16 +8,20 @@ for r in requests.get("https://openapi.twse.com.tw/v1/opendata/t187ap03_L", time
     if r.get("英文簡稱"):
         names[r["公司代號"].strip()] = r["英文簡稱"].strip()
 tw = pd.read_csv("data/processed/tw_revenue.csv", dtype={"code": str})
-latest = tw[tw.month == tw.month.max()]
+latest = tw.sort_values("month").drop_duplicates("code", keep="last")
 todo = [(c, m) for c, m in zip(latest.code, latest.market) if c not in names]
+SUFFIX = re.compile(r"[,.]?\s+(Co\.?,?\s*Ltd\.?|Corporation|Corp\.?|Inc\.?|Ltd\.?|Limited|Company|Holdings? Co.*)$", re.I)
 def yname(cm):
     c, m = cm
     try:
         i = yf.Ticker(c + (".TWO" if m == "otc" else ".TW")).info
-        return c, (i.get("shortName") or i.get("longName") or "").strip()
+        n = (i.get("longName") or i.get("shortName") or "").strip()
+        for _ in range(2):
+            n = SUFFIX.sub("", n).strip(" ,.")
+        return c, n
     except Exception:
         return c, ""
-with ThreadPoolExecutor(8) as ex:
+with ThreadPoolExecutor(4) as ex:
     for c, n in ex.map(yname, todo):
         if n:
             names[c] = n

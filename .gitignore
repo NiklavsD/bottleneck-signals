@@ -14,3 +14,13 @@ data/processed/prices.csv
 __pycache__/
 work/
 .codex-workers/
+
+# web data
+web/data/*.db
+web/data/*.db-*
+data/dispatch_state.json
+__pycache__/
+data/processed/tw_prices.csv.gz
+data/processed/universe_prices.csv.gz
+data/processed/us_imports_all.csv
+web/data/snapshot.json

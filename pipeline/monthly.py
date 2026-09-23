@@ -22,7 +22,8 @@ def refresh():
     # fetch_tw rewrites the whole CSV from its start year; old pages come from the cache, so always start at 2005
     steps = [[PY, "pipeline/fetch_tw.py", "2005"], [PY, "pipeline/fetch_market.py"],
              [PY, "pipeline/fetch_comtrade.py"], [PY, "pipeline/fetch_census.py"],
-             [PY, "pipeline/fetch_korea_customs.py"]]
+             [PY, "pipeline/fetch_korea_customs.py"], [PY, "pipeline/fetch_census_all.py"],
+             [PY, "pipeline/fetch_universe_prices.py"], [PY, "pipeline/discovery.py"], [PY, "engine/build.py"]]
     for cmd in steps:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=3600)
         print(" ".join(cmd[1:]), "->", "ok" if r.returncode == 0 else f"FAILED\n{r.stderr[-2000:]}", flush=True)
@@ -65,6 +66,23 @@ def current_calls():
     return calls
 
 
+def v6_calls():
+    """Model v6 (backtest/PREREGISTRATION_v6_universe.md), read from the snapshot engine/build.py just wrote.
+    Memory is skipped: v6 keeps the v4 Rule M, which is already logged above. Monitoring themes log NO CALL."""
+    snap = json.load(open("web/data/snapshot.json"))
+    px = pd.read_csv("data/processed/universe_prices.csv.gz", index_col=0, parse_dates=True).ffill().iloc[-1]
+    calls = []
+    for t in snap["themes"]:
+        if t["slug"] == "memory":
+            continue
+        tick = [b["ticker"] for b in t["basket"]] + [t["benchmark"]]
+        calls.append({"bottleneck": t["slug"], "model": "v6", "rule": "tilt" if t["status"] == "validated" else "monitoring",
+                      "state": t["call"] or "NO CALL", "data_month": t.get("data_month"), "decision_date": t.get("decision_date"),
+                      "C": t["C"], "M": t["M"], "benchmark": t["benchmark"],
+                      "basket_prices": {k: round(float(px[k]), 4) for k in tick if k in px and pd.notna(px[k])}})
+    return calls
+
+
 def append(calls):
     prev = "0" * 64
     if os.path.exists(LOG):
@@ -82,7 +100,7 @@ def append(calls):
 
 def publish(entry):
     """Commit the new log entry (and refreshed public data) and push; the push time is the public timestamp."""
-    paths = [LOG, "data/processed", "backtest"]
+    paths = [LOG, "data/processed", "backtest", "config"]
     subprocess.run(["git", "add", *paths], check=True)
     msg = f"Monthly signals {entry['logged_at'][:10]}: " + ", ".join(
         f"{c['bottleneck']} {c['state']}" for c in entry["calls"]) + f"\n\nentry hash {entry['hash']}"
@@ -95,9 +113,11 @@ if __name__ == "__main__":
     if "--no-refresh" not in sys.argv:
         refresh()
     sanity_check()
-    e = append(current_calls())
+    e = append(current_calls() + v6_calls())
     for c in e["calls"]:
         print(f"{c['bottleneck']:7s} {c['state']:3s} (data {c['data_month']}, decided {c['decision_date']}, C={c['C']}, M={c['M']})")
     print("hash", e["hash"])
     if "--publish" in sys.argv:
         publish(e)
+        subprocess.run([PY, "engine/build.py"], check=True)  # pick up the new log entry
+        subprocess.run([PY, "engine/dispatch.py", "--digest"], check=True)

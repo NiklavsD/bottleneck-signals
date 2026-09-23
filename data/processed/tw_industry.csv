@@ -1,0 +1,1857 @@
+code,industry,market
+1101,Cement,sii
+1102,Cement,sii
+1103,Cement,sii
+1104,Cement,sii
+1108,Cement,sii
+1109,Cement,sii
+1110,Cement,sii
+1201,Food,sii
+1203,Food,sii
+1210,Food,sii
+1213,Food,sii
+1215,Food,sii
+1216,Food,sii
+1217,Food,sii
+1218,Food,sii
+1219,Food,sii
+1220,Food,sii
+1225,Food,sii
+1227,Food,sii
+1229,Food,sii
+1231,Food,sii
+1232,Food,sii
+1233,Food,sii
+1234,Food,sii
+1235,Food,sii
+1236,Food,sii
+1702,Food,sii
+1737,Food,sii
+1301,Plastics,sii
+1303,Plastics,sii
+1304,Plastics,sii
+1305,Plastics,sii
+1307,Plastics,sii
+1308,Plastics,sii
+1309,Plastics,sii
+1310,Plastics,sii
+1312,Plastics,sii
+1313,Plastics,sii
+1314,Plastics,sii
+1315,Plastics,sii
+1321,Plastics,sii
+1323,Plastics,sii
+1324,Plastics,sii
+1325,Plastics,sii
+1326,Plastics,sii
+4306,Plastics,sii
+1402,Textiles,sii
+1409,Textiles,sii
+1410,Textiles,sii
+1413,Textiles,sii
+1414,Textiles,sii
+1417,Textiles,sii
+1418,Textiles,sii
+1419,Textiles,sii
+1423,Textiles,sii
+1434,Textiles,sii
+1440,Textiles,sii
+1441,Textiles,sii
+1444,Textiles,sii
+1445,Textiles,sii
+1446,Textiles,sii
+1447,Textiles,sii
+1449,Textiles,sii
+1451,Textiles,sii
+1452,Textiles,sii
+1454,Textiles,sii
+1455,Textiles,sii
+1457,Textiles,sii
+1459,Textiles,sii
+1460,Textiles,sii
+1463,Textiles,sii
+1464,Textiles,sii
+1465,Textiles,sii
+1466,Textiles,sii
+1467,Textiles,sii
+1468,Textiles,sii
+1470,Textiles,sii
+1473,Textiles,sii
+1474,Textiles,sii
+1475,Textiles,sii
+1476,Textiles,sii
+1477,Textiles,sii
+4414,Textiles,sii
+4426,Textiles,sii
+4438,Textiles,sii
+4440,Textiles,sii
+4441,Textiles,sii
+1503,Electrical machinery,sii
+1504,Electrical machinery,sii
+1506,Electrical machinery,sii
+1513,Electrical machinery,sii
+1514,Electrical machinery,sii
+1515,Electrical machinery,sii
+1517,Electrical machinery,sii
+1519,Electrical machinery,sii
+1526,Electrical machinery,sii
+1527,Electrical machinery,sii
+1528,Electrical machinery,sii
+1529,Electrical machinery,sii
+1530,Electrical machinery,sii
+1531,Electrical machinery,sii
+1532,Electrical machinery,sii
+1535,Electrical machinery,sii
+1537,Electrical machinery,sii
+1538,Electrical machinery,sii
+1539,Electrical machinery,sii
+1540,Electrical machinery,sii
+1541,Electrical machinery,sii
+1558,Electrical machinery,sii
+1560,Electrical machinery,sii
+1583,Electrical machinery,sii
+1597,Electrical machinery,sii
+2049,Electrical machinery,sii
+2371,Electrical machinery,sii
+3167,Electrical machinery,sii
+4526,Electrical machinery,sii
+4532,Electrical machinery,sii
+4540,Electrical machinery,sii
+4555,Electrical machinery,sii
+4562,Electrical machinery,sii
+4564,Electrical machinery,sii
+4566,Electrical machinery,sii
+4572,Electrical machinery,sii
+4576,Electrical machinery,sii
+4583,Electrical machinery,sii
+4590,Electrical machinery,sii
+6606,Electrical machinery,sii
+7750,Electrical machinery,sii
+8222,Electrical machinery,sii
+8374,Electrical machinery,sii
+8996,Electrical machinery,sii
+1603,Electric wire & cable,sii
+1604,Electric wire & cable,sii
+1605,Electric wire & cable,sii
+1608,Electric wire & cable,sii
+1609,Electric wire & cable,sii
+1611,Electric wire & cable,sii
+1612,Electric wire & cable,sii
+1614,Electric wire & cable,sii
+1615,Electric wire & cable,sii
+1616,Electric wire & cable,sii
+1617,Electric wire & cable,sii
+1618,Electric wire & cable,sii
+1623,Electric wire & cable,sii
+4930,Electric wire & cable,sii
+5283,Electric wire & cable,sii
+1708,Chemicals,sii
+1709,Chemicals,sii
+1710,Chemicals,sii
+1711,Chemicals,sii
+1712,Chemicals,sii
+1713,Chemicals,sii
+1714,Chemicals,sii
+1717,Chemicals,sii
+1718,Chemicals,sii
+1721,Chemicals,sii
+1722,Chemicals,sii
+1723,Chemicals,sii
+1725,Chemicals,sii
+1726,Chemicals,sii
+1727,Chemicals,sii
+1730,Chemicals,sii
+1732,Chemicals,sii
+1735,Chemicals,sii
+1773,Chemicals,sii
+1776,Chemicals,sii
+4720,Chemicals,sii
+4722,Chemicals,sii
+4739,Chemicals,sii
+4755,Chemicals,sii
+4764,Chemicals,sii
+4766,Chemicals,sii
+4770,Chemicals,sii
+1707,Biotech & medical,sii
+1720,Biotech & medical,sii
+1731,Biotech & medical,sii
+1733,Biotech & medical,sii
+1734,Biotech & medical,sii
+1752,Biotech & medical,sii
+1760,Biotech & medical,sii
+1762,Biotech & medical,sii
+1783,Biotech & medical,sii
+1786,Biotech & medical,sii
+1789,Biotech & medical,sii
+1795,Biotech & medical,sii
+3164,Biotech & medical,sii
+3705,Biotech & medical,sii
+3716,Biotech & medical,sii
+4104,Biotech & medical,sii
+4106,Biotech & medical,sii
+4108,Biotech & medical,sii
+4119,Biotech & medical,sii
+4133,Biotech & medical,sii
+4142,Biotech & medical,sii
+4155,Biotech & medical,sii
+4164,Biotech & medical,sii
+4169,Biotech & medical,sii
+4736,Biotech & medical,sii
+4737,Biotech & medical,sii
+4746,Biotech & medical,sii
+4771,Biotech & medical,sii
+6446,Biotech & medical,sii
+6472,Biotech & medical,sii
+6491,Biotech & medical,sii
+6534,Biotech & medical,sii
+6589,Biotech & medical,sii
+6645,Biotech & medical,sii
+6657,Biotech & medical,sii
+6782,Biotech & medical,sii
+6794,Biotech & medical,sii
+6796,Biotech & medical,sii
+6838,Biotech & medical,sii
+6861,Biotech & medical,sii
+6885,Biotech & medical,sii
+6918,Biotech & medical,sii
+6919,Biotech & medical,sii
+6931,Biotech & medical,sii
+6934,Biotech & medical,sii
+6936,Biotech & medical,sii
+6949,Biotech & medical,sii
+6955,Biotech & medical,sii
+1802,Glass & ceramics,sii
+1806,Glass & ceramics,sii
+1809,Glass & ceramics,sii
+1810,Glass & ceramics,sii
+1817,Glass & ceramics,sii
+1903,Paper,sii
+1904,Paper,sii
+1905,Paper,sii
+1906,Paper,sii
+1907,Paper,sii
+1909,Paper,sii
+6790,Paper,sii
+2002,Steel,sii
+2006,Steel,sii
+2007,Steel,sii
+2008,Steel,sii
+2009,Steel,sii
+2010,Steel,sii
+2012,Steel,sii
+2013,Steel,sii
+2014,Steel,sii
+2015,Steel,sii
+2017,Steel,sii
+2020,Steel,sii
+2022,Steel,sii
+2023,Steel,sii
+2024,Steel,sii
+2025,Steel,sii
+2027,Steel,sii
+2028,Steel,sii
+2029,Steel,sii
+2030,Steel,sii
+2031,Steel,sii
+2032,Steel,sii
+2033,Steel,sii
+2034,Steel,sii
+2038,Steel,sii
+2069,Steel,sii
+2211,Steel,sii
+3004,Steel,sii
+5007,Steel,sii
+9958,Steel,sii
+2101,Rubber,sii
+2102,Rubber,sii
+2103,Rubber,sii
+2104,Rubber,sii
+2105,Rubber,sii
+2106,Rubber,sii
+2107,Rubber,sii
+2108,Rubber,sii
+2109,Rubber,sii
+2114,Rubber,sii
+6582,Rubber,sii
+1319,Automotive,sii
+1339,Automotive,sii
+1512,Automotive,sii
+1521,Automotive,sii
+1522,Automotive,sii
+1524,Automotive,sii
+1525,Automotive,sii
+1533,Automotive,sii
+1536,Automotive,sii
+1563,Automotive,sii
+1568,Automotive,sii
+1587,Automotive,sii
+2201,Automotive,sii
+2204,Automotive,sii
+2206,Automotive,sii
+2207,Automotive,sii
+2227,Automotive,sii
+2228,Automotive,sii
+2231,Automotive,sii
+2233,Automotive,sii
+2237,Automotive,sii
+2241,Automotive,sii
+2247,Automotive,sii
+2254,Automotive,sii
+2258,Automotive,sii
+2497,Automotive,sii
+3346,Automotive,sii
+4551,Automotive,sii
+6605,Automotive,sii
+6988,Automotive,sii
+7732,Automotive,sii
+7736,Automotive,sii
+2302,Semiconductors,sii
+2303,Semiconductors,sii
+2329,Semiconductors,sii
+2330,Semiconductors,sii
+2337,Semiconductors,sii
+2338,Semiconductors,sii
+2340,Semiconductors,sii
+2342,Semiconductors,sii
+2344,Semiconductors,sii
+2351,Semiconductors,sii
+2363,Semiconductors,sii
+2369,Semiconductors,sii
+2379,Semiconductors,sii
+2388,Semiconductors,sii
+2401,Semiconductors,sii
+2408,Semiconductors,sii
+2434,Semiconductors,sii
+2436,Semiconductors,sii
+2441,Semiconductors,sii
+2449,Semiconductors,sii
+2451,Semiconductors,sii
+2454,Semiconductors,sii
+2458,Semiconductors,sii
+2481,Semiconductors,sii
+3006,Semiconductors,sii
+3014,Semiconductors,sii
+3016,Semiconductors,sii
+3034,Semiconductors,sii
+3035,Semiconductors,sii
+3041,Semiconductors,sii
+3094,Semiconductors,sii
+3135,Semiconductors,sii
+3150,Semiconductors,sii
+3189,Semiconductors,sii
+3257,Semiconductors,sii
+3413,Semiconductors,sii
+3443,Semiconductors,sii
+3450,Semiconductors,sii
+3530,Semiconductors,sii
+3532,Semiconductors,sii
+3545,Semiconductors,sii
+3583,Semiconductors,sii
+3588,Semiconductors,sii
+3592,Semiconductors,sii
+3686,Semiconductors,sii
+3711,Semiconductors,sii
+4919,Semiconductors,sii
+4952,Semiconductors,sii
+4961,Semiconductors,sii
+4967,Semiconductors,sii
+4968,Semiconductors,sii
+5222,Semiconductors,sii
+5236,Semiconductors,sii
+5269,Semiconductors,sii
+5285,Semiconductors,sii
+5471,Semiconductors,sii
+6202,Semiconductors,sii
+6239,Semiconductors,sii
+6243,Semiconductors,sii
+6257,Semiconductors,sii
+6271,Semiconductors,sii
+6515,Semiconductors,sii
+6526,Semiconductors,sii
+6531,Semiconductors,sii
+6533,Semiconductors,sii
+6552,Semiconductors,sii
+6695,Semiconductors,sii
+6719,Semiconductors,sii
+6756,Semiconductors,sii
+6770,Semiconductors,sii
+6789,Semiconductors,sii
+6799,Semiconductors,sii
+6909,Semiconductors,sii
+6921,Semiconductors,sii
+6937,Semiconductors,sii
+7730,Semiconductors,sii
+7768,Semiconductors,sii
+7769,Semiconductors,sii
+8016,Semiconductors,sii
+8028,Semiconductors,sii
+8081,Semiconductors,sii
+8110,Semiconductors,sii
+8131,Semiconductors,sii
+8150,Semiconductors,sii
+8162,Semiconductors,sii
+8261,Semiconductors,sii
+8271,Semiconductors,sii
+2301,Computers & peripherals,sii
+2305,Computers & peripherals,sii
+2324,Computers & peripherals,sii
+2331,Computers & peripherals,sii
+2352,Computers & peripherals,sii
+2353,Computers & peripherals,sii
+2356,Computers & peripherals,sii
+2357,Computers & peripherals,sii
+2362,Computers & peripherals,sii
+2364,Computers & peripherals,sii
+2365,Computers & peripherals,sii
+2376,Computers & peripherals,sii
+2377,Computers & peripherals,sii
+2380,Computers & peripherals,sii
+2382,Computers & peripherals,sii
+2387,Computers & peripherals,sii
+2395,Computers & peripherals,sii
+2397,Computers & peripherals,sii
+2399,Computers & peripherals,sii
+2405,Computers & peripherals,sii
+2417,Computers & peripherals,sii
+2425,Computers & peripherals,sii
+2432,Computers & peripherals,sii
+2465,Computers & peripherals,sii
+2495,Computers & peripherals,sii
+3002,Computers & peripherals,sii
+3005,Computers & peripherals,sii
+3013,Computers & peripherals,sii
+3017,Computers & peripherals,sii
+3022,Computers & peripherals,sii
+3046,Computers & peripherals,sii
+3057,Computers & peripherals,sii
+3060,Computers & peripherals,sii
+3231,Computers & peripherals,sii
+3416,Computers & peripherals,sii
+3494,Computers & peripherals,sii
+3515,Computers & peripherals,sii
+3652,Computers & peripherals,sii
+3701,Computers & peripherals,sii
+3706,Computers & peripherals,sii
+3712,Computers & peripherals,sii
+4916,Computers & peripherals,sii
+4938,Computers & peripherals,sii
+5258,Computers & peripherals,sii
+6117,Computers & peripherals,sii
+6128,Computers & peripherals,sii
+6166,Computers & peripherals,sii
+6206,Computers & peripherals,sii
+6230,Computers & peripherals,sii
+6235,Computers & peripherals,sii
+6277,Computers & peripherals,sii
+6414,Computers & peripherals,sii
+6579,Computers & peripherals,sii
+6669,Computers & peripherals,sii
+6831,Computers & peripherals,sii
+6928,Computers & peripherals,sii
+7711,Computers & peripherals,sii
+8114,Computers & peripherals,sii
+8163,Computers & peripherals,sii
+8210,Computers & peripherals,sii
+9912,Computers & peripherals,sii
+2323,Optoelectronics,sii
+2349,Optoelectronics,sii
+2374,Optoelectronics,sii
+2393,Optoelectronics,sii
+2406,Optoelectronics,sii
+2409,Optoelectronics,sii
+2426,Optoelectronics,sii
+2429,Optoelectronics,sii
+2438,Optoelectronics,sii
+2466,Optoelectronics,sii
+2486,Optoelectronics,sii
+2489,Optoelectronics,sii
+2491,Optoelectronics,sii
+3008,Optoelectronics,sii
+3019,Optoelectronics,sii
+3024,Optoelectronics,sii
+3031,Optoelectronics,sii
+3038,Optoelectronics,sii
+3049,Optoelectronics,sii
+3050,Optoelectronics,sii
+3051,Optoelectronics,sii
+3059,Optoelectronics,sii
+3149,Optoelectronics,sii
+3168,Optoelectronics,sii
+3356,Optoelectronics,sii
+3406,Optoelectronics,sii
+3437,Optoelectronics,sii
+3481,Optoelectronics,sii
+3504,Optoelectronics,sii
+3535,Optoelectronics,sii
+3543,Optoelectronics,sii
+3563,Optoelectronics,sii
+3576,Optoelectronics,sii
+3591,Optoelectronics,sii
+3622,Optoelectronics,sii
+3714,Optoelectronics,sii
+4934,Optoelectronics,sii
+4942,Optoelectronics,sii
+4949,Optoelectronics,sii
+4956,Optoelectronics,sii
+4960,Optoelectronics,sii
+4976,Optoelectronics,sii
+5234,Optoelectronics,sii
+5244,Optoelectronics,sii
+5484,Optoelectronics,sii
+6116,Optoelectronics,sii
+6120,Optoelectronics,sii
+6164,Optoelectronics,sii
+6168,Optoelectronics,sii
+6176,Optoelectronics,sii
+6209,Optoelectronics,sii
+6225,Optoelectronics,sii
+6226,Optoelectronics,sii
+6278,Optoelectronics,sii
+6405,Optoelectronics,sii
+6443,Optoelectronics,sii
+6477,Optoelectronics,sii
+6668,Optoelectronics,sii
+6706,Optoelectronics,sii
+6742,Optoelectronics,sii
+6916,Optoelectronics,sii
+8104,Optoelectronics,sii
+8105,Optoelectronics,sii
+8215,Optoelectronics,sii
+2314,Communications & networking,sii
+2321,Communications & networking,sii
+2332,Communications & networking,sii
+2345,Communications & networking,sii
+2412,Communications & networking,sii
+2419,Communications & networking,sii
+2424,Communications & networking,sii
+2439,Communications & networking,sii
+2444,Communications & networking,sii
+2450,Communications & networking,sii
+2455,Communications & networking,sii
+2485,Communications & networking,sii
+2498,Communications & networking,sii
+3025,Communications & networking,sii
+3027,Communications & networking,sii
+3045,Communications & networking,sii
+3047,Communications & networking,sii
+3062,Communications & networking,sii
+3138,Communications & networking,sii
+3311,Communications & networking,sii
+3380,Communications & networking,sii
+3419,Communications & networking,sii
+3447,Communications & networking,sii
+3596,Communications & networking,sii
+3669,Communications & networking,sii
+3694,Communications & networking,sii
+3704,Communications & networking,sii
+4904,Communications & networking,sii
+4906,Communications & networking,sii
+5388,Communications & networking,sii
+6136,Communications & networking,sii
+6142,Communications & networking,sii
+6152,Communications & networking,sii
+6216,Communications & networking,sii
+6285,Communications & networking,sii
+6416,Communications & networking,sii
+6426,Communications & networking,sii
+6442,Communications & networking,sii
+6674,Communications & networking,sii
+6792,Communications & networking,sii
+8011,Communications & networking,sii
+8045,Communications & networking,sii
+8101,Communications & networking,sii
+1471,Electronic components,sii
+1582,Electronic components,sii
+2059,Electronic components,sii
+2308,Electronic components,sii
+2313,Electronic components,sii
+2316,Electronic components,sii
+2327,Electronic components,sii
+2328,Electronic components,sii
+2355,Electronic components,sii
+2367,Electronic components,sii
+2368,Electronic components,sii
+2375,Electronic components,sii
+2383,Electronic components,sii
+2385,Electronic components,sii
+2392,Electronic components,sii
+2402,Electronic components,sii
+2413,Electronic components,sii
+2415,Electronic components,sii
+2420,Electronic components,sii
+2421,Electronic components,sii
+2428,Electronic components,sii
+2431,Electronic components,sii
+2440,Electronic components,sii
+2457,Electronic components,sii
+2460,Electronic components,sii
+2462,Electronic components,sii
+2467,Electronic components,sii
+2472,Electronic components,sii
+2476,Electronic components,sii
+2478,Electronic components,sii
+2483,Electronic components,sii
+2484,Electronic components,sii
+2492,Electronic components,sii
+2493,Electronic components,sii
+3003,Electronic components,sii
+3011,Electronic components,sii
+3015,Electronic components,sii
+3021,Electronic components,sii
+3023,Electronic components,sii
+3026,Electronic components,sii
+3032,Electronic components,sii
+3037,Electronic components,sii
+3042,Electronic components,sii
+3044,Electronic components,sii
+3058,Electronic components,sii
+3090,Electronic components,sii
+3092,Electronic components,sii
+3229,Electronic components,sii
+3296,Electronic components,sii
+3308,Electronic components,sii
+3321,Electronic components,sii
+3338,Electronic components,sii
+3376,Electronic components,sii
+3432,Electronic components,sii
+3501,Electronic components,sii
+3533,Electronic components,sii
+3550,Electronic components,sii
+3593,Electronic components,sii
+3605,Electronic components,sii
+3607,Electronic components,sii
+3645,Electronic components,sii
+3653,Electronic components,sii
+3679,Electronic components,sii
+3715,Electronic components,sii
+4545,Electronic components,sii
+4915,Electronic components,sii
+4989,Electronic components,sii
+4999,Electronic components,sii
+5469,Electronic components,sii
+6108,Electronic components,sii
+6115,Electronic components,sii
+6133,Electronic components,sii
+6141,Electronic components,sii
+6153,Electronic components,sii
+6155,Electronic components,sii
+6191,Electronic components,sii
+6197,Electronic components,sii
+6205,Electronic components,sii
+6213,Electronic components,sii
+6224,Electronic components,sii
+6269,Electronic components,sii
+6272,Electronic components,sii
+6282,Electronic components,sii
+6412,Electronic components,sii
+6449,Electronic components,sii
+6715,Electronic components,sii
+6805,Electronic components,sii
+6834,Electronic components,sii
+6835,Electronic components,sii
+8039,Electronic components,sii
+8046,Electronic components,sii
+8103,Electronic components,sii
+8213,Electronic components,sii
+8249,Electronic components,sii
+2347,Electronics distribution,sii
+2414,Electronics distribution,sii
+2430,Electronics distribution,sii
+3010,Electronics distribution,sii
+3028,Electronics distribution,sii
+3033,Electronics distribution,sii
+3036,Electronics distribution,sii
+3048,Electronics distribution,sii
+3054,Electronics distribution,sii
+3055,Electronics distribution,sii
+3209,Electronics distribution,sii
+3312,Electronics distribution,sii
+3528,Electronics distribution,sii
+3702,Electronics distribution,sii
+5434,Electronics distribution,sii
+6189,Electronics distribution,sii
+6281,Electronics distribution,sii
+6776,Electronics distribution,sii
+6908,Electronics distribution,sii
+8070,Electronics distribution,sii
+8072,Electronics distribution,sii
+8112,Electronics distribution,sii
+2427,IT services,sii
+2453,IT services,sii
+2468,IT services,sii
+2471,IT services,sii
+2480,IT services,sii
+3029,IT services,sii
+4994,IT services,sii
+5203,IT services,sii
+6112,IT services,sii
+6183,IT services,sii
+6214,IT services,sii
+2312,Other electronics,sii
+2317,Other electronics,sii
+2354,Other electronics,sii
+2359,Other electronics,sii
+2360,Other electronics,sii
+2373,Other electronics,sii
+2390,Other electronics,sii
+2404,Other electronics,sii
+2423,Other electronics,sii
+2433,Other electronics,sii
+2459,Other electronics,sii
+2461,Other electronics,sii
+2464,Other electronics,sii
+2474,Other electronics,sii
+2477,Other electronics,sii
+2482,Other electronics,sii
+2488,Other electronics,sii
+3018,Other electronics,sii
+3030,Other electronics,sii
+3043,Other electronics,sii
+3305,Other electronics,sii
+3518,Other electronics,sii
+3617,Other electronics,sii
+4585,Other electronics,sii
+4588,Other electronics,sii
+6139,Other electronics,sii
+6192,Other electronics,sii
+6196,Other electronics,sii
+6201,Other electronics,sii
+6215,Other electronics,sii
+6283,Other electronics,sii
+6409,Other electronics,sii
+6438,Other electronics,sii
+6558,Other electronics,sii
+6658,Other electronics,sii
+6691,Other electronics,sii
+6698,Other electronics,sii
+6722,Other electronics,sii
+6743,Other electronics,sii
+6830,Other electronics,sii
+7631,Other electronics,sii
+8021,Other electronics,sii
+8201,Other electronics,sii
+2616,"Oil, power & gas",sii
+6505,"Oil, power & gas",sii
+8926,"Oil, power & gas",sii
+9908,"Oil, power & gas",sii
+9918,"Oil, power & gas",sii
+9926,"Oil, power & gas",sii
+9931,"Oil, power & gas",sii
+9937,"Oil, power & gas",sii
+1316,Construction,sii
+1436,Construction,sii
+1438,Construction,sii
+1439,Construction,sii
+1442,Construction,sii
+1453,Construction,sii
+1456,Construction,sii
+1472,Construction,sii
+1805,Construction,sii
+1808,Construction,sii
+2442,Construction,sii
+2501,Construction,sii
+2504,Construction,sii
+2505,Construction,sii
+2506,Construction,sii
+2509,Construction,sii
+2511,Construction,sii
+2515,Construction,sii
+2516,Construction,sii
+2520,Construction,sii
+2524,Construction,sii
+2527,Construction,sii
+2528,Construction,sii
+2530,Construction,sii
+2534,Construction,sii
+2535,Construction,sii
+2536,Construction,sii
+2537,Construction,sii
+2538,Construction,sii
+2539,Construction,sii
+2540,Construction,sii
+2542,Construction,sii
+2543,Construction,sii
+2545,Construction,sii
+2546,Construction,sii
+2547,Construction,sii
+2548,Construction,sii
+2597,Construction,sii
+3052,Construction,sii
+3056,Construction,sii
+3266,Construction,sii
+3703,Construction,sii
+5515,Construction,sii
+5519,Construction,sii
+5521,Construction,sii
+5522,Construction,sii
+5525,Construction,sii
+5531,Construction,sii
+5533,Construction,sii
+5534,Construction,sii
+6177,Construction,sii
+9906,Construction,sii
+9946,Construction,sii
+2208,Shipping,sii
+2601,Shipping,sii
+2603,Shipping,sii
+2605,Shipping,sii
+2606,Shipping,sii
+2607,Shipping,sii
+2608,Shipping,sii
+2609,Shipping,sii
+2610,Shipping,sii
+2611,Shipping,sii
+2612,Shipping,sii
+2613,Shipping,sii
+2615,Shipping,sii
+2617,Shipping,sii
+2618,Shipping,sii
+2630,Shipping,sii
+2633,Shipping,sii
+2634,Shipping,sii
+2636,Shipping,sii
+2642,Shipping,sii
+2645,Shipping,sii
+2646,Shipping,sii
+5607,Shipping,sii
+5608,Shipping,sii
+6753,Shipping,sii
+6757,Shipping,sii
+8367,Shipping,sii
+2701,Tourism,sii
+2702,Tourism,sii
+2704,Tourism,sii
+2705,Tourism,sii
+2706,Tourism,sii
+2707,Tourism,sii
+2712,Tourism,sii
+2722,Tourism,sii
+2727,Tourism,sii
+2731,Tourism,sii
+2739,Tourism,sii
+2748,Tourism,sii
+2753,Tourism,sii
+5706,Tourism,sii
+7705,Tourism,sii
+7760,Tourism,sii
+8940,Tourism,sii
+9943,Tourism,sii
+2801,Finance & insurance,sii
+2812,Finance & insurance,sii
+2816,Finance & insurance,sii
+2820,Finance & insurance,sii
+2832,Finance & insurance,sii
+2834,Finance & insurance,sii
+2836,Finance & insurance,sii
+2838,Finance & insurance,sii
+2845,Finance & insurance,sii
+2849,Finance & insurance,sii
+2850,Finance & insurance,sii
+2851,Finance & insurance,sii
+2852,Finance & insurance,sii
+2855,Finance & insurance,sii
+2880,Finance & insurance,sii
+2881,Finance & insurance,sii
+2882,Finance & insurance,sii
+2883,Finance & insurance,sii
+2884,Finance & insurance,sii
+2885,Finance & insurance,sii
+2886,Finance & insurance,sii
+2887,Finance & insurance,sii
+2889,Finance & insurance,sii
+2890,Finance & insurance,sii
+2891,Finance & insurance,sii
+2892,Finance & insurance,sii
+2897,Finance & insurance,sii
+5876,Finance & insurance,sii
+5880,Finance & insurance,sii
+6005,Finance & insurance,sii
+6024,Finance & insurance,sii
+2901,Trading & retail,sii
+2903,Trading & retail,sii
+2905,Trading & retail,sii
+2906,Trading & retail,sii
+2908,Trading & retail,sii
+2910,Trading & retail,sii
+2911,Trading & retail,sii
+2912,Trading & retail,sii
+2913,Trading & retail,sii
+2915,Trading & retail,sii
+2945,Trading & retail,sii
+8443,Trading & retail,sii
+2072,Green energy,sii
+3708,Green energy,sii
+4582,Green energy,sii
+5292,Green energy,sii
+6581,Green energy,sii
+6771,Green energy,sii
+6869,Green energy,sii
+6873,Green energy,sii
+6923,Green energy,sii
+6944,Green energy,sii
+6947,Green energy,sii
+6951,Green energy,sii
+6969,Green energy,sii
+6994,Green energy,sii
+7610,Green energy,sii
+7740,Green energy,sii
+8341,Green energy,sii
+8422,Green energy,sii
+8438,Green energy,sii
+8473,Green energy,sii
+8476,Green energy,sii
+9930,Green energy,sii
+9955,Green energy,sii
+3130,Digital cloud,sii
+6165,Digital cloud,sii
+6614,Digital cloud,sii
+6689,Digital cloud,sii
+6902,Digital cloud,sii
+6906,Digital cloud,sii
+7721,Digital cloud,sii
+7722,Digital cloud,sii
+7765,Digital cloud,sii
+8454,Digital cloud,sii
+8487,Digital cloud,sii
+1432,Sports & leisure,sii
+1598,Sports & leisure,sii
+1736,Sports & leisure,sii
+4536,Sports & leisure,sii
+5306,Sports & leisure,sii
+6670,Sports & leisure,sii
+8462,Sports & leisure,sii
+8478,Sports & leisure,sii
+9904,Sports & leisure,sii
+9910,Sports & leisure,sii
+9914,Sports & leisure,sii
+9921,Sports & leisure,sii
+2062,Home & living,sii
+3557,Home & living,sii
+6754,Home & living,sii
+8464,Home & living,sii
+9911,Home & living,sii
+9924,Home & living,sii
+9934,Home & living,sii
+9935,Home & living,sii
+1342,Other,sii
+1416,Other,sii
+1435,Other,sii
+1437,Other,sii
+1443,Other,sii
+1516,Other,sii
+2348,Other,sii
+2496,Other,sii
+2514,Other,sii
+2614,Other,sii
+2904,Other,sii
+3040,Other,sii
+6184,Other,sii
+6464,Other,sii
+6504,Other,sii
+6585,Other,sii
+6592,Other,sii
+6625,Other,sii
+6655,Other,sii
+6901,Other,sii
+6914,Other,sii
+6952,Other,sii
+6958,Other,sii
+7855,Other,sii
+8033,Other,sii
+8463,Other,sii
+8481,Other,sii
+9902,Other,sii
+9905,Other,sii
+9907,Other,sii
+9917,Other,sii
+9919,Other,sii
+9925,Other,sii
+9927,Other,sii
+9928,Other,sii
+9929,Other,sii
+9933,Other,sii
+9938,Other,sii
+9939,Other,sii
+9940,Other,sii
+9941,Other,sii
+9942,Other,sii
+9944,Other,sii
+9945,Other,sii
+7780,Food,sii
+7788,Electronic components,sii
+7786,Green energy,sii
+7791,Food,sii
+7799,Biotech & medical,sii
+7803,Biotech & medical,sii
+7795,Electronic components,sii
+7689,Communications & networking,sii
+7818,Green energy,sii
+7821,Automotive,sii
+7822,Semiconductors,sii
+4195,Biotech & medical,sii
+3717,Automotive,sii
+7812,Communications & networking,sii
+7835,Digital cloud,sii
+1264,Food,otc
+1294,Food,otc
+1295,Food,otc
+1780,Food,otc
+1796,Food,otc
+4205,Food,otc
+4207,Food,otc
+6846,Food,otc
+7743,Food,otc
+4303,Plastics,otc
+4304,Plastics,otc
+4305,Plastics,otc
+9950,Plastics,otc
+4401,Textiles,otc
+4402,Textiles,otc
+4406,Textiles,otc
+4413,Textiles,otc
+4417,Textiles,otc
+4420,Textiles,otc
+4432,Textiles,otc
+4433,Textiles,otc
+6506,Textiles,otc
+1570,Electrical machinery,otc
+1580,Electrical machinery,otc
+1586,Electrical machinery,otc
+1599,Electrical machinery,otc
+2066,Electrical machinery,otc
+2067,Electrical machinery,otc
+2070,Electrical machinery,otc
+2235,Electrical machinery,otc
+3162,Electrical machinery,otc
+3226,Electrical machinery,otc
+3379,Electrical machinery,otc
+3685,Electrical machinery,otc
+4502,Electrical machinery,otc
+4503,Electrical machinery,otc
+4506,Electrical machinery,otc
+4510,Electrical machinery,otc
+4513,Electrical machinery,otc
+4523,Electrical machinery,otc
+4527,Electrical machinery,otc
+4528,Electrical machinery,otc
+4533,Electrical machinery,otc
+4534,Electrical machinery,otc
+4535,Electrical machinery,otc
+4538,Electrical machinery,otc
+4543,Electrical machinery,otc
+4549,Electrical machinery,otc
+4550,Electrical machinery,otc
+4558,Electrical machinery,otc
+4561,Electrical machinery,otc
+4563,Electrical machinery,otc
+4568,Electrical machinery,otc
+4580,Electrical machinery,otc
+4584,Electrical machinery,otc
+5381,Electrical machinery,otc
+6122,Electrical machinery,otc
+6125,Electrical machinery,otc
+6425,Electrical machinery,otc
+6603,Electrical machinery,otc
+6609,Electrical machinery,otc
+6843,Electrical machinery,otc
+6982,Electrical machinery,otc
+7642,Electrical machinery,otc
+7709,Electrical machinery,otc
+7718,Electrical machinery,otc
+8027,Electrical machinery,otc
+8083,Electrical machinery,otc
+8107,Electrical machinery,otc
+8255,Electrical machinery,otc
+9951,Electrical machinery,otc
+2061,Electric wire & cable,otc
+1742,Chemicals,otc
+3430,Chemicals,otc
+4706,Chemicals,otc
+4707,Chemicals,otc
+4711,Chemicals,otc
+4714,Chemicals,otc
+4716,Chemicals,otc
+4721,Chemicals,otc
+4741,Chemicals,otc
+4754,Chemicals,otc
+4767,Chemicals,otc
+4768,Chemicals,otc
+4772,Chemicals,otc
+6509,Chemicals,otc
+1565,Biotech & medical,otc
+1777,Biotech & medical,otc
+1781,Biotech & medical,otc
+1784,Biotech & medical,otc
+1788,Biotech & medical,otc
+1799,Biotech & medical,otc
+1813,Biotech & medical,otc
+3118,Biotech & medical,otc
+3176,Biotech & medical,otc
+3205,Biotech & medical,otc
+3218,Biotech & medical,otc
+4102,Biotech & medical,otc
+4105,Biotech & medical,otc
+4107,Biotech & medical,otc
+4109,Biotech & medical,otc
+4111,Biotech & medical,otc
+4114,Biotech & medical,otc
+4116,Biotech & medical,otc
+4120,Biotech & medical,otc
+4121,Biotech & medical,otc
+4123,Biotech & medical,otc
+4126,Biotech & medical,otc
+4127,Biotech & medical,otc
+4128,Biotech & medical,otc
+4129,Biotech & medical,otc
+4131,Biotech & medical,otc
+4138,Biotech & medical,otc
+4147,Biotech & medical,otc
+4153,Biotech & medical,otc
+4160,Biotech & medical,otc
+4161,Biotech & medical,otc
+4162,Biotech & medical,otc
+4163,Biotech & medical,otc
+4166,Biotech & medical,otc
+4167,Biotech & medical,otc
+4168,Biotech & medical,otc
+4173,Biotech & medical,otc
+4174,Biotech & medical,otc
+4175,Biotech & medical,otc
+4183,Biotech & medical,otc
+4188,Biotech & medical,otc
+4192,Biotech & medical,otc
+4198,Biotech & medical,otc
+4726,Biotech & medical,otc
+4728,Biotech & medical,otc
+4735,Biotech & medical,otc
+4743,Biotech & medical,otc
+4744,Biotech & medical,otc
+4747,Biotech & medical,otc
+4905,Biotech & medical,otc
+4911,Biotech & medical,otc
+5312,Biotech & medical,otc
+6130,Biotech & medical,otc
+6242,Biotech & medical,otc
+6461,Biotech & medical,otc
+6469,Biotech & medical,otc
+6492,Biotech & medical,otc
+6496,Biotech & medical,otc
+6499,Biotech & medical,otc
+6523,Biotech & medical,otc
+6527,Biotech & medical,otc
+6535,Biotech & medical,otc
+6547,Biotech & medical,otc
+6569,Biotech & medical,otc
+6574,Biotech & medical,otc
+6576,Biotech & medical,otc
+6612,Biotech & medical,otc
+6615,Biotech & medical,otc
+6620,Biotech & medical,otc
+6637,Biotech & medical,otc
+6649,Biotech & medical,otc
+6661,Biotech & medical,otc
+6662,Biotech & medical,otc
+6703,Biotech & medical,otc
+6712,Biotech & medical,otc
+6730,Biotech & medical,otc
+6733,Biotech & medical,otc
+6762,Biotech & medical,otc
+6767,Biotech & medical,otc
+6785,Biotech & medical,otc
+6841,Biotech & medical,otc
+6844,Biotech & medical,otc
+6872,Biotech & medical,otc
+6875,Biotech & medical,otc
+6929,Biotech & medical,otc
+6945,Biotech & medical,otc
+6986,Biotech & medical,otc
+7713,Biotech & medical,otc
+8279,Biotech & medical,otc
+8403,Biotech & medical,otc
+8409,Biotech & medical,otc
+8432,Biotech & medical,otc
+8436,Biotech & medical,otc
+2035,Steel,otc
+2063,Steel,otc
+2064,Steel,otc
+2065,Steel,otc
+2073,Steel,otc
+4950,Steel,otc
+5009,Steel,otc
+5011,Steel,otc
+5013,Steel,otc
+5014,Steel,otc
+5015,Steel,otc
+5016,Steel,otc
+6248,Steel,otc
+8349,Steel,otc
+8415,Steel,otc
+8930,Steel,otc
+9962,Steel,otc
+1595,Semiconductors,otc
+3105,Semiconductors,otc
+3122,Semiconductors,otc
+3131,Semiconductors,otc
+3141,Semiconductors,otc
+3169,Semiconductors,otc
+3178,Semiconductors,otc
+3227,Semiconductors,otc
+3228,Semiconductors,otc
+3259,Semiconductors,otc
+3260,Semiconductors,otc
+3264,Semiconductors,otc
+3265,Semiconductors,otc
+3268,Semiconductors,otc
+3317,Semiconductors,otc
+3372,Semiconductors,otc
+3374,Semiconductors,otc
+3438,Semiconductors,otc
+3467,Semiconductors,otc
+3527,Semiconductors,otc
+3529,Semiconductors,otc
+3555,Semiconductors,otc
+3556,Semiconductors,otc
+3567,Semiconductors,otc
+3581,Semiconductors,otc
+3675,Semiconductors,otc
+3680,Semiconductors,otc
+3707,Semiconductors,otc
+4749,Semiconductors,otc
+4923,Semiconductors,otc
+4951,Semiconductors,otc
+4973,Semiconductors,otc
+5272,Semiconductors,otc
+5274,Semiconductors,otc
+5299,Semiconductors,otc
+5302,Semiconductors,otc
+5344,Semiconductors,otc
+5347,Semiconductors,otc
+5351,Semiconductors,otc
+5425,Semiconductors,otc
+5443,Semiconductors,otc
+5468,Semiconductors,otc
+5483,Semiconductors,otc
+5487,Semiconductors,otc
+6103,Semiconductors,otc
+6104,Semiconductors,otc
+6129,Semiconductors,otc
+6138,Semiconductors,otc
+6147,Semiconductors,otc
+6182,Semiconductors,otc
+6187,Semiconductors,otc
+6208,Semiconductors,otc
+6223,Semiconductors,otc
+6229,Semiconductors,otc
+6233,Semiconductors,otc
+6237,Semiconductors,otc
+6261,Semiconductors,otc
+6291,Semiconductors,otc
+6411,Semiconductors,otc
+6423,Semiconductors,otc
+6435,Semiconductors,otc
+6462,Semiconductors,otc
+6485,Semiconductors,otc
+6488,Semiconductors,otc
+6494,Semiconductors,otc
+6510,Semiconductors,otc
+6532,Semiconductors,otc
+6548,Semiconductors,otc
+6568,Semiconductors,otc
+6640,Semiconductors,otc
+6643,Semiconductors,otc
+6651,Semiconductors,otc
+6679,Semiconductors,otc
+6683,Semiconductors,otc
+6684,Semiconductors,otc
+6693,Semiconductors,otc
+6708,Semiconductors,otc
+6716,Semiconductors,otc
+6720,Semiconductors,otc
+6732,Semiconductors,otc
+6788,Semiconductors,otc
+6823,Semiconductors,otc
+6829,Semiconductors,otc
+6895,Semiconductors,otc
+6953,Semiconductors,otc
+6996,Semiconductors,otc
+7556,Semiconductors,otc
+7704,Semiconductors,otc
+7712,Semiconductors,otc
+7734,Semiconductors,otc
+7751,Semiconductors,otc
+7770,Semiconductors,otc
+7772,Semiconductors,otc
+8024,Semiconductors,otc
+8040,Semiconductors,otc
+8054,Semiconductors,otc
+8086,Semiconductors,otc
+8088,Semiconductors,otc
+8091,Semiconductors,otc
+8102,Semiconductors,otc
+8227,Semiconductors,otc
+8277,Semiconductors,otc
+8299,Semiconductors,otc
+8383,Semiconductors,otc
+1569,Computers & peripherals,otc
+3071,Computers & peripherals,otc
+3088,Computers & peripherals,otc
+3211,Computers & peripherals,otc
+3213,Computers & peripherals,otc
+3272,Computers & peripherals,otc
+3287,Computers & peripherals,otc
+3323,Computers & peripherals,otc
+3325,Computers & peripherals,otc
+3349,Computers & peripherals,otc
+3479,Computers & peripherals,otc
+3483,Computers & peripherals,otc
+3540,Computers & peripherals,otc
+3577,Computers & peripherals,otc
+3594,Computers & peripherals,otc
+3611,Computers & peripherals,otc
+3625,Computers & peripherals,otc
+3693,Computers & peripherals,otc
+3709,Computers & peripherals,otc
+4931,Computers & peripherals,otc
+5289,Computers & peripherals,otc
+5356,Computers & peripherals,otc
+5386,Computers & peripherals,otc
+5426,Computers & peripherals,otc
+5438,Computers & peripherals,otc
+5465,Computers & peripherals,otc
+5474,Computers & peripherals,otc
+5490,Computers & peripherals,otc
+6121,Computers & peripherals,otc
+6150,Computers & peripherals,otc
+6160,Computers & peripherals,otc
+6161,Computers & peripherals,otc
+6188,Computers & peripherals,otc
+6228,Computers & peripherals,otc
+6276,Computers & peripherals,otc
+6441,Computers & peripherals,otc
+6570,Computers & peripherals,otc
+6577,Computers & peripherals,otc
+6680,Computers & peripherals,otc
+6922,Computers & peripherals,otc
+8050,Computers & peripherals,otc
+8076,Computers & peripherals,otc
+8234,Computers & peripherals,otc
+8410,Computers & peripherals,otc
+3066,Optoelectronics,otc
+3128,Optoelectronics,otc
+3230,Optoelectronics,otc
+3297,Optoelectronics,otc
+3339,Optoelectronics,otc
+3362,Optoelectronics,otc
+3434,Optoelectronics,otc
+3441,Optoelectronics,otc
+3455,Optoelectronics,otc
+3490,Optoelectronics,otc
+3516,Optoelectronics,otc
+3523,Optoelectronics,otc
+3531,Optoelectronics,otc
+3615,Optoelectronics,otc
+3623,Optoelectronics,otc
+3630,Optoelectronics,otc
+3666,Optoelectronics,otc
+3691,Optoelectronics,otc
+4729,Optoelectronics,otc
+4933,Optoelectronics,otc
+4972,Optoelectronics,otc
+4995,Optoelectronics,otc
+5220,Optoelectronics,otc
+5230,Optoelectronics,otc
+5245,Optoelectronics,otc
+5251,Optoelectronics,otc
+5315,Optoelectronics,otc
+5392,Optoelectronics,otc
+6167,Optoelectronics,otc
+6222,Optoelectronics,otc
+6234,Optoelectronics,otc
+6244,Optoelectronics,otc
+6246,Optoelectronics,otc
+6419,Optoelectronics,otc
+6498,Optoelectronics,otc
+6517,Optoelectronics,otc
+6556,Optoelectronics,otc
+6560,Optoelectronics,otc
+6859,Optoelectronics,otc
+6899,Optoelectronics,otc
+7402,Optoelectronics,otc
+7753,Optoelectronics,otc
+8049,Optoelectronics,otc
+8064,Optoelectronics,otc
+8069,Optoelectronics,otc
+8111,Optoelectronics,otc
+8240,Optoelectronics,otc
+3081,Communications & networking,otc
+3095,Communications & networking,otc
+3152,Communications & networking,otc
+3163,Communications & networking,otc
+3221,Communications & networking,otc
+3234,Communications & networking,otc
+3306,Communications & networking,otc
+3363,Communications & networking,otc
+3466,Communications & networking,otc
+3491,Communications & networking,otc
+3499,Communications & networking,otc
+3558,Communications & networking,otc
+3564,Communications & networking,otc
+3632,Communications & networking,otc
+3672,Communications & networking,otc
+3684,Communications & networking,otc
+4903,Communications & networking,otc
+4908,Communications & networking,otc
+4909,Communications & networking,otc
+4979,Communications & networking,otc
+5353,Communications & networking,otc
+6109,Communications & networking,otc
+6143,Communications & networking,otc
+6170,Communications & networking,otc
+6190,Communications & networking,otc
+6218,Communications & networking,otc
+6241,Communications & networking,otc
+6245,Communications & networking,otc
+6263,Communications & networking,otc
+6417,Communications & networking,otc
+6465,Communications & networking,otc
+6470,Communications & networking,otc
+6486,Communications & networking,otc
+6530,Communications & networking,otc
+6546,Communications & networking,otc
+6561,Communications & networking,otc
+6588,Communications & networking,otc
+8034,Communications & networking,otc
+8048,Communications & networking,otc
+8059,Communications & networking,otc
+8089,Communications & networking,otc
+8097,Communications & networking,otc
+8176,Communications & networking,otc
+1336,Electronic components,otc
+1815,Electronic components,otc
+3078,Electronic components,otc
+3114,Electronic components,otc
+3115,Electronic components,otc
+3191,Electronic components,otc
+3206,Electronic components,otc
+3207,Electronic components,otc
+3217,Electronic components,otc
+3236,Electronic components,otc
+3276,Electronic components,otc
+3288,Electronic components,otc
+3290,Electronic components,otc
+3294,Electronic components,otc
+3310,Electronic components,otc
+3322,Electronic components,otc
+3332,Electronic components,otc
+3354,Electronic components,otc
+3357,Electronic components,otc
+3388,Electronic components,otc
+3390,Electronic components,otc
+3484,Electronic components,otc
+3485,Electronic components,otc
+3492,Electronic components,otc
+3511,Electronic components,otc
+3520,Electronic components,otc
+3526,Electronic components,otc
+3537,Electronic components,otc
+3548,Electronic components,otc
+3597,Electronic components,otc
+3609,Electronic components,otc
+3624,Electronic components,otc
+3631,Electronic components,otc
+3646,Electronic components,otc
+3689,Electronic components,otc
+3710,Electronic components,otc
+4542,Electronic components,otc
+4939,Electronic components,otc
+4974,Electronic components,otc
+5228,Electronic components,otc
+5291,Electronic components,otc
+5309,Electronic components,otc
+5328,Electronic components,otc
+5340,Electronic components,otc
+5355,Electronic components,otc
+5439,Electronic components,otc
+5457,Electronic components,otc
+5460,Electronic components,otc
+5464,Electronic components,otc
+5475,Electronic components,otc
+5488,Electronic components,otc
+5498,Electronic components,otc
+6114,Electronic components,otc
+6124,Electronic components,otc
+6126,Electronic components,otc
+6127,Electronic components,otc
+6134,Electronic components,otc
+6156,Electronic components,otc
+6158,Electronic components,otc
+6173,Electronic components,otc
+6174,Electronic components,otc
+6175,Electronic components,otc
+6185,Electronic components,otc
+6194,Electronic components,otc
+6203,Electronic components,otc
+6204,Electronic components,otc
+6207,Electronic components,otc
+6210,Electronic components,otc
+6217,Electronic components,otc
+6220,Electronic components,otc
+6259,Electronic components,otc
+6266,Electronic components,otc
+6274,Electronic components,otc
+6275,Electronic components,otc
+6279,Electronic components,otc
+6284,Electronic components,otc
+6290,Electronic components,otc
+6292,Electronic components,otc
+6418,Electronic components,otc
+6432,Electronic components,otc
+6538,Electronic components,otc
+6584,Electronic components,otc
+6597,Electronic components,otc
+6642,Electronic components,otc
+6664,Electronic components,otc
+6727,Electronic components,otc
+6761,Electronic components,otc
+6821,Electronic components,otc
+6913,Electronic components,otc
+6967,Electronic components,otc
+7744,Electronic components,otc
+8038,Electronic components,otc
+8042,Electronic components,otc
+8043,Electronic components,otc
+8071,Electronic components,otc
+8074,Electronic components,otc
+8093,Electronic components,otc
+8109,Electronic components,otc
+8121,Electronic components,otc
+8147,Electronic components,otc
+8155,Electronic components,otc
+8182,Electronic components,otc
+8289,Electronic components,otc
+8291,Electronic components,otc
+8358,Electronic components,otc
+3224,Electronics distribution,otc
+3232,Electronics distribution,otc
+3360,Electronics distribution,otc
+3444,Electronics distribution,otc
+6113,Electronics distribution,otc
+6118,Electronics distribution,otc
+6154,Electronics distribution,otc
+6227,Electronics distribution,otc
+6265,Electronics distribution,otc
+6270,Electronics distribution,otc
+6474,Electronics distribution,otc
+8032,Electronics distribution,otc
+8067,Electronics distribution,otc
+8068,Electronics distribution,otc
+8084,Electronics distribution,otc
+8096,Electronics distribution,otc
+3147,IT services,otc
+3158,IT services,otc
+3570,IT services,otc
+4953,IT services,otc
+5201,IT services,otc
+5202,IT services,otc
+5210,IT services,otc
+5211,IT services,otc
+5212,IT services,otc
+5310,IT services,otc
+5403,IT services,otc
+5410,IT services,otc
+6123,IT services,otc
+6140,IT services,otc
+6148,IT services,otc
+6163,IT services,otc
+6221,IT services,otc
+6231,IT services,otc
+6240,IT services,otc
+6516,IT services,otc
+6590,IT services,otc
+6593,IT services,otc
+6697,IT services,otc
+6751,IT services,otc
+6752,IT services,otc
+6791,IT services,otc
+6874,IT services,otc
+6884,IT services,otc
+7767,IT services,otc
+8099,IT services,otc
+8272,IT services,otc
+8284,IT services,otc
+8416,IT services,otc
+1785,Other electronics,otc
+3093,Other electronics,otc
+3219,Other electronics,otc
+3285,Other electronics,otc
+3289,Other electronics,otc
+3303,Other electronics,otc
+3324,Other electronics,otc
+3373,Other electronics,otc
+3402,Other electronics,otc
+3465,Other electronics,otc
+3498,Other electronics,otc
+3508,Other electronics,otc
+3541,Other electronics,otc
+3552,Other electronics,otc
+3580,Other electronics,otc
+3587,Other electronics,otc
+3628,Other electronics,otc
+3663,Other electronics,otc
+4554,Other electronics,otc
+4577,Other electronics,otc
+4760,Other electronics,otc
+5452,Other electronics,otc
+5489,Other electronics,otc
+5493,Other electronics,otc
+5536,Other electronics,otc
+6146,Other electronics,otc
+6151,Other electronics,otc
+6512,Other electronics,otc
+6613,Other electronics,otc
+6654,Other electronics,otc
+6667,Other electronics,otc
+6725,Other electronics,otc
+6735,Other electronics,otc
+6739,Other electronics,otc
+6840,Other electronics,otc
+6855,Other electronics,otc
+6877,Other electronics,otc
+6903,Other electronics,otc
+6983,Other electronics,otc
+7703,Other electronics,otc
+7728,Other electronics,otc
+8047,Other electronics,otc
+8085,Other electronics,otc
+8092,Other electronics,otc
+8183,Other electronics,otc
+8431,Other electronics,otc
+8908,"Oil, power & gas",otc
+8917,"Oil, power & gas",otc
+8927,"Oil, power & gas",otc
+8931,"Oil, power & gas",otc
+2596,Construction,otc
+2718,Construction,otc
+3188,Construction,otc
+3313,Construction,otc
+3489,Construction,otc
+3512,Construction,otc
+3521,Construction,otc
+4113,Construction,otc
+4416,Construction,otc
+4907,Construction,otc
+5206,Construction,otc
+5213,Construction,otc
+5324,Construction,otc
+5455,Construction,otc
+5508,Construction,otc
+5511,Construction,otc
+5512,Construction,otc
+5514,Construction,otc
+5516,Construction,otc
+5520,Construction,otc
+5523,Construction,otc
+5529,Construction,otc
+5547,Construction,otc
+5548,Construction,otc
+6171,Construction,otc
+6186,Construction,otc
+6198,Construction,otc
+6212,Construction,otc
+6219,Construction,otc
+6264,Construction,otc
+8080,Construction,otc
+8424,Construction,otc
+2641,Shipping,otc
+2643,Shipping,otc
+5601,Shipping,otc
+5603,Shipping,otc
+5609,Shipping,otc
+7716,Shipping,otc
+1259,Tourism,otc
+1268,Tourism,otc
+2719,Tourism,otc
+2729,Tourism,otc
+2732,Tourism,otc
+2734,Tourism,otc
+2736,Tourism,otc
+2740,Tourism,otc
+2743,Tourism,otc
+2745,Tourism,otc
+2751,Tourism,otc
+2752,Tourism,otc
+2754,Tourism,otc
+2755,Tourism,otc
+2756,Tourism,otc
+3252,Tourism,otc
+3522,Tourism,otc
+4419,Tourism,otc
+4530,Tourism,otc
+5301,Tourism,otc
+5364,Tourism,otc
+5701,Tourism,otc
+5703,Tourism,otc
+5704,Tourism,otc
+5905,Tourism,otc
+6961,Tourism,otc
+7708,Tourism,otc
+7723,Tourism,otc
+7757,Tourism,otc
+8077,Tourism,otc
+5864,Finance,otc
+5878,Finance,otc
+6015,Finance,otc
+6016,Finance,otc
+6020,Finance,otc
+6021,Finance,otc
+6023,Finance,otc
+6026,Finance,otc
+6028,Finance,otc
+1584,Other,otc
+2221,Other,otc
+3284,Other,otc
+4430,Other,otc
+4529,Other,otc
+4541,Other,otc
+4556,Other,otc
+5209,Other,otc
+5314,Other,otc
+5345,Other,otc
+5398,Other,otc
+5450,Other,otc
+5481,Other,otc
+5530,Other,otc
+5604,Other,otc
+6179,Other,otc
+6199,Other,otc
+6721,Other,otc
+6881,Other,otc
+6904,Other,otc
+7777,Other,otc
+8342,Other,otc
+8354,Other,otc
+8401,Other,otc
+8421,Other,otc
+8435,Other,otc
+8489,Other,otc
+8905,Other,otc
+8906,Other,otc
+8916,Other,otc
+8921,Other,otc
+8929,Other,otc
+8935,Other,otc
+8936,Other,otc
+8937,Other,otc
+8942,Other,otc
+2926,Cultural & creative,otc
+3064,Cultural & creative,otc
+3083,Cultural & creative,otc
+3086,Cultural & creative,otc
+3293,Cultural & creative,otc
+3546,Cultural & creative,otc
+3629,Cultural & creative,otc
+4806,Cultural & creative,otc
+4946,Cultural & creative,otc
+5263,Cultural & creative,otc
+5478,Cultural & creative,otc
+6101,Cultural & creative,otc
+6111,Cultural & creative,otc
+6144,Cultural & creative,otc
+6169,Cultural & creative,otc
+6180,Cultural & creative,otc
+6294,Cultural & creative,otc
+6482,Cultural & creative,otc
+6542,Cultural & creative,otc
+6596,Cultural & creative,otc
+6856,Cultural & creative,otc
+7584,Cultural & creative,otc
+8446,Cultural & creative,otc
+8450,Cultural & creative,otc
+8923,Cultural & creative,otc
+9949,Cultural & creative,otc
+1240,Agritech,otc
+4171,Agritech,otc
+6508,Agritech,otc
+6578,Agritech,otc
+3073,Green energy,otc
+3551,Green energy,otc
+3713,Green energy,otc
+5205,Green energy,otc
+5432,Green energy,otc
+6624,Green energy,otc
+6692,Green energy,otc
+6803,Green energy,otc
+6894,Green energy,otc
+6971,Green energy,otc
+7715,Green energy,otc
+8087,Green energy,otc
+8171,Green energy,otc
+8390,Green energy,otc
+8440,Green energy,otc
+2640,Digital cloud,otc
+2949,Digital cloud,otc
+3085,Digital cloud,otc
+3687,Digital cloud,otc
+5278,Digital cloud,otc
+5287,Digital cloud,otc
+5321,Digital cloud,otc
+6236,Digital cloud,otc
+6690,Digital cloud,otc
+6763,Digital cloud,otc
+6811,Digital cloud,otc
+6865,Digital cloud,otc
+6870,Digital cloud,otc
+6910,Digital cloud,otc
+6925,Digital cloud,otc
+6997,Digital cloud,otc
+7547,Digital cloud,otc
+7714,Digital cloud,otc
+7738,Digital cloud,otc
+7747,Digital cloud,otc
+7805,Digital cloud,otc
+8044,Digital cloud,otc
+8472,Digital cloud,otc
+8477,Digital cloud,otc
+8932,Digital cloud,otc
+1593,Sports & leisure,otc
+5348,Sports & leisure,otc
+6804,Sports & leisure,otc
+8924,Sports & leisure,otc
+8928,Sports & leisure,otc
+8933,Sports & leisure,otc
+8938,Sports & leisure,otc
+9960,Sports & leisure,otc
+2230,Home & living,otc
+2916,Home & living,otc
+2937,Home & living,otc
+2938,Home & living,otc
+2941,Home & living,otc
+2947,Home & living,otc
+2948,Home & living,otc
+3067,Home & living,otc
+3171,Home & living,otc
+4609,Home & living,otc
+4702,Home & living,otc
+5902,Home & living,otc
+5903,Home & living,otc
+5904,Home & living,otc
+6195,Home & living,otc
+6728,Home & living,otc
+6968,Home & living,otc
+8066,Home & living,otc
+8433,Home & living,otc
+8941,Home & living,otc
+7792,Other electronics,otc
+7782,Home & living,otc
+7794,Home & living,otc
+7814,Biotech & medical,otc
+7810,Semiconductors,otc
+7820,Green energy,otc
+7811,Sports & leisure,otc
+7819,IT services,otc
+7828,Semiconductors,otc
+7825,Other electronics,otc
+7842,Green energy,otc
+7839,Digital cloud,otc
+7856,Semiconductors,otc
+3718,Optoelectronics,otc

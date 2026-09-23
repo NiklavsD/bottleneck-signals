@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}{{ "Create account" if mode == "signup" else "Sign in" }} · Leadtime{% endblock %}
+{% block main %}
+<div class="wrap"><div class="auth card card-pad">
+  <p class="eyebrow">{{ "Free while in beta" if mode == "signup" else "Welcome back" }}</p>
+  <h1 style="font-size:2rem;margin:10px 0 6px">{{ "Create your account" if mode == "signup" else "Sign in" }}</h1>
+  <p class="muted small">{{ "You need an account to choose alert channels and bottlenecks. Everything else on Leadtime is open." if mode == "signup" else "Manage your alert channels and preferences." }}</p>
+  {% if error %}<div class="notice err" role="alert" style="margin:14px 0">{{ icon('warning') }}<span>{{ error }}</span></div>{% endif %}
+  <form class="form" method="post" action="/{{ mode }}" style="margin-top:16px">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <label class="f">Email<input type="email" name="email" autocomplete="email" required></label>
+    <label class="f">Password{% if mode == "signup" %} <span class="muted small">(10+ characters)</span>{% endif %}<input type="password" name="password" autocomplete="{{ 'new-password' if mode == 'signup' else 'current-password' }}" minlength="{{ 10 if mode == 'signup' else 1 }}" required></label>
+    <button class="btn btn-primary" type="submit" style="justify-content:center">{{ "Create account" if mode == "signup" else "Sign in" }}</button>
+  </form>
+  <p class="small muted" style="margin:16px 0 0">{% if mode == "signup" %}Already have an account? <a href="/login">Sign in</a>{% else %}New here? <a href="/signup">Create an account</a>{% endif %}</p>
+</div></div>
+{% endblock %}

@@ -4,7 +4,16 @@ The AI buildout runs into physical bottlenecks: memory, optics, power equipment.
 
 > **Not investment advice.** These are model outputs from a research project. Past and back-tested results do not predict future returns.
 
-## Current status (model v4, 2026-09-23)
+## Leadtime (the website)
+
+`web/` is **Leadtime**, a site built on this repo. It covers 28 bottlenecks across AI compute, power and robotics (`config/themes.json`), each with its evidence series, listed exposure and model call. It also includes a discovery feed, a track record page with chain verification, and alert delivery by Discord, Slack, phone push (ntfy), webhook, Telegram, email and SMS.
+
+- **Model v6** (all themes, [`RESULTS_v6.md`](backtest/RESULTS_v6.md)): 6 of 19 testable themes pass their out-of-sample tilt test; memory keeps Rule M. The rest are shown as *monitoring*, with no call.
+- **Discovery scanner v5** ([`RESULTS_v5.md`](backtest/RESULTS_v5.md)): the average flag beats the market out of sample; the median flag doesn't. Treat flags as leads, not buy signals.
+- **Code:** `engine/build.py` writes `web/data/snapshot.json`; `engine/dispatch.py` sends alerts, deduplicated per channel; `web/app/` is FastAPI + Jinja; `web/notify/` holds the channel adapters.
+- **Run locally:** `cd web && LEADTIME_SECRET=dev ../.venv/bin/uvicorn app.main:app --port 8911`
+
+## Model v4 status (2026-09-23)
 
 **Memory / storage**
 - **Test:** timing (IN/OUT). Out-of-sample 2008–2017: **PASS**. CAGR 15.9% vs 13.0%, Sharpe 0.71 vs 0.60.
@@ -57,6 +66,11 @@ echo "CENSUS_API_KEY=<your free key>" > .env        # https://api.census.gov/dat
 .venv/bin/python pipeline/fetch_census.py
 .venv/bin/python pipeline/fetch_korea_customs.py
 .venv/bin/python backtest/run_v4.py
+# Leadtime site data
+.venv/bin/python pipeline/fetch_census_all.py       # all HS6 in ch. 28/84/85/90, 2013+
+.venv/bin/python pipeline/fetch_universe_prices.py  # basket prices (not redistributed)
+.venv/bin/python pipeline/discovery.py
+.venv/bin/python engine/build.py
 ```
 
 ## Known limits

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, pct %}
+{% block title %}Track record · Leadtime{% endblock %}
+{% block main %}
+{% set tr = snap.track %}
+<div class="page-head"><div class="wrap">
+  <p class="eyebrow"><span class="dot"></span>Track record</p>
+  <h1>Every call, on the record</h1>
+  <p class="lede">Each month the model's calls are written to a log with the basket prices on that day. Every entry includes the SHA-256 of the one before it, and the log is published on GitHub, so nobody can rewrite a past call quietly, including us.</p>
+  <div class="chain" style="margin-top:16px">
+    <span class="chip {{ 'good' if tr.chain_ok else 'bad' }}">{{ icon('seal-check') }} Chain {{ "verified" if tr.chain_ok else "broken" }}</span>
+    <span>{{ tr.entries }} entries</span><span>head <span class="hash">{{ tr.head }}</span></span>
+    <button class="icon-btn" type="button" data-copy="{{ tr.head }}" aria-label="Copy head hash" style="width:30px;height:30px">{{ icon('copy') }}</button>
+  </div>
+  <p class="small" style="margin-top:12px"><a href="{{ tr.repo }}/blob/main/backtest/signal_log.jsonl" rel="noopener">{{ icon('github-logo') }} Raw log on GitHub</a> · <a href="{{ tr.repo }}/tree/main/backtest" rel="noopener">pre-registrations &amp; backtests</a></p>
+</div></div>
+<div class="wrap" style="padding-top:26px">
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Logged (UTC)</th><th>Bottleneck</th><th>Model</th><th>Call</th><th class="r">Pressure</th><th class="r">Basket since</th><th class="r hide-sm">Benchmark since</th><th class="hide-sm">Entry hash</th></tr></thead>
+      <tbody>
+      {% for r in tr.rows %}
+        <tr>
+          <td class="num small">{{ r.logged_at[:16].replace('T', ' ') }}</td>
+          <td>{% if r.bottleneck in snap.by_slug %}<a href="/t/{{ r.bottleneck }}">{{ snap.by_slug[r.bottleneck].name }}</a>{% else %}{{ r.bottleneck|title }}{% endif %}</td>
+          <td class="mono small">{{ r.model }}</td>
+          <td><span class="chip {{ 'good' if r.state in ('IN','OVERWEIGHT') else 'bad' if r.state in ('OUT','UNDERWEIGHT') else '' }}">{{ r.state|lower }}</span></td>
+          <td class="r num">{{ '%+.2f'|format(r.C) }}</td>
+          <td class="r">{{ pct(r.basket_since_pct) }}</td>
+          <td class="r hide-sm">{% if r.bench %}{{ pct(r.bench_since_pct) }} <span class="muted small">{{ r.bench }}</span>{% else %}<span class="muted">—</span>{% endif %}</td>
+          <td class="hide-sm hash">{{ r.hash[:12] }}…</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if tr.no_call %}<p class="small muted" style="margin-top:10px">Also logged: {{ tr.no_call }} "no call" entries for themes on watch. They are in the raw log, not in this table.</p>{% endif %}
+  <div class="two" style="margin-top:28px;align-items:start">
+    <div class="card card-pad">
+      <h3>What "basket since" means</h3>
+      <p class="small muted" style="margin-top:8px">The equal-weight change in the basket's prices from the day of the call to the latest close, before costs. For IN/OUT calls, an OUT call is right if the basket later falls. For tilt calls, compare the basket with its benchmark.</p>
+    </div>
+    <div class="card card-pad">
+      <h3>Verify it yourself</h3>
+      <p class="small muted" style="margin-top:8px">Each line's <code>hash</code> is SHA-256 of the entry without its hash field, serialised as compact JSON with sorted keys, and <code>prev</code> must equal the previous line's hash. The script is in the repo: <code>pipeline/monthly.py</code>.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

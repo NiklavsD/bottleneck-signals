@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, pct %}
+{% block title %}Companies · Leadtime{% endblock %}
+{% block main %}
+<div class="page-head"><div class="wrap">
+  <p class="eyebrow"><span class="dot"></span>Companies</p>
+  <h1>Who controls the constraints</h1>
+  <p class="lede">{{ snap.companies|length }} listed companies across {{ snap.themes|length }} bottlenecks. Search, sort, then open a company to see every bottleneck it sits in.</p>
+</div></div>
+<div class="wrap" style="padding-top:26px">
+  <div style="max-width:420px;margin-bottom:14px"><input type="text" placeholder="Search name, ticker, country or role…" data-filter-for="co-table" value="{{ q }}" aria-label="Search companies"></div>
+  <div class="table-wrap">
+  <table class="data" id="co-table" data-sortable>
+    <thead><tr><th class="sortable">Company</th><th class="hide-sm">Bottlenecks</th><th class="sortable r">1 mo</th><th class="sortable r">3 mo</th><th class="sortable r hide-sm">YTD</th><th class="sortable r hide-sm">1 yr</th></tr></thead>
+    <tbody>
+    {% for tk, c in snap.companies|dictsort %}
+      <tr>
+        <td><a href="/c/{{ tk }}" style="text-decoration:none"><span class="co-name">{{ c.name }}</span><br><span class="tick muted">{{ tk }}</span> <span class="co-sub">{{ c.country }}</span></a></td>
+        <td class="hide-sm small">{% for th in c.themes %}<a class="tag" href="/t/{{ th.slug }}">{{ th.name }}</a>{{ ", " if not loop.last }}{% endfor %}</td>
+        <td class="r" data-v="{{ c.r1m if c.r1m is not none else '' }}">{{ pct(c.r1m) }}</td>
+        <td class="r" data-v="{{ c.r3m if c.r3m is not none else '' }}">{{ pct(c.r3m) }}</td>
+        <td class="r hide-sm" data-v="{{ c.ytd if c.ytd is not none else '' }}">{{ pct(c.ytd) }}</td>
+        <td class="r hide-sm" data-v="{{ c.r1y if c.r1y is not none else '' }}">{{ pct(c.r1y) }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+{% endblock %}
