@@ -13,3 +13,4 @@ data/processed/prices.csv
 .venv/
 __pycache__/
 work/
+.codex-workers/

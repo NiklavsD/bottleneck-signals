@@ -1,0 +1,148 @@
+{
+ "memory": {
+  "korea_source": "korea_customs",
+  "korea_vs_comtrade_median_abs_diff": 5.514107093151921e-08,
+  "OOS": {
+   "rule": "ruleM",
+   "from": "2008-03-17",
+   "to": "2017-02-28",
+   "strategy": {
+    "cagr": 15.9,
+    "max_dd": -73.1,
+    "sharpe": 0.71
+   },
+   "buy_hold": {
+    "cagr": 13.0,
+    "max_dd": -73.1,
+    "sharpe": 0.6
+   },
+   "benchmark": {
+    "cagr": 13.3,
+    "max_dd": -60.4,
+    "sharpe": 0.6
+   },
+   "time_in_market": 91.5,
+   "fwd12_excess_on": 13.4,
+   "fwd12_excess_off": -25.1,
+   "n_on_off": [
+    99,
+    9
+   ],
+   "pass_c1_excess_spread": true,
+   "pass_c2_sharpe": true,
+   "PASS": true
+  },
+  "IS": {
+   "rule": "ruleM",
+   "from": "2017-03-01",
+   "to": "2026-09-23",
+   "strategy": {
+    "cagr": 44.1,
+    "max_dd": -37.6,
+    "sharpe": 1.51
+   },
+   "buy_hold": {
+    "cagr": 40.7,
+    "max_dd": -39.6,
+    "sharpe": 1.33
+   },
+   "benchmark": {
+    "cagr": 31.0,
+    "max_dd": -45.6,
+    "sharpe": 0.97
+   },
+   "time_in_market": 76.1,
+   "fwd12_excess_on": 32.3,
+   "fwd12_excess_off": 18.9,
+   "n_on_off": [
+    76,
+    27
+   ]
+  },
+  "now": {
+   "month": "2026-08-01",
+   "decision": "2026-09-16",
+   "C": 5.33,
+   "M": -0.15,
+   "state": "OUT"
+  }
+ },
+ "optics": {
+  "window": "OOS",
+  "tilt": {
+   "from": "2008-03-17",
+   "to": "2017-02-28",
+   "tilt_sharpe": 0.32,
+   "always_overweight_sharpe": 0.3,
+   "tilt_ann_excess_pct": 22.0,
+   "always_ann_excess_pct": 20.6,
+   "pct_overweight": 57.1,
+   "PASS": true
+  },
+  "IS_tilt": {
+   "from": "2017-03-01",
+   "to": "2026-09-23",
+   "tilt_sharpe": 0.6,
+   "always_overweight_sharpe": 0.2,
+   "tilt_ann_excess_pct": 17.5,
+   "always_ann_excess_pct": 5.8,
+   "pct_overweight": 65.0,
+   "PASS": true
+  },
+  "now": {
+   "month": "2026-08-01",
+   "decision": "2026-09-16",
+   "C": 1.5,
+   "tilt": "OVERWEIGHT"
+  }
+ },
+ "power_v2": {
+  "window": "OOS",
+  "tilt": {
+   "from": "2008-01-02",
+   "to": "2017-02-28",
+   "tilt_sharpe": 0.48,
+   "always_overweight_sharpe": -0.18,
+   "tilt_ann_excess_pct": 7.6,
+   "always_ann_excess_pct": -2.9,
+   "pct_overweight": 15.0,
+   "PASS": true
+  },
+  "IS_tilt": {
+   "from": "2017-03-01",
+   "to": "2026-09-23",
+   "tilt_sharpe": 0.84,
+   "always_overweight_sharpe": 0.83,
+   "tilt_ann_excess_pct": 14.7,
+   "always_ann_excess_pct": 14.4,
+   "pct_overweight": 81.3,
+   "PASS": true
+  },
+  "now": {
+   "month": "2026-08-01",
+   "decision": "2026-09-16",
+   "C": 0.53,
+   "tilt": "OVERWEIGHT"
+  }
+ },
+ "power_v3": {
+  "window": "FULL_UNVALIDATED",
+  "tilt": {
+   "from": "2016-04-18",
+   "to": "2026-09-23",
+   "tilt_sharpe": 0.58,
+   "always_overweight_sharpe": 0.78,
+   "tilt_ann_excess_pct": 9.8,
+   "always_ann_excess_pct": 13.1,
+   "pct_overweight": 79.4,
+   "PASS": false
+  },
+  "IS_tilt": null,
+  "now": {
+   "month": "2026-07-01",
+   "decision": "2026-09-16",
+   "C": 0.13,
+   "tilt": "OVERWEIGHT"
+  }
+ }
+}

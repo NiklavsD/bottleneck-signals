@@ -4,22 +4,21 @@ The AI buildout runs into physical bottlenecks: memory, optics, power equipment.
 
 > **Not investment advice.** These are model outputs from a research project. Past and back-tested results do not predict future returns.
 
-## Current status
+## Current status (model v4, 2026-09-23)
 
-**Memory / storage** (model v2, memory rule):
-- Out-of-sample 2008–2017: **PASS**.
-- In/out timing beat holding: CAGR 15.9% vs 13.0%, Sharpe 0.71 vs 0.60.
+**Memory / storage**
+- **Test:** timing (IN/OUT). Out-of-sample 2008–2017: **PASS**. CAGR 15.9% vs 13.0%, Sharpe 0.71 vs 0.60.
+- **Live call:** **OUT** (C 5.33, M −0.15).
 
-**Optics** (model v2, level rule):
-- **FAIL** as a timing tool.
-- Still sorts forward excess returns: +39% when ON vs +21% when OFF.
+**Optics**
+- **Test:** tilt vs SOXX. **PASS, marginal** (Sharpe 0.32 vs 0.30).
+- **Live call:** **OVERWEIGHT**.
 
-**Power equipment** (model v3, level rule):
-- **FAIL** as a timing tool.
-- Still sorts forward excess returns: +26.5% when ON vs +8.1% when OFF.
-- There was no clean out-of-sample window to test on.
+**Power equipment**
+- **Test:** tilt vs XLI, using TW revenue + PPI. **PASS** (Sharpe 0.48 vs −0.18).
+- **Live call:** **OVERWEIGHT**.
 
-For the details, see [`backtest/RESULTS_v1.md`](backtest/RESULTS_v1.md), [`backtest/RESULTS_v2.md`](backtest/RESULTS_v2.md) and `backtest/v3_power_results.json`.
+Details: [`backtest/RESULTS_v4.md`](backtest/RESULTS_v4.md). Earlier versions are in `RESULTS_v1.md`, `RESULTS_v2.md` and `v3_power_results.json`.
 
 ![memory signal](docs/memory-signal-v2.png)
 
@@ -31,7 +30,7 @@ For the details, see [`backtest/RESULTS_v1.md`](backtest/RESULTS_v1.md), [`backt
 - **Heavy electrical:** Fortune, Shihlin, Chung-Hsin, Allis
 
 **Other sources:**
-- Korea memory-IC exports (UN Comtrade, HS 854232)
+- Korea memory-IC exports (Korea Customs Service, tradedata.go.kr, HS 854232; validated against UN Comtrade)
 - US imports of power transformers and switchgear (Census, HS 850421/2/3 and 853720)
 
 Each series becomes a year-over-year z-score (expanding window). A bottleneck's **pressure index C** is the average z-score of its series, and **momentum M** is C minus C three months earlier.
@@ -56,12 +55,13 @@ echo "CENSUS_API_KEY=<your free key>" > .env        # https://api.census.gov/dat
 .venv/bin/python pipeline/fetch_market.py           # prices (not redistributed here), FRED, SEC
 .venv/bin/python pipeline/fetch_comtrade.py
 .venv/bin/python pipeline/fetch_census.py
-.venv/bin/python backtest/run_v2.py && .venv/bin/python backtest/run_v3_power.py
+.venv/bin/python pipeline/fetch_korea_customs.py
+.venv/bin/python backtest/run_v4.py
 ```
 
 ## Known limits
 - **Survivorship bias:** delisted names such as old SanDisk, Elpida and Finisar cannot be priced.
 - **Short history:** about 6 memory cycles, and power import data only from 2013.
-- **Coverage gaps:** Comtrade's Korea data currently ends in Dec 2025, and the PPI series use revised values rather than the values available at the time.
+- **Revised data:** the PPI series use revised values rather than the values available at the time.
 
 Code: MIT. Data remains the property of its sources: MOPS/TWSE, UN Comtrade, the US Census Bureau, FRED/BLS and SEC EDGAR.

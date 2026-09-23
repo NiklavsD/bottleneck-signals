@@ -21,7 +21,8 @@ LOG = "backtest/signal_log.jsonl"
 def refresh():
     # fetch_tw rewrites the whole CSV from its start year; old pages come from the cache, so always start at 2005
     steps = [[PY, "pipeline/fetch_tw.py", "2005"], [PY, "pipeline/fetch_market.py"],
-             [PY, "pipeline/fetch_comtrade.py"], [PY, "pipeline/fetch_census.py"]]
+             [PY, "pipeline/fetch_comtrade.py"], [PY, "pipeline/fetch_census.py"],
+             [PY, "pipeline/fetch_korea_customs.py"]]
     for cmd in steps:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=3600)
         print(" ".join(cmd[1:]), "->", "ok" if r.returncode == 0 else f"FAILED\n{r.stderr[-2000:]}", flush=True)
@@ -36,22 +37,31 @@ def sanity_check():
 
 
 def current_calls():
+    """Model v4 (backtest/PREREGISTRATION_v4.md): memory in/out; optics and power as tilts vs their benchmark."""
     ns = {}
-    exec(open("backtest/run_v3_power.py").read().split("\nif __name__ == ")[0], ns)
-    today = pd.Timestamp(dt.date.today())
-    specs = [("memory", "v2", "ruleM", ns["build"](ns["GROUPS"]["memory"])),
-             ("optics", "v2", "ruleB", ns["build"](ns["GROUPS"]["optics"])),
-             ("power", "v3", "ruleB", ns["build_v3"]())]
+    exec(open("backtest/run_v4.py").read().split("\nif __name__ == ")[0], ns)
+    mem, src, _ = ns["build_memory_v4"]()
+    specs = [("memory", "v4", "ruleM", mem, "memory", None),
+             ("optics", "v4-tilt", "ruleB", ns["build"](ns["GROUPS"]["optics"]), "optics", "SOXX"),
+             ("power", "v4-tilt", "ruleB", ns["build"](ns["GROUPS"]["power"]), "power", "XLI")]
     calls = []
-    for name, ver, rule, ind in specs:
-        live = ind[ind.decision <= today]
-        row = live.iloc[-1]
-        basket = ns["GROUPS"]["power" if name == "power" else name]["basket"]
+    for name, ver, rule, ind, grp, bench in specs:
+        row = ns["live"](ind)
+        basket = ns["GROUPS"][grp]["basket"] + ([bench] if bench else [])
         px = ns["PX"][basket].ffill().iloc[-1]
-        calls.append({"bottleneck": name, "model": ver, "rule": rule, "state": "IN" if row[rule] else "OUT",
-                      "data_month": str(live.index[-1].date()), "decision_date": str(row.decision.date()),
-                      "C": round(float(row.C), 3), "M": round(float(row.M), 3),
-                      "basket_prices": {k: round(float(v), 4) for k, v in px.items() if pd.notna(v)}})
+        if bench:
+            state = "OVERWEIGHT" if row[rule] else "UNDERWEIGHT"
+        else:
+            state = "IN" if row[rule] else "OUT"
+        call = {"bottleneck": name, "model": ver, "rule": rule, "state": state,
+                "data_month": str(row.name.date()), "decision_date": str(row.decision.date()),
+                "C": round(float(row.C), 3), "M": round(float(row.M), 3),
+                "basket_prices": {k: round(float(v), 4) for k, v in px.items() if pd.notna(v)}}
+        if bench:
+            call["benchmark"] = bench
+        if name == "memory":
+            call["korea_source"] = src
+        calls.append(call)
     return calls
 
 
