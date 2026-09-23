@@ -5,63 +5,31 @@
 {% set scored = themes|selectattr("C", "ne", none)|list %}
 {% set validated = themes|selectattr("status", "equalto", "validated")|list %}
 <section class="hero">
-  <div class="wrap hero-grid">
+  <div class="wrap hero-single">
     <div>
-      <p class="eyebrow"><span class="dot"></span>Physical supply chains · AI · Power · Robotics</p>
-      <h1 style="margin-top:18px">See the shortage <em>before</em> the stock does.</h1>
-      <p class="lede">Every AI boom turns into a hardware problem: memory, optics, transformers, actuators. Leadtime tracks those bottlenecks in free, dated data like supplier revenue, customs flows and import values. It turns them into tested calls and keeps a public record nobody can edit.</p>
-      <div class="hero-cta">
+      <p class="eyebrow rise" style="--d:0"><span class="dot"></span>Physical supply chains · AI · Power · Robotics</p>
+      <h1 class="rise" style="margin-top:18px;--d:1">See the shortage <em>before</em> the stock does.</h1>
+      <p class="lede rise" style="--d:2">Every AI boom turns into a hardware problem: memory, optics, transformers, actuators. Leadtime tracks those bottlenecks in free, dated data like supplier revenue, customs flows and import values. It turns them into tested calls and keeps a public record nobody can edit.</p>
+      <div class="hero-cta rise" style="--d:3">
         <a class="btn btn-accent" href="/map">Open the bottleneck map {{ icon('arrow-right') }}</a>
         <a class="btn btn-ghost" href="{{ '/alerts' if user else '/signup' }}">{{ icon('bell') }} Get alerts</a>
       </div>
-      <div class="hero-proof">
-        <div><b>{{ themes|length }}</b><span>bottlenecks tracked</span></div>
-        <div><b>{{ validated|length }}</b><span>with a tested, live call</span></div>
-        <div><b>1,850+</b><span>Taiwan suppliers scanned monthly</span></div>
+      <div class="hero-proof rise" style="--d:4">
+        <div><b data-count="{{ themes|length }}">{{ themes|length }}</b><span>bottlenecks tracked</span></div>
+        <div><b data-count="{{ validated|length }}">{{ validated|length }}</b><span>with a tested, live call</span></div>
+        <div><b data-count="1850" data-suffix="+">1,850+</b><span>Taiwan suppliers scanned monthly</span></div>
       </div>
     </div>
-    {% set f = field %}
-    <div class="field" aria-labelledby="field-title">
-      <div class="field-head">
-        <h2 id="field-title" class="field-title">All {{ themes|length }} bottlenecks, one glance</h2>
-        <span class="small muted">Data to {{ (scored|map(attribute='data_month')|max)[:7] if scored else '' }}</span>
-      </div>
-      <p class="field-sub">Each dot is a bottleneck, placed by how far its supplier data runs above or below its own history. Further right means tighter.</p>
-      <svg class="field-svg" viewBox="0 0 {{ f.w }} {{ f.h }}" role="img" aria-label="Pressure of every bottleneck, grouped by AI compute, power and robotics">
-        <rect x="{{ f.zero }}" y="22" width="{{ f.w - 14 - f.zero }}" height="{{ f.h - 48 }}" class="zone-tight"/>
-        <rect x="14" y="22" width="{{ f.zero - 14 }}" height="{{ f.h - 48 }}" class="zone-ease"/>
-        {% for tk in f.ticks %}<line x1="{{ tk.x }}" x2="{{ tk.x }}" y1="22" y2="{{ f.h - 26 }}" class="{{ 'zero' if tk.v == 0 else 'grid' }}"/>{% endfor %}
-        {% for ln in f.lanes %}
-          {% if not loop.first %}<line x1="14" x2="{{ f.w - 14 }}" y1="{{ ln.y }}" y2="{{ ln.y }}" class="lane-sep"/>{% endif %}
-          <text x="20" y="{{ ln.y + 15 }}" class="lane-label">{{ ln.name }}</text>
-          {% for d in ln.dots %}
-          <a href="/t/{{ d.slug }}" class="dot-link" aria-label="{{ d.name }}: pressure {{ '%+.1f'|format(d.C) }}{{ ', call ' ~ d.call|lower if d.call else ', monitoring' }}">
-            <title>{{ d.name }} · pressure {{ '%+.1f'|format(d.C) }}{{ ' · ' ~ d.call|lower if d.call else '' }}</title>
-            {% if d.ring %}<circle cx="{{ d.x }}" cy="{{ d.y }}" r="{{ f.r + 3.2 }}" class="ring ring-{{ d.ring }}"/>{% endif %}
-            <circle cx="{{ d.x }}" cy="{{ d.y }}" r="{{ f.r }}" class="dot dot-{{ d.tone }}" fill-opacity="{{ d.alpha }}"/>
-          </a>
-          {% endfor %}
-          {% if ln.top %}{% set tp = ln.top %}<text x="{{ tp.x + (6 if tp.x > f.w * 0.55 else -6) }}" y="{{ tp.y - f.r - 7 }}" text-anchor="{{ 'end' if tp.x > f.w * 0.55 else 'start' }}" class="dot-label">{{ tp.name }}</text>{% endif %}
-        {% endfor %}
-        {% for tk in f.ticks %}<text x="{{ tk.x }}" y="{{ f.h - 10 }}" text-anchor="middle" class="tick">{{ '%+d'|format(tk.v) if tk.v else '0' }}</text>{% endfor %}
-        <text x="16" y="14" class="axis-cap">← Easing</text>
-        <text x="{{ f.w - 16 }}" y="14" text-anchor="end" class="axis-cap">Tighter than usual →</text>
-      </svg>
-      <div class="field-legend small">
-        <span><i class="lg lg-ring-good"></i>Call: in / overweight</span>
-        <span><i class="lg lg-ring-bad"></i>Call: out / underweight</span>
-        <span><i class="lg lg-plain"></i>Watching, no call</span>
-      </div>
-      <div class="calls">
-        <p class="calls-title">Live calls <span class="muted">· {{ validated|length }} bottlenecks passed an out-of-sample test · Over/Under = vs benchmark</span></p>
-        <div class="call-pills">
-        {% for t in validated|sort(attribute="C", reverse=True) %}
-          {% set up = t.call in ("IN", "OVERWEIGHT") %}<a class="call-pill" href="/t/{{ t.slug }}" title="{{ t.call|capitalize }}">{{ t.name }} <span class="pill-state {{ 'good' if up else 'bad' }}">{{ icon('trend-up' if up else 'trend-down') }}{{ {"IN": "In", "OUT": "Out", "OVERWEIGHT": "Over", "UNDERWEIGHT": "Under"}[t.call] }}</span></a>
-        {% endfor %}
-        </div>
-      </div>
-    </div>
-    </div>
+  </div>
+  <div class="leadlag" aria-hidden="true">
+    <svg viewBox="0 0 1200 170" preserveAspectRatio="none">
+      <line x1="0" x2="1200" y1="150" y2="150" class="ll-base"/>
+      <path class="ll-signal" pathLength="1" d="M0,142 C160,142 230,140 300,132 C380,122 420,92 480,70 C560,40 640,28 720,26 C820,24 880,40 960,58 C1040,76 1120,84 1200,86"/>
+      <path class="ll-price" pathLength="1" d="M0,146 C220,146 330,145 430,140 C520,134 570,112 640,88 C720,60 800,44 880,40 C960,36 1020,44 1080,56 C1130,66 1170,70 1200,72"/>
+      <circle class="ll-dot ll-dot-signal" cx="720" cy="26" r="5"/>
+      <circle class="ll-dot ll-dot-price" cx="880" cy="40" r="5"/>
+    </svg>
+    <div class="wrap ll-caption"><span class="ll-key ll-key-signal">Supplier data turns first</span><span class="ll-key ll-key-price">the stock follows</span><span class="ll-note">Illustration</span></div>
   </div>
 </section>
 

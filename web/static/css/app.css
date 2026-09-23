@@ -385,55 +385,38 @@ details.more summary { cursor: pointer; color: var(--ink-2); font-size: .9rem; }
 .ctx-stats b { font-family: var(--mono); font-weight: 500; }
 @media (max-width: 760px) { .ctx-head { grid-template-columns: 1fr; } }
 
-/* home: pressure field (replaces the old pressure board) */
-.field { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; box-shadow: var(--shadow); padding: 18px 18px 14px; }
-.field-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-.field-title { font-size: 1.35rem; }
-.field-sub { font-size: .86rem; color: var(--ink-2); margin: 6px 0 4px; max-width: 52ch; }
-.field-svg { width: 100%; height: auto; display: block; overflow: visible; }
-.field-svg .zone-tight { fill: var(--tight); opacity: .06; }
-.field-svg .zone-ease { fill: var(--ease); opacity: .06; }
-.field-svg .grid { stroke: var(--chart-grid); stroke-width: 1; }
-.field-svg .zero { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 3 3; }
-.field-svg .lane-sep { stroke: var(--rule); }
-.field-svg .lane-label { font: 600 10.5px var(--mono); letter-spacing: .06em; text-transform: uppercase; fill: var(--ink-3); }
-.field-svg .tick { font: 10.5px var(--mono); fill: var(--ink-3); }
-.field-svg .axis-cap { font: 500 11px var(--sans); fill: var(--ink-2); }
-.field-svg .dot-tight { fill: var(--tight); }
-.field-svg .dot-ease { fill: var(--ease); }
-.field-svg .dot { stroke: var(--card); stroke-width: 1.5; transition: r .15s ease; }
-.field-svg .ring { fill: none; stroke-width: 2; }
-.field-svg .ring-good { stroke: var(--good); }
-.field-svg .ring-bad { stroke: var(--bad); }
-.field-svg .dot-link:hover .dot, .field-svg .dot-link:focus-visible .dot { stroke: var(--ink); stroke-width: 2; }
-.field-svg .dot-link:focus-visible { outline: none; }
-.field-svg .dot-label { font: 500 11.5px var(--sans); fill: var(--ink); paint-order: stroke; stroke: var(--card); stroke-width: 3px; }
-.field-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--ink-2); margin: 4px 0 14px; }
-.field-legend .lg { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; background: var(--tight); opacity: .85; }
-.field-legend .lg-ring-good { box-shadow: 0 0 0 2px var(--card), 0 0 0 3.5px var(--good); }
-.field-legend .lg-ring-bad { box-shadow: 0 0 0 2px var(--card), 0 0 0 3.5px var(--bad); }
-.calls { border-top: 1px solid var(--rule); padding-top: 12px; }
-.calls-title { font-weight: 600; font-size: .92rem; margin: 0 0 8px; }
-.calls-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 22px; }
-.call-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 6px 0; text-decoration: none; color: var(--ink); border-bottom: 1px dashed var(--rule); font-size: .9rem; }
-.call-row:hover .call-name { text-decoration: underline; }
-.call-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.calls-more { display: inline-flex; gap: 6px; align-items: center; margin-top: 10px; color: var(--ink-2); }
-@media (max-width: 560px) { .calls-grid { grid-template-columns: 1fr; } }
 
-.call-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-.call-pill { display: inline-flex; align-items: center; gap: 8px; padding: 4px 5px 4px 11px; border: 1px solid var(--rule); border-radius: 999px; font-size: .86rem; color: var(--ink); text-decoration: none; background: var(--paper); }
-.call-pill:hover { border-color: var(--ink-3); }
-.pill-state { display: inline-flex; align-items: center; gap: 3px; font: 600 .72rem/1 var(--mono); padding: 4px 7px; border-radius: 999px; }
-.pill-state .icon { width: 12px; height: 12px; }
-.pill-state.good { color: var(--good); background: var(--good-soft); }
-.pill-state.bad { color: var(--bad); background: var(--bad-soft); }
-@media (max-width: 560px) {
-  .field { padding: 14px 12px 12px; }
-  .field-svg .lane-label, .field-svg .tick { font-size: 17px; }
-  .field-svg .axis-cap { font-size: 17px; }
-  .field-svg .dot-label { display: none; }
-  .field-svg .dot { r: 9px; }
-  .field-svg .ring { r: 12.5px; stroke-width: 2.5; }
-  .field-head { flex-direction: column; gap: 2px; }
+/* home hero: single column + lead-lag illustration */
+.hero-single { max-width: 860px; }
+.hero-single h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); }
+.hero-single .lede { max-width: 62ch; }
+.leadlag { position: relative; margin-top: 40px; height: 170px; }
+.leadlag svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.ll-base { stroke: var(--rule); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.ll-signal, .ll-price { fill: none; stroke-width: 2.5; stroke-linecap: round; }
+.ll-signal { stroke: var(--accent); }
+.ll-price { stroke: var(--ink-3); stroke-dasharray: none; }
+.ll-dot { opacity: 0; }
+.ll-dot-signal { fill: var(--accent); }
+.ll-dot-price { fill: var(--ink-3); }
+.ll-caption { display: flex; gap: 22px; align-items: center; font-size: .84rem; color: var(--ink-2); margin-top: 8px; }
+.ll-key::before { content: ""; display: inline-block; width: 18px; height: 2.5px; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
+.ll-key-signal::before { background: var(--accent); }
+.ll-key-price::before { background: var(--ink-3); }
+.ll-note { margin-left: auto; font: .72rem var(--mono); color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .rise { opacity: 0; transform: translateY(14px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--d, 0) * 110ms + 80ms); }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  .js .ll-signal, .js .ll-price { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 2.4s cubic-bezier(.45,.05,.25,1) forwards; }
+  .js .ll-signal { animation-delay: .6s; }
+  .js .ll-price { animation-delay: 1.5s; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .js .ll-dot-signal { animation: pop .4s ease 2.2s forwards, pulse 2.4s ease-in-out 2.6s infinite; }
+  .js .ll-dot-price { animation: pop .4s ease 3.1s forwards; }
+  @keyframes pop { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: none; } }
+  @keyframes pulse { 0%, 100% { r: 5px; } 50% { r: 8px; } }
+  .ll-dot { transform-box: fill-box; transform-origin: center; }
+  .js .ll-caption { opacity: 0; animation: rise .6s ease 2.4s forwards; }
 }
+@media (prefers-reduced-motion: reduce) { .ll-dot { opacity: 1; } }
+@media (max-width: 560px) { .leadlag { height: 110px; margin-top: 28px; } .ll-dot { display: none; } .ll-signal, .ll-price { stroke-width: 5; } .ll-caption { flex-wrap: wrap; gap: 6px 16px; } }

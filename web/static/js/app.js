@@ -66,6 +66,21 @@
     });
   });
 
+  // ---------- count-up numbers (home hero)
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll("[data-count]").forEach((el) => {
+    if (reduce) return;
+    const end = +el.dataset.count, suffix = el.dataset.suffix || "", t0 = performance.now() + 450, dur = 1100;
+    const fmt = (v) => Math.round(v).toLocaleString("en-US") + suffix;
+    el.textContent = fmt(0);
+    const step = (now) => {
+      const p = Math.min(Math.max((now - t0) / dur, 0), 1);
+      el.textContent = fmt(end * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+
   // ---------- selects that submit their form on change
   document.querySelectorAll("select[data-autosubmit]").forEach((sel) => sel.addEventListener("change", () => sel.form.submit()));
 
