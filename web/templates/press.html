@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, press_list %}
+{% block title %}Press &amp; analysts · Leadtime{% endblock %}
+{% block main %}
+{% set cx = snap.context %}
+{% macro q(t=theme_filter, s=signal, k=kind) %}?theme={{ t }}&signal={{ s }}&kind={{ k }}{% endmacro %}
+<div class="page-head"><div class="wrap">
+  <p class="eyebrow"><span class="dot"></span>Press &amp; analysts</p>
+  <h1>What people are saying about the bottlenecks</h1>
+  <p class="lede">Every day we read free newsletters, research houses and trade press, then an AI model tags each relevant item to a bottleneck and marks whether it points to tightening or easing. We store the headline, link and a one-line summary, never the article. This is context next to the data. It doesn't change any call.</p>
+  <p class="small muted" style="margin-top:12px">Sources: {{ cx.sources|map(attribute="name")|join(", ") }}, plus a daily news search per bottleneck.{% if cx.since %} Collecting since {{ cx.since }}.{% endif %}</p>
+</div></div>
+<div class="wrap" style="padding-top:28px">
+  <div class="filters">
+    <div class="seg" role="group" aria-label="Filter by signal">
+      <a href="{{ q(s='') }}" aria-current="{{ 'true' if not signal else 'false' }}">All</a>
+      <a href="{{ q(s='tightening') }}" aria-current="{{ 'true' if signal == 'tightening' else 'false' }}">Tightening</a>
+      <a href="{{ q(s='easing') }}" aria-current="{{ 'true' if signal == 'easing' else 'false' }}">Easing</a>
+    </div>
+    <div class="seg" role="group" aria-label="Filter by source type">
+      <a href="{{ q(k='') }}" aria-current="{{ 'true' if not kind else 'false' }}">Any source</a>
+      <a href="{{ q(k='newsletter') }}" aria-current="{{ 'true' if kind == 'newsletter' else 'false' }}">Newsletters</a>
+      <a href="{{ q(k='research') }}" aria-current="{{ 'true' if kind == 'research' else 'false' }}">Research</a>
+      <a href="{{ q(k='press') }}" aria-current="{{ 'true' if kind == 'press' else 'false' }}">Trade press</a>
+    </div>
+    <form method="get" style="display:flex;gap:8px;align-items:center">
+      <input type="hidden" name="signal" value="{{ signal }}"><input type="hidden" name="kind" value="{{ kind }}">
+      <label class="sr-only" for="theme-sel">Bottleneck</label>
+      <select id="theme-sel" name="theme" data-autosubmit>
+        <option value="">All bottlenecks</option>
+        {% for t in snap.themes %}<option value="{{ t.slug }}" {{ 'selected' if t.slug == theme_filter }}>{{ t.name }}</option>{% endfor %}
+      </select>
+      <noscript><button class="btn btn-ghost btn-sm" type="submit">Apply</button></noscript>
+    </form>
+  </div>
+  <div class="two" style="grid-template-columns:minmax(0,1fr) 300px;align-items:start;margin-top:18px">
+    <div>
+      <p class="small muted" style="margin:0 0 10px">{{ n }} item{{ '' if n == 1 else 's' }} in the last 60 days{% if n > items|length %}, newest {{ items|length }} shown{% endif %}.</p>
+      {{ press_list(items, snap.by_slug, show_themes=true) }}
+    </div>
+    <aside class="card card-pad">
+      <h3>Emerging terms</h3>
+      <p class="small muted" style="margin:6px 0 12px">Supply bottlenecks named at least twice in the last 60 days that none of our 28 themes covers yet. Candidates for a new theme.</p>
+      {% for e in cx.emerging %}
+        <p class="small" style="margin:0 0 8px"><b>{{ e.term }}</b> <span class="muted num">×{{ e.n }}</span><br><a href="{{ e.example }}" rel="noopener nofollow" target="_blank" class="muted">{{ e.example_title[:70] }}{{ '…' if e.example_title|length > 70 }}</a></p>
+      {% else %}<p class="small muted" style="margin:0">Nothing repeated yet.</p>{% endfor %}
+    </aside>
+  </div>
+</div>
+{% endblock %}

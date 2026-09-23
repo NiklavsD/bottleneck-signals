@@ -172,6 +172,18 @@ def discovery(request: Request, kind: str = "all", theme: str = ""):
     return render(request, "discovery.html", kind=kind, theme_filter=theme)
 
 
+@app.get("/press", response_class=HTMLResponse)
+def press(request: Request, theme: str = "", signal: str = "", kind: str = ""):
+    items = (snap().get("context") or {}).get("all", [])
+    if theme:
+        items = [i for i in items if theme in i["themes"]]
+    if signal in ("tightening", "easing", "neutral"):
+        items = [i for i in items if i["signal"] == signal]
+    if kind in ("newsletter", "research", "press", "news"):
+        items = [i for i in items if i["kind"] == kind]
+    return render(request, "press.html", items=items[:150], n=len(items), theme_filter=theme, signal=signal, kind=kind)
+
+
 @app.get("/companies", response_class=HTMLResponse)
 def companies(request: Request, q: str = ""):
     return render(request, "companies.html", q=q)

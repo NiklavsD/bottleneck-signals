@@ -6,6 +6,7 @@ Output: web/data/snapshot.json, which the website reads. Run after the data refr
 import datetime as dt
 import hashlib
 import json
+import re
 import os
 
 import numpy as np
@@ -289,11 +290,79 @@ def track_record():
             "rows": rows[::-1], "no_call": no_call, "repo": "https://github.com/NiklavsD/bottleneck-signals"}
 
 
+def context():
+    """Press/analyst context (engine/context.py) and memory spot prices. Context only: no call reads this."""
+    out = {"themes": {}, "latest": [], "all": [], "emerging": [], "since": None, "spot": None, "sources": []}
+    path = "data/context/items.jsonl"
+    if os.path.exists(path):
+        items = [json.loads(l) for l in open(path) if l.strip()]
+        seen, uniq = set(), []
+        for i in sorted(items, key=lambda i: (i["published"], i["tagged_at"]), reverse=True):
+            key = re.sub(r"\W+", " ", i["title"].lower()).strip()[:80]
+            if key not in seen:  # the same story syndicated by several outlets counts once
+                seen.add(key)
+                uniq.append(i)
+        items = uniq
+        out["since"] = min(i["tagged_at"] for i in items)[:10] if items else None
+        out["latest"] = [i for i in items if i["signal"] != "neutral"][:24]
+        cut60 = str((TODAY - pd.Timedelta(days=60)).date())
+        out["all"] = [i for i in items if i["published"] >= cut60]
+        today = pd.Timestamp(TODAY.date())
+        weeks = pd.date_range(end=today, periods=26, freq="W-MON")
+        for slug in [t["slug"] for t in THEMES]:
+            mine = [i for i in items if slug in i["themes"]]
+            d = pd.to_datetime(pd.Series([i["published"] for i in mine], dtype="object"))
+            wk = d.dt.to_period("W-SUN").dt.start_time.value_counts() if len(d) else pd.Series(dtype=int)
+            recent = [i for i in mine if i["published"] >= str((today - pd.Timedelta(days=28)).date())]
+            tight = sum(i["signal"] == "tightening" for i in recent)
+            ease = sum(i["signal"] == "easing" for i in recent)
+            out["themes"][slug] = {"items": mine[:10], "n_28d": len(recent), "tight_28d": tight, "ease_28d": ease,
+                                   "tone": round((tight - ease) / len(recent), 2) if recent else None,
+                                   "weekly": [[str(w.date()), int(wk.get(w, 0))] for w in weeks]}
+        cut = str((today - pd.Timedelta(days=60)).date())
+        terms = {}
+        known = {t["name"].lower() for t in THEMES}
+        for i in items:
+            if i["published"] < cut:
+                continue
+            for term in i.get("new_terms", []):
+                k = term.strip().lower()
+                if len(k) < 3 or k in known:
+                    continue
+                e = terms.setdefault(k, {"term": term.strip(), "n": 0, "example": i["url"], "example_title": i["title"]})
+                e["n"] += 1
+        out["emerging"] = sorted([e for e in terms.values() if e["n"] >= 2], key=lambda e: -e["n"])[:15]
+    src = json.load(open("config/context_sources.json"))
+    out["sources"] = [{"name": f["name"], "kind": f["kind"]} for f in src["feeds"]]
+    if os.path.exists("data/context/spot_prices.csv"):
+        sp = pd.read_csv("data/context/spot_prices.csv")
+        last = sp[sp.date == sp.date.max()]
+        first = sp.sort_values("date").drop_duplicates("item")[["item", "date", "avg_usd"]].set_index("item")
+        rows = []
+        for r in last.itertuples():
+            f0 = first.loc[r.item]
+            rows.append({"category": r.category, "item": r.item, "avg_usd": r.avg_usd, "change_pct": r.change_pct,
+                         "since": f0.date, "since_pct": round((r.avg_usd / f0.avg_usd - 1) * 100, 1) if f0.date != r.date else None})
+        out["spot"] = {"asof": str(sp.date.max()), "rows": rows, "history": None}
+        if os.path.exists("data/context/spot_history.csv"):
+            h = pd.concat([pd.read_csv("data/context/spot_history.csv"), sp[["date", "category", "item", "avg_usd"]]])
+            h["date"] = pd.to_datetime(h.date)
+            h["item"] = h["item"].str.replace(r"\s+", " ", regex=True).str.strip()
+            h = h[h.category == "dram_chip"].sort_values("date")
+            # like-for-like chained index (as in PREREGISTRATION_v7 B): mean log change of items present at both dates
+            piv = h.pivot_table(index="date", columns="item", values="avg_usd", aggfunc="last")
+            lr = np.log(piv).diff().mean(axis=1, skipna=True).fillna(0)
+            idx = np.exp(lr.cumsum()) * 100
+            m = idx.resample("ME").last().dropna()
+            out["spot"]["history"] = [[str(d.date()), round(float(v), 2)] for d, v in m.items()]
+    return out
+
+
 def main():
     os.makedirs("web/data", exist_ok=True)
     themes = [theme_block(t) for t in THEMES]
     snap = {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
-            "prices_asof": str(PX.index.max().date()), "themes": themes, "discovery": discovery(),
+            "prices_asof": str(PX.index.max().date()), "themes": themes, "discovery": discovery(), "context": context(),
             "track": track_record(),
             "universes": [{"slug": "ai", "name": "AI compute", "tagline": "Wafers, memory, packaging, optics and the data-centre stack."},
                           {"slug": "power", "name": "Power", "tagline": "Turbines, transformers, grid and delivered megawatts."},

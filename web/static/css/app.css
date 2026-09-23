@@ -362,3 +362,24 @@ details.more summary { cursor: pointer; color: var(--ink-2); font-size: .9rem; }
 :root[data-theme="dark"] .btn-accent:hover { background: #9a3412; }
 .chip-quiet { font-size: .82rem; color: var(--ink-3); white-space: nowrap; }
 .soon-line { margin-top: 12px; color: var(--ink-3); }
+
+/* press / analyst context */
+.press { display: grid; grid-template-columns: 22px 1fr; gap: 12px; padding: 14px 18px; }
+.press + .press { border-top: 1px solid var(--rule); }
+.press .what { font-weight: 500; color: var(--ink); text-decoration: none; }
+.press .what:hover { text-decoration: underline; }
+.press .why { font-size: .9rem; color: var(--ink-2); margin: 4px 0 0; }
+.press .meta { font-size: .8rem; color: var(--ink-3); margin: 5px 0 0; }
+.press .kind { color: var(--accent); }
+.sig { display: inline-flex; width: 22px; height: 22px; border-radius: 6px; align-items: center; justify-content: center; margin-top: 1px; }
+.sig .icon { width: 14px; height: 14px; }
+.sig-tightening { color: var(--tight); background: color-mix(in srgb, var(--tight) 14%, transparent); }
+.sig-easing { color: var(--ease); background: color-mix(in srgb, var(--ease) 14%, transparent); }
+.sig-neutral { color: var(--ink-3); background: color-mix(in srgb, var(--ink-3) 12%, transparent); }
+.heat-bars { width: 100%; height: 40px; display: block; }
+.heat-bars rect { fill: var(--ink-3); opacity: .55; }
+.heat-bars rect:last-child { fill: var(--accent); opacity: 1; }
+.ctx-head { display: grid; grid-template-columns: 1fr minmax(180px, 260px); gap: 24px; align-items: end; margin-bottom: 12px; }
+.ctx-stats { font-size: .85rem; color: var(--ink-2); }
+.ctx-stats b { font-family: var(--mono); font-weight: 500; }
+@media (max-width: 760px) { .ctx-head { grid-template-columns: 1fr; } }

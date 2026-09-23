@@ -20,7 +20,7 @@
   <div class="wrap">
     <a class="brand" href="/" aria-label="Leadtime home"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span><span class="word">Leadtime</span></a>
     <nav class="nav" aria-label="Main">
-      {% for href, label in [("/map", "Bottleneck map"), ("/discovery", "Discovery"), ("/companies", "Companies"), ("/track-record", "Track record"), ("/method", "Method")] %}
+      {% for href, label in [("/map", "Bottleneck map"), ("/discovery", "Discovery"), ("/press", "Press"), ("/companies", "Companies"), ("/track-record", "Track record"), ("/method", "Method")] %}
       <a href="{{ href }}" {% if path.startswith(href) %}aria-current="page"{% endif %}>{{ label }}</a>
       {% endfor %}
     </nav>
@@ -46,7 +46,7 @@
       </div>
       <div>
         <b class="small" style="color:var(--ink)">Research</b>
-        <a href="/map">Bottleneck map</a><a href="/discovery">Discovery feed</a><a href="/companies">Companies</a><a href="/track-record">Track record</a>
+        <a href="/map">Bottleneck map</a><a href="/discovery">Discovery feed</a><a href="/press">Press &amp; analysts</a><a href="/companies">Companies</a><a href="/track-record">Track record</a>
       </div>
       <div>
         <b class="small" style="color:var(--ink)">About</b>

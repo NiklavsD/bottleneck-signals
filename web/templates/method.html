@@ -11,7 +11,7 @@
 </div></div>
 <div class="wrap prose-wrap" style="padding-top:26px">
 <nav class="toc card card-pad small" aria-label="On this page">
-  <a href="#pressure">Pressure index</a><a href="#calls">Calls</a><a href="#discovery">Discovery scanner</a><a href="#sources">Data sources</a><a href="#honesty">Pre-registration</a><a href="#limits">Limits</a>
+  <a href="#pressure">Pressure index</a><a href="#calls">Calls</a><a href="#discovery">Discovery scanner</a><a href="#context">Press &amp; spot prices</a><a href="#sources">Data sources</a><a href="#honesty">Pre-registration</a><a href="#limits">Limits</a>
 </nav>
 <article class="prose">
   <h2 id="pressure">1. The pressure index</h2>
@@ -43,7 +43,15 @@
   <div class="notice warn">{{ icon('warning') }}<span><b>How to read a flag:</b> the typical flagged stock does about as well as the market, or worse. The average is positive because a few flags become very large winners, like the memory names in 2025. A flag is a lead to research, not a buy signal.</span></div>
   <p class="small muted">We removed {{ es.bad_ticks_removed or 677 }} bad price ticks (closes below 0.2× or above 5× the one-year median) after one broken quote inflated the first result. That fix is disclosed in the repo.</p>
 
-  <h2 id="sources">4. Data sources</h2>
+  <h2 id="context">4. Context: press, analysts and spot prices</h2>
+  <p>Next to the hard data we collect two kinds of context. <b>Neither changes a call.</b> Both rules were <a href="{{ repo }}/blob/main/backtest/PREREGISTRATION_v7_context.md" rel="noopener">pre-registered</a> before any number was computed.</p>
+  <ul>
+    <li><b>Press and analysts:</b> free newsletters (SemiAnalysis, Fabricated Knowledge, The Chip Letter, Asianometry), research houses (TrendForce, DigiTimes), trade press and a daily news search per bottleneck. An AI model (GLM-5.3) tags each item to a bottleneck, marks it tightening, easing or neutral, and writes a one-line summary using only the headline and teaser. We store the link and our summary, never the article. Paywalled content is not read.</li>
+    <li><b>Hype gap, tested later:</b> we count weekly mentions per bottleneck. "Quiet but tight" (high pressure, little talk) is the early-opportunity case. Old news can't be reconstructed point in time, so this can only be tested on live data. The first test is due after 12 months (2027-09), and we'll publish the result either way.</li>
+    <li><b>Memory spot prices:</b> DRAM and NAND spot prices from DRAMeXchange's public page, recorded daily. We rebuilt past prices from archived copies of that page. A pre-registered test checks whether spot-price momentum beats the current memory rule. If it does, it can only become a new pre-registered model, never a silent change.</li>
+  </ul>
+
+  <h2 id="sources">5. Data sources</h2>
   <p>All sources are free and public, and the code that fetches them is in the <a href="{{ repo }}" rel="noopener">repository</a>.</p>
   <ul>
     <li><b>Taiwan MOPS:</b> monthly revenue for every listed company, 2005 on.</li>
@@ -52,16 +60,17 @@
     <li><b>FRED:</b> producer price indexes (e.g. transformers, switchgear).</li>
     <li><b>SEC XBRL and UN Comtrade:</b> cross-checks.</li>
     <li><b>Yahoo Finance:</b> daily closes for baskets and benchmarks.</li>
+    <li><b>DRAMeXchange:</b> public memory spot prices (context).</li>
   </ul>
 
-  <h2 id="honesty">5. Pre-registration and the log</h2>
+  <h2 id="honesty">6. Pre-registration and the log</h2>
   <p>Before we test a rule, we write it down, hash it and push it to GitHub. Rules that fail stay public. Each month the calls are appended to <code>signal_log.jsonl</code>, where every entry carries the SHA-256 of the one before it. See the <a href="/track-record">track record</a>.</p>
   <ul class="plain">
-    {% for f, d in [("PREREGISTRATION.md","v1: first index"),("PREREGISTRATION_v2.md","v2: IN/OUT rules"),("PREREGISTRATION_v3_power.md","v3: power from imports (failed)"),("PREREGISTRATION_v4.md","v4: like-for-like momentum, tilts"),("PREREGISTRATION_v5_discovery.md","v5: discovery scanner"),("PREREGISTRATION_v6_universe.md","v6: all 28 themes")] %}
+    {% for f, d in [("PREREGISTRATION.md","v1: first index"),("PREREGISTRATION_v2.md","v2: IN/OUT rules"),("PREREGISTRATION_v3_power.md","v3: power from imports (failed)"),("PREREGISTRATION_v4.md","v4: like-for-like momentum, tilts"),("PREREGISTRATION_v5_discovery.md","v5: discovery scanner"),("PREREGISTRATION_v6_universe.md","v6: all 28 themes"),("PREREGISTRATION_v7_context.md","v7: press heat and spot-price test")] %}
     <li><a href="{{ repo }}/blob/main/backtest/{{ f }}" rel="noopener">{{ icon('file-text') }} {{ d }}</a></li>{% endfor %}
   </ul>
 
-  <h2 id="limits">6. Limits</h2>
+  <h2 id="limits">7. Limits</h2>
   <ul>
     <li><b>Few live calls:</b> the live log started in September 2026. Backtests aren't a track record.</li>
     <li><b>Survivorship:</b> baskets list companies that exist today, which flatters old backtest returns.</li>

@@ -66,6 +66,9 @@
     });
   });
 
+  // ---------- selects that submit their form on change
+  document.querySelectorAll("select[data-autosubmit]").forEach((sel) => sel.addEventListener("change", () => sel.form.submit()));
+
   // ---------- copy buttons
   document.addEventListener("click", (e) => {
     const b = e.target.closest("[data-copy]");
@@ -121,7 +124,7 @@
     // grid + y labels
     const ticks = spec.log
       ? [10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 2500, 5000].filter((v) => Math.log10(v) > lo && Math.log10(v) < hi)
-          .filter((v, i, a) => a.length <= 5 || [10, 50, 100, 500, 1000, 5000].includes(v))
+          .filter((v, i, a) => a.length <= 5 || [10, 20, 50, 100, 200, 500, 1000, 2000, 5000].includes(v))
       : niceTicks(lo, hi, 4);
     const gridc = css("--chart-grid"), inkc = css("--ink-3");
     ticks.forEach((v) => {

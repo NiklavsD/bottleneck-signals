@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import icon, call_chip, momentum, pressure_word, gauge, pct, chart %}
+{% from "_macros.html" import icon, call_chip, momentum, pressure_word, gauge, pct, chart, press_list, heat_bars %}
 {% block title %}{{ t.name }} · Leadtime{% endblock %}
 {% block desc %}{{ t.thesis }}{% endblock %}
 {% block main %}
@@ -68,6 +68,37 @@
     </div>
   </section>
   {% endif %}
+
+  {% set cx = snap.context.themes.get(t.slug) if snap.context else none %}
+  {% if t.slug in ("memory", "storage") and snap.context and snap.context.spot %}{% set sp = snap.context.spot %}
+  <section style="margin-top:32px">
+    <div class="section-head" style="margin-bottom:12px"><div><h2>Spot prices</h2><p class="muted">Daily {{ "DRAM" if t.slug == "memory" else "NAND flash" }} spot prices from <a href="https://www.dramexchange.com/" rel="noopener">DRAMeXchange (TrendForce)</a>, recorded here since {{ sp.rows[0].since if sp.rows else sp.asof }}. Context: no call uses them yet (see <a href="/method#context">method</a>).</p></div></div>
+    {% if t.slug == "memory" and sp.history %}<div class="card card-pad" style="margin-bottom:12px">
+      <h3 style="margin-bottom:4px">DRAM chip spot index</h3><p class="small muted" style="margin:0 0 8px">Chained like-for-like index of every DRAM chip quote, month-end, from archived DRAMeXchange pages. Log scale.</p>
+      {{ chart({"label": "DRAM spot index", "log": true, "dp": 1, "series": [{"name": "Spot index", "color": "--accent", "data": sp.history, "width": 2}]}) }}
+    </div>{% endif %}
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Item</th><th class="r">Avg (US$)</th><th class="r">Day</th><th class="r hide-sm">Since first record</th></tr></thead>
+      <tbody>{% for r in sp.rows if (t.slug == "memory" and r.category in ("dram_chip", "dram_module", "gddr")) or (t.slug == "storage" and r.category in ("nand_chip", "nand_wafer")) %}
+        <tr><td>{{ r.item }}</td><td class="r num">{{ '%.2f'|format(r.avg_usd) }}</td><td class="r">{{ pct(r.change_pct) if r.change_pct is not none else '—' }}</td><td class="r hide-sm">{{ pct(r.since_pct) if r.since_pct is not none else '<span class="muted small">new</span>'|safe }}</td></tr>
+      {% endfor %}</tbody>
+    </table></div>
+    <p class="small muted" style="margin-top:8px">As of {{ sp.asof }}.</p>
+  </section>
+  {% endif %}
+
+  <section style="margin-top:32px" id="press">
+    <div class="ctx-head">
+      <div><h2>What analysts and the press say</h2>
+      <p class="muted" style="margin:6px 0 0">Newsletters, research houses and trade press, tagged by an AI model to this bottleneck, with a one-line summary of each headline. Context only: it never changes a call.</p></div>
+      {% if cx %}<div>
+        {{ heat_bars(cx.weekly) }}
+        <p class="ctx-stats" style="margin:6px 0 0">Last 4 weeks: <b>{{ cx.n_28d }}</b> items · <span style="color:var(--tight)">{{ cx.tight_28d }} tightening</span> · <span style="color:var(--ease)">{{ cx.ease_28d }} easing</span></p>
+      </div>{% endif %}
+    </div>
+    {{ press_list(cx['items'] if cx else [], snap.by_slug) }}
+    {% if snap.context and snap.context.since %}<p class="small muted" style="margin-top:8px">Collecting since {{ snap.context.since }}. <a href="/press?theme={{ t.slug }}">All items for {{ t.name }}</a></p>{% endif %}
+  </section>
 
   <section style="margin-top:32px">
     <div class="section-head" style="margin-bottom:12px"><div><h2>Listed exposure</h2><p class="muted">Companies that control the constraint. Prices delayed{% if t.basket and t.basket[0].asof %} · as of {{ t.basket[0].asof }}{% endif %}.</p></div></div>

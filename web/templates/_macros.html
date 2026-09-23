@@ -38,3 +38,31 @@
 <div class="chart {{ cls }}" data-chart><script type="application/json">{{ spec|tojson }}</script>
 <noscript><p class="small muted">Chart needs JavaScript. The data is available at <a href="/api/snapshot">/api/snapshot</a>.</p></noscript></div>
 {%- endmacro %}
+
+{% macro signal_dot(sig) -%}
+<span class="sig sig-{{ sig }}" title="{{ 'Points to tightening' if sig == 'tightening' else 'Points to easing' if sig == 'easing' else 'Neutral' }}">{{ icon('trend-up') if sig == 'tightening' else icon('trend-down') if sig == 'easing' else icon('minus') }}</span>
+{%- endmacro %}
+
+{% macro press_list(items, by_slug, show_themes=false) -%}
+<div class="card">
+{% for i in items %}
+  <article class="press">
+    {{ signal_dot(i.signal) }}
+    <div>
+      <a class="what" href="{{ i.url }}" rel="noopener nofollow" target="_blank">{{ i.title }}</a>
+      <p class="why">{{ i.claim }}</p>
+      <p class="meta">{{ i.source_name }} · {{ i.published }}{% if i.kind in ('newsletter', 'research') %} · <span class="kind">{{ 'Newsletter' if i.kind == 'newsletter' else 'Research' }}</span>{% endif %}{% if show_themes %} · {% for s in i.themes if s in by_slug %}<a class="tag" href="/t/{{ s }}">{{ by_slug[s].name }}</a>{{ ", " if not loop.last }}{% endfor %}{% endif %}</p>
+    </div>
+  </article>
+{% else %}
+  <p class="card-pad muted" style="margin:0">Nothing tagged yet. The press feed runs daily.</p>
+{% endfor %}
+</div>
+{%- endmacro %}
+
+{% macro heat_bars(weekly) -%}
+{%- set mx = [weekly|map(attribute=1)|max, 1]|max -%}
+<svg class="heat-bars" viewBox="0 0 {{ weekly|length * 8 }} 32" preserveAspectRatio="none" role="img" aria-label="Mentions per week, last {{ weekly|length }} weeks">
+{%- for w in weekly %}<rect x="{{ loop.index0 * 8 + 1 }}" y="{{ 32 - (w[1] / mx * 30)|round(1) }}" width="6" height="{{ (w[1] / mx * 30)|round(1) }}"><title>Week of {{ w[0] }}: {{ w[1] }}</title></rect>{% endfor -%}
+</svg>
+{%- endmacro %}
