@@ -20,19 +20,47 @@
         <div><b>1,850+</b><span>Taiwan suppliers scanned monthly</span></div>
       </div>
     </div>
-    <div class="board" aria-label="Current bottleneck pressure">
-      <div class="board-head">
-        <span class="eyebrow">Pressure board</span>
-        <span class="small muted">Latest data month · {{ (scored|map(attribute='data_month')|max)[:7] if scored else '' }}</span>
+    {% set f = field %}
+    <div class="field" aria-labelledby="field-title">
+      <div class="field-head">
+        <h2 id="field-title" class="field-title">All {{ themes|length }} bottlenecks, one glance</h2>
+        <span class="small muted">Data to {{ (scored|map(attribute='data_month')|max)[:7] if scored else '' }}</span>
       </div>
-      {% for t in (scored|sort(attribute="C", reverse=True))[:8] %}
-      <a class="board-row" href="/t/{{ t.slug }}">
-        <span><span class="t">{{ t.name }}</span><br><span class="u">{{ pressure_word(t.C) }} · {{ momentum(t.M) }}</span></span>
-        <span class="gauge-wrap">{{ gauge(t.C) }}</span>
-        <span style="text-align:right">{{ call_chip(t) }}</span>
-      </a>
-      {% endfor %}
-      <div class="board-foot"><span class="legend-note">Bar = pressure index (tight right, easing left)</span><a href="/map">All {{ themes|length }} {{ icon('arrow-right') }}</a></div>
+      <p class="field-sub">Each dot is a bottleneck, placed by how far its supplier data runs above or below its own history. Further right means tighter.</p>
+      <svg class="field-svg" viewBox="0 0 {{ f.w }} {{ f.h }}" role="img" aria-label="Pressure of every bottleneck, grouped by AI compute, power and robotics">
+        <rect x="{{ f.zero }}" y="22" width="{{ f.w - 14 - f.zero }}" height="{{ f.h - 48 }}" class="zone-tight"/>
+        <rect x="14" y="22" width="{{ f.zero - 14 }}" height="{{ f.h - 48 }}" class="zone-ease"/>
+        {% for tk in f.ticks %}<line x1="{{ tk.x }}" x2="{{ tk.x }}" y1="22" y2="{{ f.h - 26 }}" class="{{ 'zero' if tk.v == 0 else 'grid' }}"/>{% endfor %}
+        {% for ln in f.lanes %}
+          {% if not loop.first %}<line x1="14" x2="{{ f.w - 14 }}" y1="{{ ln.y }}" y2="{{ ln.y }}" class="lane-sep"/>{% endif %}
+          <text x="20" y="{{ ln.y + 15 }}" class="lane-label">{{ ln.name }}</text>
+          {% for d in ln.dots %}
+          <a href="/t/{{ d.slug }}" class="dot-link" aria-label="{{ d.name }}: pressure {{ '%+.1f'|format(d.C) }}{{ ', call ' ~ d.call|lower if d.call else ', monitoring' }}">
+            <title>{{ d.name }} · pressure {{ '%+.1f'|format(d.C) }}{{ ' · ' ~ d.call|lower if d.call else '' }}</title>
+            {% if d.ring %}<circle cx="{{ d.x }}" cy="{{ d.y }}" r="{{ f.r + 3.2 }}" class="ring ring-{{ d.ring }}"/>{% endif %}
+            <circle cx="{{ d.x }}" cy="{{ d.y }}" r="{{ f.r }}" class="dot dot-{{ d.tone }}" fill-opacity="{{ d.alpha }}"/>
+          </a>
+          {% endfor %}
+          {% if ln.top %}{% set tp = ln.top %}<text x="{{ tp.x + (6 if tp.x > f.w * 0.55 else -6) }}" y="{{ tp.y - f.r - 7 }}" text-anchor="{{ 'end' if tp.x > f.w * 0.55 else 'start' }}" class="dot-label">{{ tp.name }}</text>{% endif %}
+        {% endfor %}
+        {% for tk in f.ticks %}<text x="{{ tk.x }}" y="{{ f.h - 10 }}" text-anchor="middle" class="tick">{{ '%+d'|format(tk.v) if tk.v else '0' }}</text>{% endfor %}
+        <text x="16" y="14" class="axis-cap">← Easing</text>
+        <text x="{{ f.w - 16 }}" y="14" text-anchor="end" class="axis-cap">Tighter than usual →</text>
+      </svg>
+      <div class="field-legend small">
+        <span><i class="lg lg-ring-good"></i>Call: in / overweight</span>
+        <span><i class="lg lg-ring-bad"></i>Call: out / underweight</span>
+        <span><i class="lg lg-plain"></i>Watching, no call</span>
+      </div>
+      <div class="calls">
+        <p class="calls-title">Live calls <span class="muted">· {{ validated|length }} bottlenecks passed an out-of-sample test · Over/Under = vs benchmark</span></p>
+        <div class="call-pills">
+        {% for t in validated|sort(attribute="C", reverse=True) %}
+          {% set up = t.call in ("IN", "OVERWEIGHT") %}<a class="call-pill" href="/t/{{ t.slug }}" title="{{ t.call|capitalize }}">{{ t.name }} <span class="pill-state {{ 'good' if up else 'bad' }}">{{ icon('trend-up' if up else 'trend-down') }}{{ {"IN": "In", "OUT": "Out", "OVERWEIGHT": "Over", "UNDERWEIGHT": "Under"}[t.call] }}</span></a>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 </section>

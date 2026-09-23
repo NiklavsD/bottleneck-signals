@@ -149,9 +149,45 @@ def too_many_attempts(ip: str) -> bool:
 
 
 # ---------------------------------------------------------------- public pages
+def pressure_field(themes, universes, width=520, r=7.0, lo=-3.0, hi=6.0):
+    """Lay out every theme as a dot on a shared pressure axis, one lane per universe, stacking dots that collide."""
+    pad_l, pad_r = 14, 14
+    X = lambda c: pad_l + (min(max(c, lo), hi) - lo) / (hi - lo) * (width - pad_l - pad_r)
+    lanes, y0 = [], 34
+    for u in universes:
+        ts = sorted([t for t in themes if t["universe"] == u["slug"] and t.get("C") is not None], key=lambda t: t["C"])
+        placed = []
+        ts = ts[-1:] + ts[:-1]  # place the tightest first so it sits on the lane's centre line, with its label above
+        for t in ts:
+            x = X(t["C"])
+            level = 0
+            for cand in (0, 1, -1, 2, -2, 3, -3):
+                if all(abs(x - px) >= 2 * r + 1.5 or pl != cand for px, pl, _ in placed):
+                    level = cand
+                    break
+            placed.append((x, level, t))
+        span = max([abs(l) for _, l, _ in placed] or [0])
+        h = max(44, (2 * span + 1) * (2 * r + 2) + 18)
+        cy = y0 + h / 2
+        dots = []
+        for x, level, t in placed:
+            call = t.get("call")
+            dots.append({"x": round(x, 1), "y": round(cy + level * (2 * r + 2), 1), "slug": t["slug"], "name": t["name"],
+                         "C": t["C"], "M": t.get("M"), "call": call,
+                         "ring": "good" if call in ("IN", "OVERWEIGHT") else "bad" if call in ("OUT", "UNDERWEIGHT") else None,
+                         "tone": "tight" if t["C"] >= 0 else "ease", "alpha": round(0.35 + 0.65 * min(abs(t["C"]) / 4, 1), 2)})
+        top = max(dots, key=lambda d: d["C"]) if dots else None
+        lanes.append({"name": u["name"], "slug": u["slug"], "y": y0, "h": h, "cy": cy, "dots": dots, "top": top,
+                      "missing": sum(1 for t in themes if t["universe"] == u["slug"] and t.get("C") is None)})
+        y0 += h
+    ticks = [{"v": v, "x": round(X(v), 1)} for v in (-2, 0, 2, 4, 6)]
+    return {"w": width, "h": y0 + 26, "r": r, "lanes": lanes, "ticks": ticks, "zero": round(X(0), 1)}
+
+
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    return render(request, "home.html")
+    d = snap()
+    return render(request, "home.html", field=pressure_field(d["themes"], d["universes"]))
 
 
 @app.get("/map", response_class=HTMLResponse)
