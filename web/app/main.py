@@ -120,11 +120,20 @@ def check_csrf(request: Request, token: str):
         raise HTTPException(400, "Form expired. Reload the page and try again.")
 
 
+def asset_version():
+    """Changes whenever app.css or app.js changes, so browsers never pair new HTML with a cached old stylesheet."""
+    h = hashlib.sha1()
+    for f in ("css/app.css", "js/app.js", "css/fonts.css"):
+        p = WEB / "static" / f
+        h.update(f"{p.stat().st_mtime_ns}".encode())
+    return h.hexdigest()[:10]
+
+
 def render(request: Request, name: str, **ctx):
     tok = csrf_token(request)
     d = snap()
     st = notify.channel_status()
-    ctx.update(request=request, user=current_user(request), csrf=tok, snap=d, site_url=SITE_URL,
+    ctx.update(request=request, user=current_user(request), csrf=tok, snap=d, site_url=SITE_URL, asset_v=asset_version(),
                path=request.url.path, channels_live=[c for c in CHANNELS if st[c["kind"]]["available"]],
                channels_soon=[c for c in CHANNELS if not st[c["kind"]]["available"]])
     resp = templates.TemplateResponse(request, name, ctx)

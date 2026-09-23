@@ -1,4 +1,4 @@
-{% macro icon(name, cls="") -%}<svg class="icon {{ cls }}" aria-hidden="true"><use href="/static/icons/sprite.svg#i-{{ name }}"/></svg>{%- endmacro %}
+{% macro icon(name, cls="") -%}<svg class="icon {{ cls }}" aria-hidden="true"><use href="/static/icons/sprite.svg?v=2#i-{{ name }}"/></svg>{%- endmacro %}
 
 {% macro call_chip(t) -%}
 {%- set c = t.call -%}

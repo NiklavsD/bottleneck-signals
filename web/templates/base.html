@@ -11,7 +11,7 @@
 <meta property="og:type" content="website">
 <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="/static/fonts/IBMPlexSans-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/static/css/app.css?v=1">
+<link rel="stylesheet" href="/static/css/app.css?v={{ asset_v }}">
 <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("lt-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
@@ -56,6 +56,6 @@
     <p class="disclaimer"><b>Not investment advice.</b> Leadtime publishes general, impersonal research on a regular schedule. Nothing here is a personal recommendation or an offer to buy or sell any security. Model calls are mechanical outputs of published rules. Back-tested results are hypothetical and past performance does not predict future returns. You can lose money. Market data is delayed and may contain errors. Data as of {{ snap.prices_asof }}; snapshot built {{ snap.generated_at[:16].replace('T', ' ') }} UTC.</p>
   </div>
 </footer>
-<script src="/static/js/app.js?v=1" defer></script>
+<script src="/static/js/app.js?v={{ asset_v }}" defer></script>
 </body>
 </html>
