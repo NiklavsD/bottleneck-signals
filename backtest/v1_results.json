@@ -1,0 +1,173 @@
+{
+ "memory": {
+  "group": "memory",
+  "first_decision": "2017-03-16",
+  "last_signal_month": "2026-08-01",
+  "ruleA": {
+   "cagr": 27.5,
+   "max_dd": -51.3,
+   "total": 909.5,
+   "after_10bp": 27.3,
+   "time_in_market": 36.7,
+   "switches": 14,
+   "now": "OFF",
+   "fwd6_on_mean": 49.7,
+   "fwd6_off_mean": 22.0,
+   "n6_on_off": [
+    37,
+    72
+   ],
+   "fwd12_on_mean": 70.1,
+   "fwd12_off_mean": 80.2,
+   "n12_on_off": [
+    31,
+    72
+   ]
+  },
+  "ruleB": {
+   "cagr": 27.6,
+   "max_dd": -65.0,
+   "total": 917.8,
+   "after_10bp": 27.5,
+   "time_in_market": 63.3,
+   "switches": 8,
+   "now": "ON",
+   "fwd6_on_mean": 30.3,
+   "fwd6_off_mean": 33.1,
+   "n6_on_off": [
+    67,
+    42
+   ],
+   "fwd12_on_mean": 42.8,
+   "fwd12_off_mean": 127.1,
+   "n12_on_off": [
+    61,
+    42
+   ]
+  },
+  "buy_hold": {
+   "cagr": 47.1,
+   "max_dd": -48.1,
+   "total": 3853.0
+  },
+  "spy": {
+   "cagr": 16.3,
+   "max_dd": -33.7,
+   "total": 319.6
+  }
+ },
+ "optics": {
+  "group": "optics",
+  "first_decision": "2017-03-16",
+  "last_signal_month": "2026-08-01",
+  "ruleA": {
+   "cagr": 2.4,
+   "max_dd": -49.9,
+   "total": 24.8,
+   "after_10bp": 2.1,
+   "time_in_market": 32.6,
+   "switches": 19,
+   "now": "ON",
+   "fwd6_on_mean": 22.1,
+   "fwd6_off_mean": 29.5,
+   "n6_on_off": [
+    36,
+    73
+   ],
+   "fwd12_on_mean": 96.6,
+   "fwd12_off_mean": 46.1,
+   "n12_on_off": [
+    36,
+    67
+   ]
+  },
+  "ruleB": {
+   "cagr": 22.1,
+   "max_dd": -56.4,
+   "total": 572.0,
+   "after_10bp": 22.0,
+   "time_in_market": 58.7,
+   "switches": 15,
+   "now": "ON",
+   "fwd6_on_mean": 38.0,
+   "fwd6_off_mean": 12.5,
+   "n6_on_off": [
+    62,
+    47
+   ],
+   "fwd12_on_mean": 97.5,
+   "fwd12_off_mean": 23.5,
+   "n12_on_off": [
+    56,
+    47
+   ]
+  },
+  "buy_hold": {
+   "cagr": 38.8,
+   "max_dd": -50.4,
+   "total": 2166.8
+  },
+  "spy": {
+   "cagr": 16.3,
+   "max_dd": -33.7,
+   "total": 319.6
+  }
+ },
+ "power": {
+  "group": "power",
+  "first_decision": "2015-01-16",
+  "last_signal_month": "2026-08-01",
+  "ruleA": {
+   "cagr": 12.0,
+   "max_dd": -43.2,
+   "total": 275.0,
+   "after_10bp": 11.6,
+   "time_in_market": 42.1,
+   "switches": 37,
+   "now": "ON",
+   "fwd6_on_mean": 17.3,
+   "fwd6_off_mean": 19.0,
+   "n6_on_off": [
+    58,
+    77
+   ],
+   "fwd12_on_mean": 35.1,
+   "fwd12_off_mean": 49.2,
+   "n12_on_off": [
+    54,
+    75
+   ]
+  },
+  "ruleB": {
+   "cagr": 30.7,
+   "max_dd": -43.2,
+   "total": 2191.3,
+   "after_10bp": 30.7,
+   "time_in_market": 78.5,
+   "switches": 5,
+   "now": "ON",
+   "fwd6_on_mean": 22.0,
+   "fwd6_off_mean": 5.4,
+   "n6_on_off": [
+    105,
+    30
+   ],
+   "fwd12_on_mean": 52.5,
+   "fwd12_off_mean": 12.8,
+   "n12_on_off": [
+    99,
+    30
+   ]
+  },
+  "buy_hold": {
+   "cagr": 32.1,
+   "max_dd": -43.2,
+   "total": 2487.9
+  },
+  "spy": {
+   "cagr": 14.8,
+   "max_dd": -33.7,
+   "total": 400.0
+  }
+ }
+}

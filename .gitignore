@@ -1,0 +1,14 @@
+# secrets and session state
+.env
+.claude*
+bridge.log
+CLAUDE.md
+notes.md
+# not ours to publish
+scrape/
+artifacts/
+data/raw/
+data/processed/prices.csv
+# local env
+.venv/
+__pycache__/
