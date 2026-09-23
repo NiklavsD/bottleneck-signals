@@ -19,12 +19,20 @@ LOG = "backtest/signal_log.jsonl"
 
 
 def refresh():
-    this_year = str(dt.date.today().year - 1)
-    steps = [[PY, "pipeline/fetch_tw.py", this_year], [PY, "pipeline/fetch_market.py"],
+    # fetch_tw rewrites the whole CSV from its start year; old pages come from the cache, so always start at 2005
+    steps = [[PY, "pipeline/fetch_tw.py", "2005"], [PY, "pipeline/fetch_market.py"],
              [PY, "pipeline/fetch_comtrade.py"], [PY, "pipeline/fetch_census.py"]]
     for cmd in steps:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=3600)
         print(" ".join(cmd[1:]), "->", "ok" if r.returncode == 0 else f"FAILED\n{r.stderr[-2000:]}", flush=True)
+
+
+def sanity_check():
+    """Refuse to log if a refresh truncated history (the index needs years of data for its z-scores)."""
+    tw = pd.read_csv("data/processed/tw_revenue.csv", usecols=["month"])
+    first = pd.to_datetime(tw.month).min()
+    if first > pd.Timestamp("2006-01-01"):
+        sys.exit(f"ABORT: tw_revenue.csv starts {first.date()}; history was truncated, not logging")
 
 
 def current_calls():
@@ -76,6 +84,7 @@ def publish(entry):
 if __name__ == "__main__":
     if "--no-refresh" not in sys.argv:
         refresh()
+    sanity_check()
     e = append(current_calls())
     for c in e["calls"]:
         print(f"{c['bottleneck']:7s} {c['state']:3s} (data {c['data_month']}, decided {c['decision_date']}, C={c['C']}, M={c['M']})")
