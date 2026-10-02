@@ -14,7 +14,6 @@ import numpy as np
 import pandas as pd
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(ROOT)
 
 INDUSTRY_EN = {
     "電子零組件業": "Electronic components", "半導體業": "Semiconductors", "生技醫療業": "Biotech & medical",
@@ -53,6 +52,7 @@ def industries():
 
 def flag_panel(values, min_level):
     """values: DataFrame month x id (monthly level). Returns long DataFrame of flags with g, z, a."""
+    values = values.sort_index().asfreq("MS")
     r3 = values.rolling(3, min_periods=3).sum()
     g = r3 / r3.shift(12) - 1
     g = g.where(r3.shift(12) > 0)
@@ -115,6 +115,7 @@ def scan_hs():
 
 
 if __name__ == "__main__":
+    os.chdir(ROOT)
     f = scan_tw()
     print("TW flags:", len(f), "companies:", f.code.nunique(), "latest month flags:",
           (f.month == f.month.max()).sum(), f.month.max().date())

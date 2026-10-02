@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import icon, call_chip, gauge, pressure_word, momentum, pct %}
+{% from "_macros.html" import icon, call_chip, gauge, pressure_word, momentum, pct, snapshot_freshness %}
 {% block main %}
 {% set themes = snap.themes %}
 {% set scored = themes|selectattr("C", "ne", none)|list %}
@@ -19,6 +19,7 @@
         <div><b data-count="{{ validated|length }}">{{ validated|length }}</b><span>with a tested, live call</span></div>
         <div><b data-count="1850" data-suffix="+">1,850+</b><span>Taiwan suppliers scanned monthly</span></div>
       </div>
+      {{ snapshot_freshness(snap) }}
     </div>
   </div>
   <div class="leadlag" aria-hidden="true">

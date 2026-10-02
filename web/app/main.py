@@ -12,11 +12,12 @@ from pathlib import Path
 
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
-from fastapi import FastAPI, Form, HTTPException, Request
+from fastapi import BackgroundTasks, FastAPI, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from itsdangerous import BadSignature, URLSafeTimedSerializer
+from starlette.concurrency import run_in_threadpool
 
 from . import db
 
@@ -30,6 +31,7 @@ SITE_URL = os.environ.get("LEADTIME_URL", "https://leadtime.benbox.dev")
 TELEGRAM_BOT = os.environ.get("TELEGRAM_BOT_USERNAME", "")
 TELEGRAM_HOOK_SECRET = os.environ.get("TELEGRAM_WEBHOOK_SECRET", "")
 COOKIE = "lt_session"
+SESSION_MAX_AGE = 60 * 60 * 24 * 30
 signer = URLSafeTimedSerializer(SECRET, salt="session")
 ph = PasswordHasher()
 
@@ -97,16 +99,32 @@ def snap():
 
 
 # ---------------------------------------------------------------- session / auth
-def current_user(request: Request):
+def session_data(request: Request):
     raw = request.cookies.get(COOKIE)
     if not raw:
         return None
     try:
-        data = signer.loads(raw, max_age=60 * 60 * 24 * 30)
+        data = signer.loads(raw, max_age=SESSION_MAX_AGE)
     except BadSignature:
         return None
+    # Reject the old uid-only cookie format, including every pre-migration session.
+    if not isinstance(data, dict) or not all(
+            isinstance(data.get(key), str) and len(data[key]) >= 32 for key in ("sid", "account_token")):
+        return None
+    return data
+
+
+def current_user(request: Request):
+    data = session_data(request)
+    if not data:
+        return None
     with db.tx() as con:
-        row = con.execute("SELECT id, email, is_admin FROM users WHERE id=?", (data["uid"],)).fetchone()
+        row = con.execute("""SELECT u.id, u.email, u.is_admin FROM sessions s
+                             JOIN users u ON u.id=s.user_id
+                             WHERE s.id=? AND s.expires_at>? AND s.account_token=u.account_token
+                             AND u.account_token=?""",
+                          (hashlib.sha256(data["sid"].encode()).hexdigest(), db.now(),
+                           data["account_token"])).fetchone()
     return dict(row) if row else None
 
 
@@ -132,7 +150,7 @@ def asset_version():
 def render(request: Request, name: str, **ctx):
     tok = csrf_token(request)
     d = snap()
-    st = notify.channel_status()
+    st = channel_status()
     ctx.update(request=request, user=current_user(request), csrf=tok, snap=d, site_url=SITE_URL, asset_v=asset_version(),
                path=request.url.path, channels_live=[c for c in CHANNELS if st[c["kind"]]["available"]],
                channels_soon=[c for c in CHANNELS if not st[c["kind"]]["available"]])
@@ -143,8 +161,18 @@ def render(request: Request, name: str, **ctx):
 
 
 def login_response(uid: int, to="/alerts"):
+    sid = secrets.token_urlsafe(32)
+    with db.tx() as con:
+        row = con.execute("SELECT account_token FROM users WHERE id=?", (uid,)).fetchone()
+        if not row:
+            return RedirectResponse("/login", status_code=303)
+        con.execute("DELETE FROM sessions WHERE expires_at<=?", (db.now(),))
+        con.execute("INSERT INTO sessions(id, user_id, account_token, created_at, expires_at) VALUES (?, ?, ?, ?, ?)",
+                    (hashlib.sha256(sid.encode()).hexdigest(), uid, row["account_token"],
+                     db.now(), db.now() + SESSION_MAX_AGE))
     resp = RedirectResponse(to, status_code=303)
-    resp.set_cookie(COOKIE, signer.dumps({"uid": uid}), max_age=60 * 60 * 24 * 30, httponly=True, samesite="lax",
+    resp.set_cookie(COOKIE, signer.dumps({"sid": sid, "account_token": row["account_token"]}),
+                    max_age=SESSION_MAX_AGE, httponly=True, samesite="lax",
                     secure=SITE_URL.startswith("https"))
     return resp
 
@@ -288,6 +316,11 @@ def login(request: Request, email: str = Form(...), password: str = Form(...), c
 @app.post("/logout")
 def logout(request: Request, csrf: str = Form("")):
     check_csrf(request, csrf)
+    data = session_data(request)
+    if data:
+        with db.tx() as con:
+            con.execute("DELETE FROM sessions WHERE id=?",
+                        (hashlib.sha256(data["sid"].encode()).hexdigest(),))
     resp = RedirectResponse("/", status_code=303)
     resp.delete_cookie(COOKIE)
     return resp
@@ -311,7 +344,8 @@ def load_channels(con, uid):
 
 def mask_target(kind, t):
     if kind in ("discord", "slack"):
-        return t["webhook_url"].split("/api/webhooks/")[0].replace("https://", "") + "/…" + t["webhook_url"][-4:]
+        from urllib.parse import urlsplit
+        return urlsplit(t["webhook_url"]).hostname + "/…" + t["webhook_url"][-4:]
     if kind == "webhook":
         return t["url"].split("?")[0][:48]
     if kind == "email":
@@ -333,10 +367,11 @@ def alerts_page(request: Request, welcome: int = 0, msg: str = "", err: str = ""
         chans = load_channels(con, u["id"])
         prefs = db.get_prefs(con, u["id"])
         code = None
-        if TELEGRAM_BOT and notify.channel_status()["telegram"]["available"]:
+        con.execute("DELETE FROM telegram_links WHERE created_at<=?", (db.now() - 3600,))
+        if channel_status()["telegram"]["available"]:
             code = secrets.token_urlsafe(12)
             con.execute("INSERT INTO telegram_links(code, user_id, created_at) VALUES (?, ?, ?)", (code, u["id"], db.now()))
-    status = notify.channel_status()
+    status = channel_status()
     tg_link = notify.make_start_link(TELEGRAM_BOT, code) if code else None
     return render(request, "alerts.html", channels=chans, prefs=prefs, status=status, catalog=CHANNELS,
                   welcome=welcome, msg=msg, err=err, tg_link=tg_link)
@@ -350,7 +385,7 @@ def add_channel(request: Request, kind: str = Form(...), value: str = Form(""), 
     spec = next((c for c in CHANNELS if c["kind"] == kind and c["field"]), None)
     if not spec:
         return RedirectResponse("/alerts?err=Unknown+channel", status_code=303)
-    if not notify.channel_status()[kind]["available"]:
+    if not channel_status()[kind]["available"]:
         return RedirectResponse(f"/alerts?err={spec['name']}+is+not+enabled+on+this+server+yet", status_code=303)
     target = {spec["field"]: value.strip()}
     if kind == "webhook" and secret.strip():
@@ -436,24 +471,41 @@ def delete_account(request: Request, csrf: str = Form(""), confirm: str = Form("
 
 
 # ---------------------------------------------------------------- telegram linking
+def channel_status():
+    """A working Telegram link needs both delivery and inbound bot configuration."""
+    status = notify.channel_status()
+    if not (status["telegram"]["available"] and TELEGRAM_BOT.strip() and TELEGRAM_HOOK_SECRET.strip()):
+        status["telegram"] = {"available": False, "reason": "Telegram linking is not fully configured."}
+    return status
+
+
+def link_telegram(code, chat_id):
+    with db.tx() as con:
+        con.execute("BEGIN IMMEDIATE")
+        row = con.execute("SELECT user_id FROM telegram_links WHERE code=? AND created_at > ?",
+                          (code, db.now() - 3600)).fetchone()
+        if not row:
+            return False
+        con.execute("DELETE FROM channels WHERE user_id=? AND kind='telegram'", (row["user_id"],))
+        con.execute("INSERT INTO channels(user_id, kind, target, label, created_at) VALUES (?, 'telegram', ?, 'Telegram', ?)",
+                    (row["user_id"], json.dumps({"chat_id": str(chat_id)}), db.now()))
+        con.execute("DELETE FROM telegram_links WHERE code=?", (code,))
+    return True
+
+
 @app.post("/telegram/webhook/{secret}")
-async def telegram_webhook(request: Request, secret: str):
-    if not TELEGRAM_HOOK_SECRET or not secrets.compare_digest(secret, TELEGRAM_HOOK_SECRET):
+async def telegram_webhook(request: Request, secret: str, background_tasks: BackgroundTasks):
+    if not channel_status()["telegram"]["available"] or not secrets.compare_digest(secret, TELEGRAM_HOOK_SECRET):
         raise HTTPException(404)
     upd = await request.json()
     parsed = notify.parse_update_for_code(upd)
     if parsed:
         code, chat_id = parsed
-        with db.tx() as con:
-            row = con.execute("SELECT user_id FROM telegram_links WHERE code=? AND created_at > ?",
-                              (code, db.now() - 3600)).fetchone()
-            if row:
-                con.execute("DELETE FROM channels WHERE user_id=? AND kind='telegram'", (row["user_id"],))
-                con.execute("INSERT INTO channels(user_id, kind, target, label, created_at) VALUES (?, 'telegram', ?, 'Telegram', ?)",
-                            (row["user_id"], json.dumps({"chat_id": str(chat_id)}), db.now()))
-                con.execute("DELETE FROM telegram_links WHERE code=?", (code,))
-                notify.send("telegram", {"chat_id": str(chat_id)},
-                            notify.Message("Linked to Leadtime", "You'll receive your alerts here.", SITE_URL + "/alerts", "info"))
+        if await run_in_threadpool(link_telegram, code, chat_id):
+            # Synchronous provider I/O runs in Starlette's threadpool after commit.
+            background_tasks.add_task(notify.send, "telegram", {"chat_id": str(chat_id)},
+                                      notify.Message("Linked to Leadtime", "You'll receive your alerts here.",
+                                                     SITE_URL + "/alerts", "info"))
     return {"ok": True}
 
 

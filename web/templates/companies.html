@@ -1,11 +1,12 @@
 {% extends "base.html" %}
-{% from "_macros.html" import icon, pct %}
+{% from "_macros.html" import icon, pct, snapshot_freshness %}
 {% block title %}Companies · Leadtime{% endblock %}
 {% block main %}
 <div class="page-head"><div class="wrap">
   <p class="eyebrow"><span class="dot"></span>Companies</p>
   <h1>Who controls the constraints</h1>
   <p class="lede">{{ snap.companies|length }} listed companies across {{ snap.themes|length }} bottlenecks. Search, sort, then open a company to see every bottleneck it sits in.</p>
+  {{ snapshot_freshness(snap) }}
 </div></div>
 <div class="wrap" style="padding-top:26px">
   <div style="max-width:420px;margin-bottom:14px"><input type="text" placeholder="Search name, ticker, country or role…" data-filter-for="co-table" value="{{ q }}" aria-label="Search companies"></div>

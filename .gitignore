@@ -19,6 +19,11 @@ work/
 web/data/*.db
 web/data/*.db-*
 data/dispatch_state.json
+data/monthly.lock
+data/monthly_pending.json
+data/monthly_pending.json.tmp
+web/data/snapshot.monthly-*.json*
+.pytest_cache/
 __pycache__/
 data/processed/tw_prices.csv.gz
 data/processed/universe_prices.csv.gz

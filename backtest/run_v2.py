@@ -2,11 +2,18 @@
 import json
 import numpy as np
 import pandas as pd
+from pathlib import Path
 
-TW = pd.read_csv("data/processed/tw_revenue.csv", dtype={"code": str}, parse_dates=["month"])
-PX = pd.read_csv("data/processed/prices.csv", index_col=0, parse_dates=True)
-FRED = pd.read_csv("data/processed/fred.csv", index_col=0, parse_dates=True)
-KR = pd.read_csv("data/processed/korea_chip_exports.csv", index_col=0, parse_dates=True)
+ROOT = Path(__file__).resolve().parents[1]
+TW, PX, FRED, KR = (pd.DataFrame() for _ in range(4))
+
+
+def load_data():
+    global TW, PX, FRED, KR
+    TW = pd.read_csv(ROOT / "data/processed/tw_revenue.csv", dtype={"code": str}, parse_dates=["month"])
+    PX = pd.read_csv(ROOT / "data/processed/prices.csv", index_col=0, parse_dates=True)
+    FRED = pd.read_csv(ROOT / "data/processed/fred.csv", index_col=0, parse_dates=True)
+    KR = pd.read_csv(ROOT / "data/processed/korea_chip_exports.csv", index_col=0, parse_dates=True)
 
 PPI = ["PCU335311335311", "PCU335313335313", "PCU333611333611"]
 GROUPS = {
@@ -32,7 +39,7 @@ def expanding_z(s, min_obs=24):
 
 
 def tw_yoy(codes):
-    w = TW[TW.code.isin(codes)].pivot_table(index="month", columns="code", values="revenue_k_twd")
+    w = TW[TW.code.isin(codes)].pivot_table(index="month", columns="code", values="revenue_k_twd").sort_index().asfreq("MS")
     r3 = w.rolling(3).sum()
     prev = r3.shift(12)
     both = r3.notna() & prev.notna()
@@ -42,14 +49,14 @@ def tw_yoy(codes):
 def build(g):
     yoy = {"tw_revenue": tw_yoy(g["tw"])}
     for sid in g["ppi"]:
-        s = FRED[sid].dropna()
+        s = FRED[sid].dropna().sort_index().asfreq("MS")
         s = s[s.index >= "2003-01-01"]
         yoy[sid] = s / s.shift(12) - 1
     if g["korea"]:
-        k = KR["854232"].dropna()
+        k = KR["854232"].dropna().sort_index().asfreq("MS")
         k3 = k.rolling(3).sum()
         yoy["korea_mem_exports"] = k3 / k3.shift(12) - 1
-    Z = pd.DataFrame({k: expanding_z(v.dropna()) for k, v in yoy.items()}).sort_index()
+    Z = pd.DataFrame({k: expanding_z(v.dropna()) for k, v in yoy.items()}).sort_index().asfreq("MS")
     C = Z.mean(axis=1, skipna=True)
     ind = pd.DataFrame({"C": C, "M": C - C.shift(3), **{f"yoy_{k}": v for k, v in yoy.items()}})
     ind = ind.dropna(subset=["C"])
@@ -119,6 +126,7 @@ def run(name):
 
 
 if __name__ == "__main__":
+    load_data()
     res = {n: run(n) for n in GROUPS}
     json.dump(res, open("backtest/v2_results.json", "w"), indent=1, default=str)
     print(json.dumps(res, indent=1, default=str))

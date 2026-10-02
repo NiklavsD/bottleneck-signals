@@ -1,0 +1,52 @@
+{
+ "bad_ticks_removed": 677,
+ "dropped_no_price": 84,
+ "total_flags": 3145,
+ "events_source": "backtest/v5_discovery_events.csv",
+ "events_sha256": "231f83661348987e06f2ebb3e2744ee4b65c3e31842f49e438afa657789e7d06",
+ "events_hash_format": "UTF-8 with LF line endings; original trailing newline retained",
+ "correction_scope": "Statistics only; stored event returns unchanged.",
+ "OOS": {
+  "6m": {
+   "n_events": 1610,
+   "n_months": 106,
+   "mean_pct": 8.5,
+   "median_pct": 1.33,
+   "hit_rate_pct": 53.5,
+   "se_clustered_pct": 1.1289,
+   "t_clustered": 7.53
+  },
+  "12m": {
+   "n_events": 1610,
+   "n_months": 106,
+   "mean_pct": 9.87,
+   "median_pct": -0.2,
+   "hit_rate_pct": 49.6,
+   "se_clustered_pct": 1.6474,
+   "t_clustered": 5.99
+  }
+ },
+ "IS": {
+  "6m": {
+   "n_events": 1317,
+   "n_months": 111,
+   "mean_pct": 4.44,
+   "median_pct": -4.09,
+   "hit_rate_pct": 42.3,
+   "se_clustered_pct": 1.7395,
+   "t_clustered": 2.55
+  },
+  "12m": {
+   "n_events": 1237,
+   "n_months": 105,
+   "mean_pct": 1.67,
+   "median_pct": -7.49,
+   "hit_rate_pct": 41.5,
+   "se_clustered_pct": 2.6917,
+   "t_clustered": 0.62
+  }
+ },
+ "estimator": "event-weighted mean; CR1 standard error clustered by event month",
+ "PASS": true,
+ "computed_at": "2026-10-02T12:38:50+00:00"
+}

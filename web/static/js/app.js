@@ -20,6 +20,15 @@
       m.setAttribute("aria-expanded", nav.classList.contains("open"));
     }
   });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    const nav = document.querySelector(".nav");
+    if (!nav.classList.contains("open")) return;
+    nav.classList.remove("open");
+    const button = document.querySelector("[data-menu]");
+    button.setAttribute("aria-expanded", "false");
+    button.focus();
+  });
 
   // ---------- reveal
   const io = "IntersectionObserver" in window && new IntersectionObserver((es) => {

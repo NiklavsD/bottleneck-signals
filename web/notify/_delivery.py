@@ -19,9 +19,11 @@ from typing import Literal
 import httpx
 
 from ._redaction import redact_transport_logs
-from ._validation import CHANNELS, valid_url, validate_target
+from ._validation import CHANNELS, PublicEndpointError, resolve_public_addresses, valid_url, validate_target
 
 TIMEOUT = 10.0
+MAX_RESPONSE_BYTES = 65536
+MAX_CONNECTION_ADDRESSES = 4
 COLORS = {"info": 0x3B82F6, "change": 0xF59E0B, "flag": 0x10B981}
 _REQUIRED = {
     "telegram": ("TELEGRAM_BOT_TOKEN",),
@@ -86,15 +88,72 @@ def _retry_delay(value: str | None) -> float:
     return min(5.0, max(0.0, seconds))
 
 
+class PublicHTTPTransport(httpx.HTTPTransport):
+    """Pin connections to vetted DNS answers while preserving HTTP Host and TLS identity."""
+
+    def handle_request(self, request: httpx.Request) -> httpx.Response:
+        if request.url.scheme != "https":
+            raise PublicEndpointError("Endpoint must use HTTPS.")
+        hostname = request.url.raw_host.decode("ascii")
+        addresses = resolve_public_addresses(hostname, request.url.port or 443)
+        headers = request.headers.copy()
+        headers["Host"] = request.url.netloc.decode("ascii")
+        # Include the other address family early, rather than exhausting an
+        # IPv6-only list on a host with no IPv6 route (or the reverse).
+        candidates = [addresses[0]]
+        other_family = next((ip for ip in addresses[1:] if (":" in ip) != (":" in addresses[0])), None)
+        if other_family:
+            candidates.append(other_family)
+        candidates = (candidates + [ip for ip in addresses[1:] if ip != other_family])[:MAX_CONNECTION_ADDRESSES]
+        deadline = time.monotonic() + TIMEOUT
+        for index, address in enumerate(candidates):
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise httpx.ConnectTimeout("Endpoint connection time limit exceeded.", request=request)
+            timeouts = dict(request.extensions.get("timeout", {}))
+            configured = timeouts.get("connect")
+            # Reserve time for each remaining candidate, including when an
+            # unroutable first address times out instead of failing immediately.
+            share = remaining / (len(candidates) - index)
+            timeouts["connect"] = min(configured, share) if configured is not None else share
+            pinned = httpx.Request(
+                request.method, request.url.copy_with(host=address), headers=headers,
+                stream=request.stream,
+                extensions={**request.extensions, "timeout": timeouts, "sni_hostname": hostname.rstrip(".")},
+            )
+            try:
+                # httpcore connects to the literal IP and verifies the original
+                # TLS name. Failover never re-resolves the supplied hostname.
+                return super().handle_request(pinned)
+            except (httpx.ConnectError, httpx.ConnectTimeout):
+                if index == len(candidates) - 1:
+                    raise
+                # Connection failures precede the POST body. Read/write failures
+                # must not fail over because the provider may have accepted it.
+        raise RuntimeError("Unreachable connection state")
+
+
 def _post(url: str, **kwargs) -> httpx.Response:
     # Redirects must not forward a signed payload or credentials elsewhere.
-    with httpx.Client(timeout=TIMEOUT, follow_redirects=False) as client:
+    with httpx.Client(timeout=TIMEOUT, follow_redirects=False, trust_env=False,
+                      transport=PublicHTTPTransport(trust_env=False)) as client:
         for attempt in range(2):
-            response = client.post(url, **kwargs)
-            if attempt == 0 and (response.status_code == 429 or 500 <= response.status_code <= 599):
-                time.sleep(_retry_delay(response.headers.get("Retry-After")))
-                continue
-            return response
+            deadline = time.monotonic() + 2 * TIMEOUT
+            with client.stream("POST", url, **kwargs) as response:
+                if attempt == 0 and (response.status_code == 429 or 500 <= response.status_code <= 599):
+                    delay = _retry_delay(response.headers.get("Retry-After"))
+                else:
+                    body = bytearray()
+                    if 200 <= response.status_code < 300:
+                        for chunk in response.iter_bytes():
+                            if len(body) + len(chunk) > MAX_RESPONSE_BYTES:
+                                raise httpx.ReadError("Provider response exceeds the size limit.", request=response.request)
+                            if time.monotonic() > deadline:
+                                raise httpx.ReadTimeout("Provider response exceeds the time limit.", request=response.request)
+                            body.extend(chunk)
+                    return httpx.Response(response.status_code, headers=response.headers,
+                                          content=bytes(body), request=response.request)
+            time.sleep(delay)
     raise RuntimeError("Unreachable retry state")
 
 
@@ -219,6 +278,8 @@ def send(channel: str, target: dict, msg: Message) -> Result:
             return _http_result(channel, _post(url, **kwargs))
     except httpx.TimeoutException:
         return Result(False, "Delivery timed out.")
+    except PublicEndpointError as exc:
+        return Result(False, str(exc))
     except httpx.RequestError:
         return Result(False, "Delivery failed due to a network error.")
     except smtplib.SMTPException:

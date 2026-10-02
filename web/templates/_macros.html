@@ -31,7 +31,18 @@
 {%- endmacro %}
 
 {% macro pct(v, dp=1) -%}
-{%- if v is none -%}<span class="muted">—</span>{%- else -%}<span class="num {{ 'up' if v > 0 else 'down' if v < 0 else '' }}">{{ ('%+.' ~ dp ~ 'f')|format(v) }}%</span>{%- endif -%}
+{%- if v is undefined or v is none -%}<span class="muted">—</span>{%- else -%}<span class="num {{ 'up' if v > 0 else 'down' if v < 0 else '' }}">{{ ('%+.' ~ dp ~ 'f')|format(v) }}%</span>{%- endif -%}
+{%- endmacro %}
+
+{% macro quote_price(q, show_date=false) -%}
+{%- if q.last is defined and q.last is not none -%}
+<span class="num">{{ '{:,.2f}'.format(q.last) }}</span><span class="quote-currency">{{ q.currency|default(none, true) or 'currency unavailable' }}</span>
+{%- if show_date -%}<span class="quote-date">close {{ q.price_asof|default(q.asof, true) or 'date unavailable' }}</span>{%- endif -%}
+{%- else -%}<span class="muted">—</span>{%- endif -%}
+{%- endmacro %}
+
+{% macro snapshot_freshness(snap) -%}
+<p class="freshness-strip"><span>Latest market close: <time datetime="{{ snap.prices_asof }}">{{ snap.prices_asof or 'unavailable' }}</time></span><span>Page refreshed: <time datetime="{{ snap.generated_at }}">{{ snap.generated_at[:16].replace('T', ' ') }} UTC</time></span></p>
 {%- endmacro %}
 
 {% macro chart(spec, cls="") -%}
