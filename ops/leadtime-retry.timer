@@ -1,0 +1,10 @@
+[Unit]
+Description=Retry queued Leadtime alerts every minute
+
+[Timer]
+OnBootSec=1min
+OnUnitInactiveSec=1min
+Unit=leadtime-retry.service
+
+[Install]
+WantedBy=timers.target

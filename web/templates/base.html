@@ -19,7 +19,7 @@
 <header class="site-head">
   <div class="wrap">
     <a class="brand" href="/" aria-label="Leadtime home"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span><span class="word">Leadtime</span></a>
-    <nav class="nav" aria-label="Main">
+    <nav class="nav" id="main-nav" aria-label="Main">
       {% for href, label in [("/map", "Bottleneck map"), ("/discovery", "Discovery"), ("/press", "Press"), ("/companies", "Companies"), ("/track-record", "Track record"), ("/method", "Method")] %}
       <a href="{{ href }}" {% if path.startswith(href) %}aria-current="page"{% endif %}>{{ label }}</a>
       {% endfor %}
@@ -32,7 +32,7 @@
       <a class="btn btn-ghost btn-sm" href="/login" aria-label="Sign in">{{ icon('sign-in') }}<span class="btn-label">Sign in</span></a>
       <a class="btn btn-primary btn-sm" href="/signup" aria-label="Get alerts">{{ icon('bell') }}<span class="btn-label">Get alerts</span></a>
       {% endif %}
-      <button class="icon-btn menu-btn" type="button" data-menu aria-label="Menu" aria-expanded="false">{{ icon('list') }}</button>
+      <button class="icon-btn menu-btn" type="button" data-menu aria-label="Menu" aria-controls="main-nav" aria-expanded="false">{{ icon('list') }}</button>
     </div>
   </div>
 </header>
@@ -53,7 +53,7 @@
         <a href="/method">Method &amp; data sources</a><a href="{{ snap.track.repo }}" rel="noopener">{{ icon('github-logo') }} Public repo &amp; signal log</a><a href="/api/snapshot">Open data (JSON)</a>
       </div>
     </div>
-    <p class="disclaimer"><b>Not investment advice.</b> Leadtime publishes general, impersonal research on a regular schedule. Nothing here is a personal recommendation or an offer to buy or sell any security. Model calls are mechanical outputs of published rules. Back-tested results are hypothetical and past performance does not predict future returns. You can lose money. Market data is delayed and may contain errors. Data as of {{ snap.prices_asof }}; snapshot built {{ snap.generated_at[:16].replace('T', ' ') }} UTC.</p>
+    <p class="disclaimer"><b>Not investment advice.</b> Leadtime publishes general, impersonal research on a regular schedule. Nothing here is a personal recommendation or an offer to buy or sell any security. Model calls are mechanical outputs of published rules. Back-tested results are hypothetical and past performance does not predict future returns. You can lose money. Market data is delayed and may contain errors. Latest market close {{ snap.prices_asof }}; page refreshed {{ snap.generated_at[:16].replace('T', ' ') }} UTC. Physical-data months are shown beside each reading.</p>
   </div>
 </footer>
 <script src="/static/js/app.js?v={{ asset_v }}" defer></script>

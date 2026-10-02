@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import icon, call_chip, momentum, pressure_word, gauge, pct, chart, press_list, heat_bars %}
+{% from "_macros.html" import icon, call_chip, momentum, pressure_word, gauge, pct, chart, press_list, heat_bars, quote_price %}
 {% block title %}{{ t.name }} · Leadtime{% endblock %}
 {% block desc %}{{ t.thesis }}{% endblock %}
 {% block main %}
@@ -22,8 +22,10 @@
     <dl class="kv">
       <dt>Pressure</dt><dd>{% if t.C is not none %}<span class="num">{{ '%+.2f'|format(t.C) }}</span> · {{ pressure_word(t.C) }}{% else %}—{% endif %}</dd>
       <dt>Momentum</dt><dd>{% if t.M is not none %}<span class="num">{{ '%+.2f'|format(t.M) }}</span> · {{ momentum(t.M) }}{% else %}—{% endif %}</dd>
-      <dt>Data month</dt><dd class="num">{{ t.data_month[:7] if t.data_month else "—" }}</dd>
-      <dt>Decided</dt><dd class="num">{{ t.decision_date or "—" }}</dd>
+      <dt>Physical data month</dt><dd class="num">{{ t.data_month[:7] if t.data_month else "—" }}</dd>
+      <dt>Usable since</dt><dd class="num">{{ t.decision_date or "—" }}</dd>
+      <dt>Latest market close</dt><dd class="num">{{ snap.prices_asof or "—" }}</dd>
+      <dt>Page refreshed</dt><dd class="small"><time datetime="{{ snap.generated_at }}">{{ snap.generated_at[:16].replace('T', ' ') }} UTC</time></dd>
       <dt>Benchmark</dt><dd class="num">{{ t.benchmark }}</dd>
       <dt>Basket 3 mo</dt><dd>{{ pct(t.basket_stats.r3m) }} <span class="muted small">vs {{ pct(t.basket_stats.bench_r3m) }}</span></dd>
     </dl>
@@ -101,7 +103,7 @@
   </section>
 
   <section style="margin-top:32px">
-    <div class="section-head" style="margin-bottom:12px"><div><h2>Listed exposure</h2><p class="muted">Companies that control the constraint. Prices delayed{% if t.basket and t.basket[0].asof %} · as of {{ t.basket[0].asof }}{% endif %}.</p></div></div>
+    <div class="section-head" style="margin-bottom:12px"><div><h2>Listed exposure</h2><p class="muted">Companies that control the constraint. Delayed closes in each listing's currency; the date below each price is its latest available close.</p></div></div>
     <div class="table-wrap">
       <table class="data" data-sortable>
         <thead><tr><th class="sortable">Company</th><th class="hide-sm">Role</th><th class="sortable r">Price</th><th class="sortable r">1 mo</th><th class="sortable r">3 mo</th><th class="sortable r hide-sm">1 yr</th><th class="sortable r hide-sm">Supplier rev. YoY</th></tr></thead>
@@ -110,7 +112,7 @@
           <tr>
             <td><a href="/c/{{ b.ticker }}" style="text-decoration:none"><span class="co-name">{{ b.name }}</span><br><span class="tick muted">{{ b.ticker }}</span> <span class="co-sub">{{ b.country }}</span></a></td>
             <td class="hide-sm small">{{ b.role }}</td>
-            <td class="r num" data-v="{{ b.last if b.last is not none else '' }}">{{ '{:,.2f}'.format(b.last) if b.last is not none else '—' }}</td>
+            <td class="r" data-v="{{ b.last if b.last is not none else '' }}">{{ quote_price(b, true) }}</td>
             <td class="r" data-v="{{ b.r1m if b.r1m is not none else '' }}">{{ pct(b.r1m) }}</td>
             <td class="r" data-v="{{ b.r3m if b.r3m is not none else '' }}">{{ pct(b.r3m) }}</td>
             <td class="r hide-sm" data-v="{{ b.r1y if b.r1y is not none else '' }}">{{ pct(b.r1y) }}</td>

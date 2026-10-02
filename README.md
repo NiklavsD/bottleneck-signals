@@ -13,6 +13,8 @@ The AI buildout runs into physical bottlenecks: memory, optics, power equipment.
 - **Code:** `engine/build.py` writes `web/data/snapshot.json`; `engine/dispatch.py` sends alerts, deduplicated per channel; `web/app/` is FastAPI + Jinja; `web/notify/` holds the channel adapters.
 - **Run locally:** `cd web && LEADTIME_SECRET=dev ../.venv/bin/uvicorn app.main:app --port 8911`
 
+The [2 October reliability review and numerical corrections](docs/REVIEW_FIXES_2026-10-02.md) documents calendar/availability fixes and the separately stored corrected discovery statistics. Historical results and logged calls remain preserved.
+
 ## Model v4 status (2026-09-23)
 
 **Memory / storage**
@@ -42,7 +44,7 @@ Details: [`backtest/RESULTS_v4.md`](backtest/RESULTS_v4.md). Earlier versions ar
 - Korea memory-IC exports (Korea Customs Service, tradedata.go.kr, HS 854232; validated against UN Comtrade)
 - US imports of power transformers and switchgear (Census, HS 850421/2/3 and 853720)
 
-Each series becomes a year-over-year z-score (expanding window). A bottleneck's **pressure index C** is the average z-score of its series, and **momentum M** is C minus C three months earlier.
+Each series becomes a year-over-year z-score (expanding window). A bottleneck's **pressure index C** is the average z-score of its series. In v4/v6, **momentum M** averages each component's three-month z-score change where both observations exist.
 
 The rules:
 - **Memory:** get out when C > 0 and M < 0 (tight and slowing).
@@ -55,7 +57,22 @@ The rules:
 - **Forward log.** `backtest/signal_log.jsonl` gets one entry per month. Each entry contains the SHA-256 of the previous one, plus the basket prices on the day of the call.
 - **Monthly run.** `pipeline/monthly.py` runs on the 17th of each month and pushes the new entry here.
 
-## Reproduce
+## Development checks
+
+Use Python 3.13 or 3.14 and install `requirements-dev.txt` to run the test suite:
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m pytest
+```
+
+Tests use temporary databases and mocked provider calls. GitHub Actions runs them on both supported Python versions. Regression coverage includes account/session isolation, database migrations, delivery retries and claims, private webhook destinations, missing calendar months, and monthly refresh/publication failures.
+
+For local Windows development, create `.venv` with `python -m venv .venv`, install through `.venv\Scripts\python.exe -m pip`, and run tests through `.venv\Scripts\python.exe -m pytest`.
+
+Database upgrade, alert retry scheduling and monthly publication notes are in [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
+
+## Data refresh and research reproduction
 
 ```bash
 python -m venv .venv && .venv/bin/pip install -r requirements.txt

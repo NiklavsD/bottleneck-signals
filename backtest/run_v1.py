@@ -25,7 +25,7 @@ def expanding_z(s, min_obs=24):
 
 
 def tw_yoy(codes):
-    w = TW[TW.code.isin(codes)].pivot_table(index="month", columns="code", values="revenue_k_twd")
+    w = TW[TW.code.isin(codes)].pivot_table(index="month", columns="code", values="revenue_k_twd").sort_index().asfreq("MS")
     # Sum only over members present in both periods, so a new listing does not look like growth.
     r3 = w.rolling(3).sum()
     prev = r3.shift(12)
@@ -40,11 +40,11 @@ def build(group):
     yoy["tw_revenue"] = tw_yoy(g["tw"])
     z["tw_revenue"] = expanding_z(yoy["tw_revenue"].dropna())
     for sid in g["ppi"]:
-        s = FRED[sid].dropna()
+        s = FRED[sid].dropna().sort_index().asfreq("MS")
         s = s[s.index >= "2012-01-01"]
         yoy[sid] = s / s.shift(12) - 1
         z[sid] = expanding_z(yoy[sid].dropna())
-    Z = pd.DataFrame(z).sort_index()
+    Z = pd.DataFrame(z).sort_index().asfreq("MS")
     C = Z.mean(1, skipna=True)
     M = C - C.shift(3)
     ind = pd.DataFrame({"C": C, "M": M, **{f"yoy_{k}": v for k, v in yoy.items()}}).dropna(subset=["C"])

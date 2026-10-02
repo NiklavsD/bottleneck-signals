@@ -3,19 +3,38 @@ import json
 import os
 import numpy as np
 import pandas as pd
+import sys
+from pathlib import Path
 
-exec(open("backtest/run_v3_power.py").read().split("\nif __name__ == ")[0])
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from backtest import run_v2 as v2
+from backtest import run_v3_power as v3
+from backtest.run_v2 import GROUPS, OOS, IS, expanding_z, tw_yoy, basket_returns, evaluate, build
+from backtest.run_v3_power import build_v3
 
-KCS_PATH = "data/processed/korea_customs_exports.csv"
+KCS_PATH = v2.ROOT / "data/processed/korea_customs_exports.csv"
+PX = pd.DataFrame()
+
+
+def load_data():
+    global PX
+    v2.load_data()
+    PX = v2.PX
 
 
 def korea_memory_series():
     """Korea Customs (tradedata.go.kr) HS 854232 if it validates within 5% of Comtrade, else Comtrade."""
-    comtrade = KR["854232"].dropna()
+    comtrade = v2.KR["854232"].dropna()
     if not os.path.exists(KCS_PATH):
         return comtrade, "comtrade", None
     k = pd.read_csv(KCS_PATH, dtype={"hs": str}, parse_dates=["month"])
     kcs = k[k.hs == "854232"].set_index("month")["usd"].sort_index()
+    return select_korea_memory(kcs, comtrade)
+
+
+def select_korea_memory(kcs, comtrade):
+    """Shared, pure source-selection rule for the website and the logged v4 model."""
     both = pd.concat([kcs, comtrade], axis=1, keys=["kcs", "ct"]).dropna()
     both = both[(both.index >= "2013-01-01") & (both.index <= "2025-12-01")]
     med = float((both.kcs / both.ct - 1).abs().median())
@@ -23,7 +42,7 @@ def korea_memory_series():
 
 
 def composite(yoy):
-    Z = pd.DataFrame({k: expanding_z(v.dropna()) for k, v in yoy.items()}).sort_index()
+    Z = pd.DataFrame({k: expanding_z(v.dropna()) for k, v in yoy.items()}).sort_index().asfreq("MS")
     C = Z.mean(axis=1, skipna=True)
     dz = Z - Z.shift(3)  # NaN unless the component exists at both t and t-3
     M = dz.mean(axis=1, skipna=True)
@@ -33,7 +52,7 @@ def composite(yoy):
 def build_memory_v4():
     g = GROUPS["memory"]
     kr, src, med = korea_memory_series()
-    k3 = kr.rolling(3).sum()
+    k3 = kr.sort_index().asfreq("MS").rolling(3).sum()
     yoy = {"tw_revenue": tw_yoy(g["tw"]), "korea_mem_exports": k3 / k3.shift(12) - 1}
     Z, C, M = composite(yoy)
     ind = pd.DataFrame({"C": C, "M": M, **{f"z_{k}": Z[k] for k in Z}}).dropna(subset=["C"])
@@ -70,6 +89,8 @@ def live(ind):
 
 
 if __name__ == "__main__":
+    load_data()
+    v3.load_data()  # Required only for the separately reported v3 power comparison.
     out = {}
     mem, src, med = build_memory_v4()
     g = GROUPS["memory"]

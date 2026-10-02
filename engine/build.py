@@ -8,27 +8,40 @@ import hashlib
 import json
 import re
 import os
+import argparse
+import sys
 
 import numpy as np
 import pandas as pd
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(ROOT)
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 OUT = "web/data/snapshot.json"
 TODAY = pd.Timestamp.today().normalize()
 OOS = (pd.Timestamp("2008-03-01"), pd.Timestamp("2017-02-28"))
 
-THEMES = json.load(open("config/themes.json"))
-TW = pd.read_csv("data/processed/tw_revenue.csv", dtype={"code": str}, parse_dates=["month"])
-PX = pd.read_csv("data/processed/universe_prices.csv.gz", index_col=0, parse_dates=True)
-US = pd.read_csv("data/processed/us_imports_all.csv", dtype={"hs": str}, parse_dates=["month"])
-KR = pd.read_csv("data/processed/korea_customs_exports.csv", dtype={"hs": str}, parse_dates=["month"])
-NAMES_EN = pd.read_csv("data/processed/tw_names_en.csv", dtype={"code": str}).set_index("code")["name_en"].to_dict()
-TW_IND = pd.read_csv("data/processed/tw_industry.csv", dtype={"code": str}).set_index("code")["industry"].to_dict()
-US_W = US.pivot_table(index="month", columns="hs", values="usd")
-US_DESC = US.sort_values("month").drop_duplicates("hs", keep="last").set_index("hs")["desc"].to_dict()
-KR_W = KR.pivot_table(index="month", columns="hs", values="usd")
-TW_W = TW.pivot_table(index="month", columns="code", values="revenue_k_twd")
+THEMES, NAMES_EN, TW_IND, US_DESC, PRICE_CURRENCIES = [], {}, {}, {}, {}
+TW, PX, US, KR, US_W, KR_W, TW_W, COMTRADE = (pd.DataFrame() for _ in range(8))
+
+
+def load_data():
+    """Load build inputs explicitly; importing the calculation helpers performs no I/O."""
+    global THEMES, TW, PX, US, KR, NAMES_EN, TW_IND, US_W, US_DESC, KR_W, TW_W, PRICE_CURRENCIES, COMTRADE
+    THEMES = json.load(open("config/themes.json"))
+    TW = pd.read_csv("data/processed/tw_revenue.csv", dtype={"code": str}, parse_dates=["month"])
+    PX = pd.read_csv("data/processed/universe_prices.csv.gz", index_col=0, parse_dates=True)
+    US = pd.read_csv("data/processed/us_imports_all.csv", dtype={"hs": str}, parse_dates=["month"])
+    KR = pd.read_csv("data/processed/korea_customs_exports.csv", dtype={"hs": str}, parse_dates=["month"])
+    COMTRADE = pd.read_csv("data/processed/korea_chip_exports.csv", index_col=0, parse_dates=True)
+    NAMES_EN = pd.read_csv("data/processed/tw_names_en.csv", dtype={"code": str}).set_index("code")["name_en"].to_dict()
+    TW_IND = pd.read_csv("data/processed/tw_industry.csv", dtype={"code": str}).set_index("code")["industry"].to_dict()
+    US_W = US.pivot_table(index="month", columns="hs", values="usd")
+    US_DESC = US.sort_values("month").drop_duplicates("hs", keep="last").set_index("hs")["desc"].to_dict()
+    KR_W = KR.pivot_table(index="month", columns="hs", values="usd")
+    TW_W = TW.pivot_table(index="month", columns="code", values="revenue_k_twd")
+    meta = "data/processed/price_currencies.json"
+    PRICE_CURRENCIES = json.load(open(meta)) if os.path.exists(meta) else {}
 
 
 def expanding_z(s, min_obs=24):
@@ -41,7 +54,7 @@ def yoy3_sum(w, cols):
     cols = [c for c in cols if c in w]
     if not cols:
         return None
-    x = w[cols]
+    x = w[cols].sort_index().asfreq("MS")
     r3 = x.rolling(3).sum()
     prev = r3.shift(12)
     both = r3.notna() & prev.notna()
@@ -71,11 +84,18 @@ def components(t):
                                                               for c in us_codes)})
     kr_codes = [c["hs"] for c in t.get("kr_export_hs", [])]
     if kr_codes:
-        y = yoy3_sum(KR_W, kr_codes)
+        panel, source, url = KR_W, "Korea Customs Service (tradedata.go.kr)", "https://tradedata.go.kr/cts/index.do"
+        if t["slug"] == "memory":
+            from backtest.run_v4 import select_korea_memory
+            selected, source_kind, _ = select_korea_memory(KR_W["854232"], COMTRADE["854232"])
+            panel = selected.to_frame("854232")
+            if source_kind == "comtrade":
+                source, url = "UN Comtrade (Korea Customs validation fallback)", "https://comtradeplus.un.org/"
+        y = yoy3_sum(panel, kr_codes)
         if y is not None and len(y) > 30:
             comps["kr_exports"] = (y, 1, {"label": "Korean exports",
-                                          "source": "Korea Customs Service (tradedata.go.kr)",
-                                          "url": "https://tradedata.go.kr/cts/index.do",
+                                          "source": source,
+                                          "url": url,
                                           "detail": ", ".join(f"HS {c['hs']} {c.get('desc', '')}"
                                                               for c in t['kr_export_hs'])})
     return comps
@@ -83,12 +103,15 @@ def components(t):
 
 def build_index(comps):
     """Index per v4/v6: C = mean z, M like-for-like 3-month change. Dated by decision date."""
-    Z = pd.DataFrame({k: expanding_z(v[0]) for k, v in comps.items()}).sort_index()
+    Z = pd.DataFrame({k: expanding_z(v[0]) for k, v in comps.items()}).sort_index().asfreq("MS")
     C = Z.mean(axis=1, skipna=True)
     M = (Z - Z.shift(3)).mean(axis=1, skipna=True)
     ind = pd.DataFrame({"C": C, "M": M}).join(Z.add_prefix("z_")).dropna(subset=["C"])
-    lag = max(v[1] for v in comps.values())
-    ind["decision"] = ind.index + pd.offsets.MonthBegin(lag) + pd.Timedelta(days=15)
+    # A source configured today must not delay history in which that source was absent.
+    lags = pd.DataFrame({k: Z[k].notna().map({True: v[1], False: 0}) for k, v in comps.items()})
+    lag = lags.max(axis=1).reindex(ind.index).astype(int)
+    ind["decision"] = [month + pd.offsets.MonthBegin(int(n)) + pd.Timedelta(days=15)
+                       for month, n in lag.items()]
     return ind
 
 
@@ -107,7 +130,9 @@ def tilt_test(ind, b, bench, lo, hi):
     if len(days) < 500:
         return None
     ex = (b - bench).reindex(days).fillna(0)
-    pos = (ind.set_index("decision")["C"] > 0).map({True: 1.0, False: -1.0})
+    # A newer fast-source month can share a decision with the preceding slow-source month.
+    decisions = ind.sort_index().drop_duplicates("decision", keep="last").sort_values("decision")
+    pos = (decisions.set_index("decision")["C"] > 0).map({True: 1.0, False: -1.0})
     pos = pos.reindex(days, method="ffill").shift(1).fillna(0)
     tilt = ex * pos
     return {"from": str(days[0].date()), "to": str(days[-1].date()),
@@ -121,19 +146,42 @@ def pct(a, b):
     return None if a is None or b is None or not np.isfinite(a) or not np.isfinite(b) or b == 0 else round((a / b - 1) * 100, 1)
 
 
+def quote_currency(ticker):
+    """Quote denomination, using provider metadata or known listing exchanges (never issuer country)."""
+    meta = PRICE_CURRENCIES.get(ticker, {})
+    if meta.get("currency"):
+        return meta["currency"], "provider"
+    if ticker == "RR.L":  # This London listing is quoted in pence, not pounds.
+        return "GBp", "listing"
+    suffix = ticker.rsplit(".", 1)[-1] if "." in ticker else ""
+    currencies = {"TW": "TWD", "TWO": "TWD", "KS": "KRW", "KQ": "KRW", "T": "JPY",
+                  "AS": "EUR", "DE": "EUR", "PA": "EUR", "MI": "EUR", "SW": "CHF",
+                  "CO": "DKK", "SZ": "CNY", "SS": "CNY", "HK": "HKD", "AX": "AUD"}
+    if suffix in currencies:
+        return currencies[suffix], "exchange"
+    if not suffix and not ticker.startswith("^"):
+        return "USD", "listing"
+    return None, None
+
+
 def price_stats(ticker):
+    currency, currency_source = quote_currency(ticker)
+    missing = {"last": None, "asof": None, "price_asof": None, "currency": currency,
+               "currency_source": currency_source, "r1m": None, "r3m": None, "r1y": None, "ytd": None}
     if ticker not in PX:
-        return {}
+        return missing
     s = PX[ticker].dropna()
     if s.empty:
-        return {}
+        return missing
     last = float(s.iloc[-1])
 
     def back(days):
         d = s.index[-1] - pd.Timedelta(days=days)
         return float(s.asof(d)) if d >= s.index[0] else None
     ytd0 = s[s.index < pd.Timestamp(s.index[-1].year, 1, 1)]
-    return {"last": round(last, 2), "asof": str(s.index[-1].date()), "r1m": pct(last, back(30)), "r3m": pct(last, back(91)),
+    return {"last": round(last, 2), "asof": str(s.index[-1].date()), "price_asof": str(s.index[-1].date()),
+            "currency": currency, "currency_source": currency_source,
+            "r1m": pct(last, back(30)), "r3m": pct(last, back(91)),
             "r1y": pct(last, back(365)), "ytd": pct(last, float(ytd0.iloc[-1]) if len(ytd0) else None)}
 
 
@@ -144,6 +192,17 @@ def monthly_series(s, start="2012-01-01"):
 
 def memory_rule(ind):
     return ~((ind.C > 0) & (ind.M < 0))
+
+
+def json_safe(value):
+    """Normalize nonfinite observations to missing values before strict JSON serialization."""
+    if isinstance(value, dict):
+        return {key: json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [json_safe(item) for item in value]
+    if isinstance(value, (float, np.floating)) and not np.isfinite(value):
+        return None
+    return value
 
 
 def theme_block(t):
@@ -184,18 +243,23 @@ def theme_block(t):
                                       latest_yoy=round(float(y.iloc[-1]) * 100, 1),
                                       latest_z=round(float(z.iloc[-1]), 2) if len(z) else None,
                                       series=monthly_series(y * 100)))
-    live = ind[ind.decision <= TODAY]
+    decisions = ind.sort_index().drop_duplicates("decision", keep="last").sort_values("decision")
+    live = decisions[decisions.decision <= TODAY]
     if live.empty:
         out.update(status="monitoring", reason="Not enough history yet.", call=None, C=None, M=None,
                    index_series=[], test=None)
         return out
     r = live.iloc[-1]
-    out.update(C=round(float(r.C), 2), M=round(float(r.M), 2), data_month=str(r.name.date()),
+    out.update(C=round(float(r.C), 2), M=round(float(r.M), 2) if np.isfinite(r.M) else None, data_month=str(r.name.date()),
                decision_date=str(r.decision.date()),
                index_series=[[d.strftime("%Y-%m-%d"), round(float(c), 3), round(float(m), 3) if pd.notna(m) else None]
-                             for d, c, m in zip(ind.decision, ind.C, ind.M) if d >= pd.Timestamp("2010-01-01")])
+                             for d, c, m in zip(decisions.decision, decisions.C, decisions.M) if d >= pd.Timestamp("2010-01-01")])
     has_tw = "tw_revenue" in comps
     if t["slug"] == "memory":
+        if not np.isfinite(r.M):
+            out.update(status="monitoring", call=None, test=None, call_history=[],
+                       reason="Like-for-like momentum is unavailable; no memory call.")
+            return out
         rule = memory_rule(live)
         state = "IN" if bool(rule.iloc[-1]) else "OUT"
         out.update(status="validated", call=state, rule="Rule M: stay in unless tight AND slowing (C>0, M<0)",
@@ -258,7 +322,8 @@ def discovery():
                                   ((US_DESC.get(r.hs) or r.desc or "").title() if isinstance(r.desc, str) or r.hs in US_DESC else ""),
                           "yoy3": round(r.g * 100, 1), "z": round(r.z, 2), "accel_pp": round(r.a * 100, 1),
                           "value3_usd_m": round(r.r3 / 1e6, 1), "themes": hs_theme.get((r.source, r.hs), [])})
-    ev = json.load(open("backtest/v5_discovery_results.json"))
+    corrected = "backtest/v5_discovery_results_corrected.json"
+    ev = json.load(open(corrected if os.path.exists(corrected) else "backtest/v5_discovery_results.json"))
     return {"items": items, "event_study": ev, "latest_month": str(f.month.max().date())}
 
 
@@ -358,18 +423,42 @@ def context():
     return out
 
 
-def main():
-    os.makedirs("web/data", exist_ok=True)
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--run-id", help="Identifies the monthly refresh that produced this snapshot.")
+    ap.add_argument("--output", default=OUT, help="Snapshot destination; monthly runs stage this before publication.")
+    ap.add_argument("--include-pending", action="store_true", help="Allow an unpublished log entry in a staged monthly snapshot.")
+    args = ap.parse_args(argv)
+    os.chdir(ROOT)
+    output = os.path.abspath(args.output)
+    public = os.path.realpath(os.path.join(ROOT, OUT))
+    if args.include_pending:
+        if os.path.normcase(os.path.realpath(output)) == os.path.normcase(public):
+            raise RuntimeError("--include-pending is allowed only for staged output, never the public snapshot.")
+        return build_snapshot(args, output)
+    # Monthly refreshes and ordinary builders serialize before either reads or mutates shared inputs.
+    from pipeline.monthly import monthly_lock
+    with monthly_lock(ROOT):
+        if os.path.exists("data/monthly_pending.json"):
+            raise RuntimeError("Monthly publication is pending; preserving the existing public snapshot.")
+        return build_snapshot(args, output)
+
+
+def build_snapshot(args, output):
+    load_data()
+    os.makedirs(os.path.dirname(output), exist_ok=True)
     themes = [theme_block(t) for t in THEMES]
     snap = {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
-            "prices_asof": str(PX.index.max().date()), "themes": themes, "discovery": discovery(), "context": context(),
+            "prices_asof": str(PX.index.max().date()), "run_id": args.run_id,
+            "themes": themes, "discovery": discovery(), "context": context(),
             "track": track_record(),
             "universes": [{"slug": "ai", "name": "AI compute", "tagline": "Wafers, memory, packaging, optics and the data-centre stack."},
                           {"slug": "power", "name": "Power", "tagline": "Turbines, transformers, grid and delivered megawatts."},
                           {"slug": "robotics", "name": "Robotics", "tagline": "Actuators, sensing and automation."}]}
-    tmp = OUT + ".tmp"
-    json.dump(snap, open(tmp, "w"), default=lambda o: None if isinstance(o, float) and not np.isfinite(o) else str(o))
-    os.replace(tmp, OUT)
+    tmp = output + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as handle:
+        json.dump(json_safe(snap), handle, default=str, allow_nan=False)
+    os.replace(tmp, output)
     v = sum(t["status"] == "validated" for t in themes)
     print(f"snapshot: {len(themes)} themes ({v} validated), {len(snap['discovery']['items'])} discovery items, "
           f"track entries {snap['track']['entries']} chain_ok={snap['track']['chain_ok']}")

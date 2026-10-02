@@ -1,0 +1,13 @@
+[Unit]
+Description=Retry queued Leadtime alerts
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=leadtime
+WorkingDirectory=/opt/bottleneck-signals
+EnvironmentFile=/opt/bottleneck-signals/.env
+ExecStart=/opt/bottleneck-signals/.venv/bin/python engine/dispatch.py --retry-only
+TimeoutStartSec=3600
+UMask=0077

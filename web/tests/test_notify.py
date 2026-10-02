@@ -7,6 +7,8 @@ import json
 import logging
 import smtplib
 import ssl
+import socket
+import threading
 from urllib.parse import parse_qs
 
 import httpx
@@ -14,7 +16,10 @@ import pytest
 
 from notify import Message, Result, channel_status, send, validate_target
 from notify import _delivery
+from notify import _validation
 from notify._redaction import mask_url
+
+REAL_HTTP_HANDLE = httpx.HTTPTransport.handle_request
 
 
 TARGETS = {
@@ -31,8 +36,7 @@ MSG = Message("News <&>", "Plain <script>alert('x')</script> & text\nNext line",
 
 @pytest.mark.parametrize("channel,target", list(TARGETS.items()) + [
     ("discord", {"webhook_url": "https://discordapp.com/api/webhooks/123/a_B-9"}),
-    ("webhook", {"url": "https://localhost:8443/hook"}),
-    ("webhook", {"url": "https://[::1]/hook", "secret": ""}),
+    ("webhook", {"url": "https://hooks.example.com:8443/hook"}),
     ("ntfy", {"topic": "a" * 64, "server": "https://ntfy.example.com/base/"}),
     ("telegram", {"chat_id": "12345"}),
     ("telegram", {"chat_id": "@my_channel"}),
@@ -59,6 +63,13 @@ def test_valid_targets(channel, target):
     ("webhook", {"url": "https://example.com\n/hook"}),
     ("webhook", {"url": "https://example.com", "secret": 123}),
     ("webhook", {"url": "https://[invalid"}),
+    ("webhook", {"url": "https://localhost:8443/hook"}),
+    ("webhook", {"url": "https://[::1]/hook"}),
+    ("webhook", {"url": "https://127.0.0.1/hook"}),
+    ("webhook", {"url": "https://10.0.0.1/hook"}),
+    ("webhook", {"url": "https://93.184.216.34/hook"}),
+    ("webhook", {"url": "https://api.localhost/hook"}),
+    ("webhook", {"url": "https://host.local/hook"}),
     ("ntfy", {"topic": "short"}),
     ("ntfy", {"topic": "a" * 65}),
     ("ntfy", {"topic": "topic/name"}),
@@ -126,10 +137,11 @@ def test_http_payloads(channel, http_mock, credentials):
     result = send(channel, TARGETS[channel], MSG)
     assert result.ok and result.error is None
     assert result.provider_id == {"discord": "d1", "ntfy": "n1", "telegram": "42", "sms": "SM1"}.get(channel)
-    assert options == [{"timeout": 10.0, "follow_redirects": False}]
+    assert options == [{"timeout": 10.0, "follow_redirects": False, "trust_env": False}]
     request, = requests
     assert request.method == "POST"
-    assert set(request.extensions["timeout"].values()) == {10.0}
+    assert 0 < request.extensions["timeout"]["connect"] <= 10.0
+    assert {request.extensions["timeout"][key] for key in ("read", "write", "pool")} == {10.0}
     if channel == "discord":
         assert json.loads(request.content) == {"embeds": [{"title": MSG.title, "description": MSG.body, "url": MSG.url, "color": 0x10B981}]}
         assert request.url.params["wait"] == "true"
@@ -408,3 +420,175 @@ def test_logging_context_is_restored(http_mock, caplog):
         assert not send("slack", TARGETS["slack"], MSG).ok
         logging.getLogger("httpcore.http11").debug("outside delivery")
     assert "outside delivery" in caplog.text
+
+
+def dns_answers(*addresses, port=443):
+    return [(socket.AF_INET6 if ":" in address else socket.AF_INET,
+             socket.SOCK_STREAM, socket.IPPROTO_TCP, "", (address, port))
+            for address in addresses]
+
+
+@pytest.mark.parametrize("addresses", [
+    ("127.0.0.1",), ("10.0.0.1",), ("169.254.169.254",), ("192.168.1.1",),
+    ("172.16.0.1",), ("100.64.0.1",), ("0.0.0.0",), ("224.0.0.1",),
+    ("192.0.2.1",), ("240.0.0.1",), ("::1",), ("fc00::1",), ("fe80::1",),
+    ("2001:db8::1",), ("ff02::1",), ("93.184.216.34", "127.0.0.1"),
+])
+@pytest.mark.parametrize("channel,target", [
+    ("webhook", {"url": "https://hooks.example.test/hook"}),
+    ("ntfy", {"topic": "public_topic", "server": "https://ntfy.example.test"}),
+])
+def test_private_dns_rejected_before_transport(addresses, channel, target, http_mock, monkeypatch):
+    requests, _ = http_mock(lambda request: httpx.Response(204))
+    monkeypatch.setattr(socket, "getaddrinfo", lambda *args, **kwargs: dns_answers(*addresses))
+    result = send(channel, target, MSG)
+    assert not result.ok and "public addresses" in result.error
+    assert requests == []
+
+
+def test_dns_failure_returns_safe_error(http_mock, monkeypatch):
+    requests, _ = http_mock(lambda request: httpx.Response(204))
+    def failed_dns(*args, **kwargs):
+        raise socket.gaierror("secret-host.example.test")
+    monkeypatch.setattr(socket, "getaddrinfo", failed_dns)
+    result = send("webhook", TARGETS["webhook"], MSG)
+    assert result.error == "Could not resolve endpoint."
+    assert requests == []
+
+
+def test_retry_rechecks_dns_and_blocks_rebinding(http_mock, monkeypatch):
+    requests, _ = http_mock(lambda request: httpx.Response(503))
+    answers = iter([dns_answers("93.184.216.34"), dns_answers("127.0.0.1")])
+    monkeypatch.setattr(socket, "getaddrinfo", lambda *args, **kwargs: next(answers))
+    monkeypatch.setattr(_delivery.time, "sleep", lambda seconds: None)
+    result = send("webhook", TARGETS["webhook"], MSG)
+    assert not result.ok and "public addresses" in result.error
+    assert len(requests) == 1
+
+
+def test_custom_endpoint_redirect_is_not_followed(http_mock):
+    requests, options = http_mock(lambda request: httpx.Response(
+        307, headers={"Location": "https://127.0.0.1/admin"}))
+    assert not send("webhook", TARGETS["webhook"], MSG).ok
+    assert len(requests) == 1 and options[0]["follow_redirects"] is False
+
+
+def test_provider_response_size_is_bounded(http_mock):
+    requests, _ = http_mock(lambda request: httpx.Response(
+        200, content=b"x" * (_delivery.MAX_RESPONSE_BYTES + 1)))
+    result = send("webhook", TARGETS["webhook"], MSG)
+    assert not result.ok and result.error == "Delivery failed due to a network error."
+    assert len(requests) == 1
+
+
+def test_provider_response_total_read_time_is_bounded(http_mock, monkeypatch):
+    clock = [0.0]
+    def response(request):
+        clock[0] = 2 * _delivery.TIMEOUT + 1
+        return httpx.Response(200, content=b"ok")
+    requests, _ = http_mock(response)
+    monkeypatch.setattr(_delivery.time, "monotonic", lambda: clock[0])
+    result = send("webhook", TARGETS["webhook"], MSG)
+    assert not result.ok and result.error == "Delivery timed out."
+    assert len(requests) == 1
+
+
+def test_public_address_failover_preserves_host_tls_and_total_budget(monkeypatch):
+    from httpcore import ConnectError
+    lookups, connections, tls_hosts, writes = [], [], [], []
+    clock = [0.0]
+    def resolve(host, port, **kwargs):
+        lookups.append(host)
+        return dns_answers("2001:4860:4860::8888", "2001:4860:4860::8844", "93.184.216.34")
+    class Stream:
+        def read(self, max_bytes, timeout=None):
+            return b"HTTP/1.1 204 No Content\r\nContent-Length: 0\r\n\r\n"
+        def write(self, buffer, timeout=None):
+            writes.append(buffer)
+        def close(self):
+            pass
+        def start_tls(self, ssl_context, server_hostname=None, timeout=None):
+            assert ssl_context.check_hostname and ssl_context.verify_mode == ssl.CERT_REQUIRED
+            tls_hosts.append(server_hostname)
+            return self
+        def get_extra_info(self, name):
+            return None
+    class Backend:
+        def connect_tcp(self, host, port, timeout=None, **kwargs):
+            connections.append((host, timeout))
+            if ":" in host:
+                clock[0] += 2
+                raise ConnectError("IPv6 route unavailable")
+            return Stream()
+    monkeypatch.setattr(socket, "getaddrinfo", resolve)
+    monkeypatch.setattr(httpx.HTTPTransport, "handle_request", REAL_HTTP_HANDLE)
+    monkeypatch.setattr(_delivery.time, "monotonic", lambda: clock[0])
+    transport = _delivery.PublicHTTPTransport(trust_env=False)
+    transport._pool._network_backend = Backend()
+    with httpx.Client(transport=transport, trust_env=False, timeout=_delivery.TIMEOUT) as client:
+        assert client.post("https://hooks.example.test/hook", content=b"payload").status_code == 204
+    assert lookups == ["hooks.example.test"]
+    assert [host for host, timeout in connections] == ["2001:4860:4860::8888", "93.184.216.34"]
+    assert [timeout for host, timeout in connections] == pytest.approx([10.0 / 3, 4.0])
+    assert tls_hosts == ["hooks.example.test"]
+    assert b"Host: hooks.example.test" in b"".join(writes)
+
+
+def test_address_failover_does_not_repeat_a_post_after_read_failure(http_mock, monkeypatch):
+    requests, _ = http_mock(lambda request: (_ for _ in ()).throw(httpx.ReadTimeout("accepted but no response")))
+    monkeypatch.setattr(socket, "getaddrinfo", lambda *args, **kwargs: dns_answers("93.184.216.34", "1.1.1.1"))
+    assert not send("webhook", TARGETS["webhook"], MSG).ok
+    assert len(requests) == 1
+
+
+def test_dns_lookup_wait_is_bounded(http_mock, monkeypatch):
+    requests, _ = http_mock(lambda request: httpx.Response(204))
+    release, entered = threading.Event(), threading.Event()
+    def slow_dns(*args, **kwargs):
+        entered.set()
+        release.wait(5)
+        return dns_answers("93.184.216.34")
+    monkeypatch.setattr(socket, "getaddrinfo", slow_dns)
+    monkeypatch.setattr(_validation, "DNS_TIMEOUT_SECONDS", 0.0)
+    try:
+        result = send("webhook", TARGETS["webhook"], MSG)
+        assert result.error == "Endpoint DNS lookup timed out."
+        assert entered.wait(1) and requests == []
+    finally:
+        release.set()
+
+
+def test_effective_connection_is_pinned_and_tls_host_preserved(monkeypatch):
+    # Exercise real httpx/httpcore connection setup with an in-memory socket
+    # backend. No network is opened, and a second lookup would return loopback.
+    lookups, connections, tls_hosts, writes = [], [], [], []
+    def resolve(host, port, **kwargs):
+        lookups.append((host, port))
+        return dns_answers("93.184.216.34" if len(lookups) == 1 else "127.0.0.1", port=port)
+    class Stream:
+        def read(self, max_bytes, timeout=None):
+            return b"HTTP/1.1 204 No Content\r\nContent-Length: 0\r\n\r\n"
+        def write(self, buffer, timeout=None):
+            writes.append(buffer)
+        def close(self):
+            pass
+        def start_tls(self, ssl_context, server_hostname=None, timeout=None):
+            assert ssl_context.check_hostname and ssl_context.verify_mode == ssl.CERT_REQUIRED
+            tls_hosts.append(server_hostname)
+            return self
+        def get_extra_info(self, name):
+            return None
+    class Backend:
+        def connect_tcp(self, host, port, **kwargs):
+            connections.append((host, port))
+            return Stream()
+    monkeypatch.setattr(socket, "getaddrinfo", resolve)
+    monkeypatch.setattr(httpx.HTTPTransport, "handle_request", REAL_HTTP_HANDLE)
+    transport = _delivery.PublicHTTPTransport(trust_env=False)
+    transport._pool._network_backend = Backend()
+    with httpx.Client(transport=transport, trust_env=False, follow_redirects=False) as client:
+        assert client.post("https://hooks.example.test:8443/hook", json={"event": "test"}).status_code == 204
+    assert lookups == [("hooks.example.test", 8443)]
+    assert connections == [("93.184.216.34", 8443)]
+    assert tls_hosts == ["hooks.example.test"]
+    assert b"Host: hooks.example.test:8443" in b"".join(writes)

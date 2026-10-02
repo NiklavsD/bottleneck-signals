@@ -1,5 +1,6 @@
 import httpx
 import pytest
+import socket
 
 from notify import _delivery
 
@@ -19,6 +20,7 @@ def isolated_environment(monkeypatch):
         raise AssertionError("Unmocked network access")
     monkeypatch.setattr(httpx.HTTPTransport, "handle_request", blocked)
     monkeypatch.setattr(_delivery.smtplib, "SMTP", blocked)
+    monkeypatch.setattr(socket, "getaddrinfo", blocked)
 
 
 @pytest.fixture
@@ -42,14 +44,25 @@ def http_mock(monkeypatch):
         requests = []
         options = []
 
-        def handle(request):
-            requests.append(request)
-            return handler(request)
+        def handle(transport, request):
+            # Exercise the production public transport first. Only the final
+            # socket boundary is mocked; payload assertions retain the Host URL.
+            logical = httpx.Request(
+                request.method, request.url.copy_with(host=request.extensions["sni_hostname"]),
+                headers=request.headers, content=request.read(), extensions=request.extensions,
+            )
+            requests.append(logical)
+            return handler(logical)
 
         def client(**kwargs):
-            options.append(kwargs)
-            return original_client(transport=httpx.MockTransport(handle), **kwargs)
+            assert isinstance(kwargs["transport"], _delivery.PublicHTTPTransport)
+            options.append({key: value for key, value in kwargs.items() if key != "transport"})
+            return original_client(**kwargs)
 
+        monkeypatch.setattr(socket, "getaddrinfo", lambda host, port, **kwargs: [
+            (socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP, "", ("93.184.216.34", port)),
+        ])
+        monkeypatch.setattr(httpx.HTTPTransport, "handle_request", handle)
         monkeypatch.setattr(_delivery.httpx, "Client", client)
         return requests, options
 
