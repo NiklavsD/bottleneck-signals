@@ -18,6 +18,7 @@ from typing import Literal
 
 import httpx
 
+from ._netguard import UnsafeDestination, pinned_transport
 from ._redaction import redact_transport_logs
 from ._validation import CHANNELS, valid_url, validate_target
 
@@ -43,6 +44,7 @@ class Result:
     ok: bool
     error: str | None = None
     provider_id: str | None = None
+    http_status: int | None = None  # set only when the provider answered with a non-2xx status
 
 
 def channel_status() -> dict[str, dict[str, bool | str]]:
@@ -87,8 +89,9 @@ def _retry_delay(value: str | None) -> float:
 
 
 def _post(url: str, **kwargs) -> httpx.Response:
-    # Redirects must not forward a signed payload or credentials elsewhere.
-    with httpx.Client(timeout=TIMEOUT, follow_redirects=False) as client:
+    # Redirects must not forward a signed payload or credentials elsewhere. The transport is
+    # pinned to an address vetted as public (SSRF / DNS-rebinding guard); env proxies are not used.
+    with httpx.Client(timeout=TIMEOUT, follow_redirects=False, transport=pinned_transport(url)) as client:
         for attempt in range(2):
             response = client.post(url, **kwargs)
             if attempt == 0 and (response.status_code == 429 or 500 <= response.status_code <= 599):
@@ -183,7 +186,7 @@ def _send_email(target: dict, msg: Message) -> Result:
 
 def _http_result(channel: str, response: httpx.Response) -> Result:
     if not 200 <= response.status_code < 300:
-        return Result(False, f"{channel} returned HTTP {response.status_code}.")
+        return Result(False, f"Delivery failed (HTTP {response.status_code}).", http_status=response.status_code)
     try:
         data = response.json()
     except ValueError:
@@ -217,11 +220,10 @@ def send(channel: str, target: dict, msg: Message) -> Result:
                 return _send_email(target, msg)
             url, kwargs = _payload(channel, target, msg)
             return _http_result(channel, _post(url, **kwargs))
-    except httpx.TimeoutException:
-        return Result(False, "Delivery timed out.")
-    except httpx.RequestError:
-        return Result(False, "Delivery failed due to a network error.")
-    except smtplib.SMTPException:
+    except smtplib.SMTPException:  # subclass of OSError, so it must come first
         return Result(False, "Delivery failed due to an SMTP error.")
+    except (httpx.RequestError, UnsafeDestination, OSError):
+        # Network detail (timeouts, refused ports, blocked addresses) is never echoed to users.
+        return Result(False, "Delivery failed.")
     except Exception:
         return Result(False, "Delivery failed; check message and provider configuration.")

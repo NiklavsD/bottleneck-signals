@@ -60,7 +60,7 @@
         <div>
           <div class="eyebrow">{{ c.source }}</div>
           <h3 style="margin:8px 0 6px">{{ c.label }}: <span class="num">{{ '%+.1f'|format(c.latest_yoy) }}%</span> <span class="small muted">3-mo YoY, {{ c.latest_month[:7] }}</span></h3>
-          <p class="small muted" style="margin:0">{{ c.detail }}{% if c.latest_z is not none %} · <span class="num">{{ '%+.2f'|format(c.latest_z) }}σ</span> vs own history{% endif %} · <a href="{{ c.url }}" rel="noopener">source</a></p>
+          <p class="small muted" style="margin:0">{{ c.detail }}{% if c.latest_z is not none %} · <span class="num">{{ '%+.2f'|format(c.latest_z) }}σ</span> vs own history{% endif %} · <a href="{{ c.url|safe_url }}" rel="noopener">source</a></p>
         </div>
         {{ chart({"label": c.label, "zero": true, "dp": 1, "tipfmt": "{v}%", "yfmt": "{v}%", "series": [{"name": "YoY", "color": "--ink-2", "data": c.series[-96:], "width": 1.6}]}, "sm") }}
       </div>

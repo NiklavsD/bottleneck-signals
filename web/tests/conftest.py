@@ -1,7 +1,28 @@
+import socket
+
 import httpx
 import pytest
 
-from notify import _delivery
+from notify import _delivery, _netguard
+
+ORIGINAL_HANDLE_REQUEST = httpx.HTTPTransport.handle_request
+PUBLIC_IP = "93.184.216.34"
+
+
+def fake_dns(answers):
+    """Stub resolver: answers maps hostname -> list of IPs (default: one public IPv4)."""
+    calls = []
+
+    def getaddrinfo(host, port, *args, **kwargs):
+        calls.append(host)
+        ips = answers.get(host, [PUBLIC_IP]) if isinstance(answers, dict) else answers(host)
+        if not ips:
+            raise socket.gaierror("no such host")
+        return [(socket.AF_INET6 if ":" in ip else socket.AF_INET, socket.SOCK_STREAM, 6, "", (ip, port))
+                for ip in ips]
+
+    getaddrinfo.calls = calls
+    return getaddrinfo
 
 
 ENV = (
@@ -19,6 +40,8 @@ def isolated_environment(monkeypatch):
         raise AssertionError("Unmocked network access")
     monkeypatch.setattr(httpx.HTTPTransport, "handle_request", blocked)
     monkeypatch.setattr(_delivery.smtplib, "SMTP", blocked)
+    # No real DNS in tests: every hostname resolves to one public address unless a test says otherwise.
+    monkeypatch.setattr(_netguard, "_getaddrinfo", fake_dns({}))
 
 
 @pytest.fixture
@@ -47,6 +70,8 @@ def http_mock(monkeypatch):
             return handler(request)
 
         def client(**kwargs):
+            # The real code passes an SSRF-pinned transport; swap it for the mock.
+            assert isinstance(kwargs.pop("transport"), _netguard.PinnedTransport)
             options.append(kwargs)
             return original_client(transport=httpx.MockTransport(handle), **kwargs)
 

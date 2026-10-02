@@ -6,6 +6,7 @@
   <p class="eyebrow">{{ "Free while in beta" if mode == "signup" else "Welcome back" }}</p>
   <h1 style="font-size:2rem;margin:10px 0 6px">{{ "Create your account" if mode == "signup" else "Sign in" }}</h1>
   <p class="muted small">{{ "You need an account to choose alert channels and bottlenecks. Everything else on Leadtime is open." if mode == "signup" else "Manage your alert channels and preferences." }}</p>
+  {% if notice %}<div class="notice ok" role="status" style="margin:14px 0">{{ icon('check-circle') }}<span>{{ notice }}</span></div>{% endif %}
   {% if error %}<div class="notice err" role="alert" style="margin:14px 0">{{ icon('warning') }}<span>{{ error }}</span></div>{% endif %}
   <form class="form" method="post" action="/{{ mode }}" style="margin-top:16px">
     <input type="hidden" name="csrf" value="{{ csrf }}">

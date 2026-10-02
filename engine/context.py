@@ -44,6 +44,15 @@ def iid(url):
     return hashlib.sha1(url.encode()).hexdigest()[:16]
 
 
+def safe_link(url):
+    """Only http(s) links are stored: feed links end up as href attributes on the site."""
+    try:
+        u = urllib.parse.urlsplit((url or "").strip())
+    except ValueError:
+        return False
+    return u.scheme.lower() in ("http", "https") and bool(u.netloc)
+
+
 def clean(s, n=600):
     s = re.sub(r"<[^>]+>", " ", s or "")
     return re.sub(r"\s+", " ", s).strip()[:n]
@@ -67,7 +76,7 @@ def gather(days, max_per_query):
     def add(e, src, name, kind, theme_hint=None, force=False):
         url = e.get("link")
         d = published(e)
-        if not url or not d or d < since:
+        if not safe_link(url) or not d or d < since:
             return
         title = clean(e.get("title"), 300)
         # Google News titles end with " - Publisher"

@@ -1,0 +1,359 @@
+{
+ "_header": "frozen from RESULTS_v6.md (commit 48ee440), not recomputed",
+ "source": "backtest/RESULTS_v6.md",
+ "source_commit": "48ee440bc0147823428f8737a8df317c29bed824",
+ "published": "2026-09-23",
+ "preregistration": "backtest/PREREGISTRATION_v6_universe.md",
+ "pass_rule": "OOS window Mar 2008 – Feb 2017: tilt Sharpe > always-overweight Sharpe AND tilt annualised excess > 0",
+ "frozen_at": "2026-10-02",
+ "themes": {
+  "lithography-fab-tools": {
+   "status": "validated",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": 0.44,
+    "always_sharpe": -0.22,
+    "tilt_ann_pct": 6.2,
+    "pass": true
+   },
+   "pass": true,
+   "result": "PASS",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "UNDERWEIGHT"
+  },
+  "semiconductor-materials": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": -0.34,
+    "always_sharpe": -0.08,
+    "tilt_ann_pct": -10.0,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "foundry-logic": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": -0.67,
+    "always_sharpe": -0.0,
+    "tilt_ann_pct": -13.5,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "advanced-packaging-hbm": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": -0.14,
+    "always_sharpe": 0.23,
+    "tilt_ann_pct": -3.1,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "memory": {
+   "status": "validated",
+   "kind": "timing",
+   "rule": "Rule M (v2/v4)",
+   "pass": true,
+   "result": "PASS (timing)",
+   "window": "OOS 2008-03..2017-02 (v2/v4 timing test)",
+   "note": "Out-of-sample 2008–2017 PASS (v2/v4): CAGR 15.9% vs 13.0%, Sharpe 0.71 vs 0.60.",
+   "published_call": "OUT"
+  },
+  "storage": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": -0.32,
+    "always_sharpe": 0.1,
+    "tilt_ann_pct": -8.2,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "substrates-pcb": {
+   "status": "validated",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": 0.07,
+    "always_sharpe": -0.34,
+    "tilt_ann_pct": 2.0,
+    "pass": true
+   },
+   "pass": true,
+   "result": "PASS",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "OVERWEIGHT"
+  },
+  "photonics-optics": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": 0.34,
+    "always_sharpe": 0.35,
+    "tilt_ann_pct": 23.2,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "networking-interconnect": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": 0.11,
+    "always_sharpe": 0.62,
+    "tilt_ann_pct": 1.8,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "connectors-cables": {
+   "status": "validated",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": 0.59,
+    "always_sharpe": -0.5,
+    "tilt_ann_pct": 10.0,
+    "pass": true
+   },
+   "pass": true,
+   "result": "PASS",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "OVERWEIGHT"
+  },
+  "ai-servers": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": -0.25,
+    "always_sharpe": -0.0,
+    "tilt_ann_pct": -6.3,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "cooling-thermal": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": -0.35,
+    "always_sharpe": 0.34,
+    "tilt_ann_pct": -7.9,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "power-electronics": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": -0.23,
+    "always_sharpe": 0.22,
+    "tilt_ann_pct": -4.2,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "accelerators-custom-silicon": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": -0.55,
+    "always_sharpe": 0.08,
+    "tilt_ann_pct": -9.8,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "ai-cloud-neoclouds": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": null,
+   "pass": null,
+   "result": "no OOS window",
+   "window": null,
+   "published_call": "MONITORING"
+  },
+  "rare-earths-magnets": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": null,
+   "pass": null,
+   "result": "no OOS window",
+   "window": null,
+   "published_call": "MONITORING"
+  },
+  "gas-turbines-generation": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": null,
+   "pass": null,
+   "result": "no OOS window",
+   "window": null,
+   "published_call": "MONITORING"
+  },
+  "transformers": {
+   "status": "validated",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": 0.21,
+    "always_sharpe": -0.22,
+    "tilt_ann_pct": 3.2,
+    "pass": true
+   },
+   "pass": true,
+   "result": "PASS",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "UNDERWEIGHT"
+  },
+  "switchgear-grid-equipment": {
+   "status": "validated",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": 0.02,
+    "always_sharpe": -0.02,
+    "tilt_ann_pct": 0.3,
+    "pass": true
+   },
+   "pass": true,
+   "result": "PASS",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "OVERWEIGHT"
+  },
+  "transmission-cables": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": null,
+   "pass": null,
+   "result": "no OOS window",
+   "window": null,
+   "published_call": "MONITORING"
+  },
+  "nuclear-smr": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": null,
+   "pass": null,
+   "result": "no OOS window",
+   "window": null,
+   "published_call": "MONITORING"
+  },
+  "batteries-storage": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": null,
+   "pass": null,
+   "result": "no OOS window",
+   "window": null,
+   "published_call": "MONITORING"
+  },
+  "power-producers": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": null,
+   "pass": null,
+   "result": "no OOS window",
+   "window": null,
+   "published_call": "MONITORING"
+  },
+  "construction-mep": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": -0.4,
+    "always_sharpe": 0.27,
+    "tilt_ann_pct": -6.8,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "precision-motion-actuators": {
+   "status": "validated",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": 0.17,
+    "always_sharpe": -0.07,
+    "tilt_ann_pct": 4.6,
+    "pass": true
+   },
+   "pass": true,
+   "result": "PASS",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "OVERWEIGHT"
+  },
+  "sensing-vision": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": 0.15,
+    "always_sharpe": 0.56,
+    "tilt_ann_pct": 3.0,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "industrial-robots-automation": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": {
+    "tilt_sharpe": -0.04,
+    "always_sharpe": 0.16,
+    "tilt_ann_pct": -1.0,
+    "pass": false
+   },
+   "pass": false,
+   "result": "fail",
+   "window": "2008-03-01..2017-02-28",
+   "published_call": "MONITORING"
+  },
+  "robot-platforms": {
+   "status": "monitoring",
+   "kind": "tilt",
+   "oos": null,
+   "pass": null,
+   "result": "no OOS window",
+   "window": null,
+   "published_call": "MONITORING"
+  }
+ }
+}

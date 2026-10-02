@@ -3,6 +3,8 @@
 import re
 from urllib.parse import urlsplit
 
+from ._netguard import public_hostname
+
 CHANNELS = ("discord", "slack", "webhook", "ntfy", "telegram", "email", "sms")
 DISCORD = r"https://(?:discord\.com|discordapp\.com)/api/webhooks/[0-9]+/[A-Za-z0-9_-]+"
 SLACK = r"https://hooks\.slack\.com/services/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+"
@@ -46,16 +48,18 @@ def validate_target(channel: str, target: dict) -> tuple[bool, str | None]:
         if not matches(pattern, target.get("webhook_url")):
             return False, f"Invalid {channel} webhook URL."
     elif channel == "webhook":
-        if not valid_url(target.get("url")) or urlsplit(target["url"]).fragment:
-            return False, "Webhook URL must be HTTPS without credentials or a fragment."
+        if (not valid_url(target.get("url")) or urlsplit(target["url"]).fragment
+                or not public_hostname(urlsplit(target["url"]).hostname)):
+            return False, "Webhook URL must be HTTPS with a public hostname, without credentials or a fragment."
         if "secret" in target and not isinstance(target["secret"], str):
             return False, "Webhook secret must be a string."
     elif channel == "ntfy":
         if not matches(TOPIC, target.get("topic")):
             return False, "Topic must contain 6–64 ASCII letters, digits, underscores or hyphens."
         server = target.get("server", "https://ntfy.sh")
-        if not valid_url(server) or urlsplit(server).query or urlsplit(server).fragment:
-            return False, "ntfy server must be HTTPS without credentials, query or fragment."
+        if (not valid_url(server) or urlsplit(server).query or urlsplit(server).fragment
+                or not public_hostname(urlsplit(server).hostname)):
+            return False, "ntfy server must be HTTPS with a public hostname, without credentials, query or fragment."
     elif channel == "telegram":
         chat = target.get("chat_id")
         if isinstance(chat, bool) or not isinstance(chat, (str, int)) or not matches(CHAT, str(chat)):

@@ -31,8 +31,7 @@ MSG = Message("News <&>", "Plain <script>alert('x')</script> & text\nNext line",
 
 @pytest.mark.parametrize("channel,target", list(TARGETS.items()) + [
     ("discord", {"webhook_url": "https://discordapp.com/api/webhooks/123/a_B-9"}),
-    ("webhook", {"url": "https://localhost:8443/hook"}),
-    ("webhook", {"url": "https://[::1]/hook", "secret": ""}),
+    ("webhook", {"url": "https://hooks.example.com:8443/hook", "secret": ""}),
     ("ntfy", {"topic": "a" * 64, "server": "https://ntfy.example.com/base/"}),
     ("telegram", {"chat_id": "12345"}),
     ("telegram", {"chat_id": "@my_channel"}),
@@ -59,6 +58,8 @@ def test_valid_targets(channel, target):
     ("webhook", {"url": "https://example.com\n/hook"}),
     ("webhook", {"url": "https://example.com", "secret": 123}),
     ("webhook", {"url": "https://[invalid"}),
+    ("webhook", {"url": "https://localhost:8443/hook"}),
+    ("webhook", {"url": "https://[::1]/hook", "secret": ""}),
     ("ntfy", {"topic": "short"}),
     ("ntfy", {"topic": "a" * 65}),
     ("ntfy", {"topic": "topic/name"}),

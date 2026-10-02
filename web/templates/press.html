@@ -42,7 +42,7 @@
       <h3>Emerging terms</h3>
       <p class="small muted" style="margin:6px 0 12px">Supply bottlenecks named at least twice in the last 60 days that none of our 28 themes covers yet. Candidates for a new theme.</p>
       {% for e in cx.emerging %}
-        <p class="small" style="margin:0 0 8px"><b>{{ e.term }}</b> <span class="muted num">×{{ e.n }}</span><br><a href="{{ e.example }}" rel="noopener nofollow" target="_blank" class="muted">{{ e.example_title[:70] }}{{ '…' if e.example_title|length > 70 }}</a></p>
+        <p class="small" style="margin:0 0 8px"><b>{{ e.term }}</b> <span class="muted num">×{{ e.n }}</span><br><a href="{{ e.example|safe_url }}" rel="noopener nofollow" target="_blank" class="muted">{{ e.example_title[:70] }}{{ '…' if e.example_title|length > 70 }}</a></p>
       {% else %}<p class="small muted" style="margin:0">Nothing repeated yet.</p>{% endfor %}
     </aside>
   </div>

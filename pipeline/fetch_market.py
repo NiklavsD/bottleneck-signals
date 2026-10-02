@@ -1,5 +1,8 @@
 """Prices (yfinance), FRED series and SEC XBRL facts. All cached to data/processed/."""
-import time, json, requests, pandas as pd, yfinance as yf
+import os, sys, time, json, requests, pandas as pd, yfinance as yf
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from price_merge import merge_prices, read_previous, report  # noqa: E402
 
 TICKERS = [
     # memory / storage
@@ -29,10 +32,13 @@ SEC_CIK = {"MSFT": 789019, "GOOGL": 1652044, "AMZN": 1018724, "META": 1326801, "
            "ETN": 1551182, "HUBB": 48898, "POWL": 80420, "VRT": 1674101, "GEV": 1996810}
 SEC_UA = {"User-Agent": "ai-market-analysis research contact@example.com"}
 
-def prices():
+def prices(out="data/processed/prices.csv"):
+    """Returns True if too many tickers had to keep their previous column (see pipeline/price_merge.py)."""
     df = yf.download(TICKERS, start="2004-01-01", auto_adjust=True, progress=False, threads=True)["Close"]
-    df.to_csv("data/processed/prices.csv")
+    df, carried, missing = merge_prices(df, read_previous(out), TICKERS)
+    df.to_csv(out)
     print("prices", df.shape, df.index.max())
+    return report(carried, missing)
 
 def fred():
     out = {}
@@ -65,4 +71,5 @@ def sec():
     print("sec", df.shape)
 
 if __name__ == "__main__":
-    prices(); fred(); sec()
+    bad = prices(); fred(); sec()
+    sys.exit(1 if bad else 0)

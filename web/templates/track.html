@@ -17,7 +17,7 @@
 <div class="wrap" style="padding-top:26px">
   <div class="table-wrap">
     <table class="data">
-      <thead><tr><th>Logged (UTC)</th><th>Bottleneck</th><th>Model</th><th>Call</th><th class="r">Pressure</th><th class="r">Basket since</th><th class="r hide-sm">Benchmark since</th><th class="hide-sm">Entry hash</th></tr></thead>
+      <thead><tr><th>Logged (UTC)</th><th>Bottleneck</th><th>Model</th><th>Call</th><th class="r">Pressure</th><th class="r">Basket since</th><th class="r hide-sm">Benchmark since</th><th class="r">Call result</th><th class="hide-sm">Entry hash</th></tr></thead>
       <tbody>
       {% for r in tr.rows %}
         <tr>
@@ -28,6 +28,7 @@
           <td class="r num">{{ '%+.2f'|format(r.C) }}</td>
           <td class="r">{{ pct(r.basket_since_pct) }}</td>
           <td class="r hide-sm">{% if r.bench %}{{ pct(r.bench_since_pct) }} <span class="muted small">{{ r.bench }}</span>{% else %}<span class="muted">—</span>{% endif %}</td>
+          <td class="r">{{ pct(r.call_return_pct) if r.call_return_pct is not none else '—' }}{% if r.missing %} <span class="muted small" title="No price for: {{ r.missing|join(', ') }}">*</span>{% endif %}</td>
           <td class="hide-sm hash">{{ r.hash[:12] }}…</td>
         </tr>
       {% endfor %}
@@ -38,7 +39,7 @@
   <div class="two" style="margin-top:28px;align-items:start">
     <div class="card card-pad">
       <h3>What "basket since" means</h3>
-      <p class="small muted" style="margin-top:8px">The equal-weight change in the basket's prices from the day of the call to the latest close, before costs. For IN/OUT calls, an OUT call is right if the basket later falls. For tilt calls, compare the basket with its benchmark.</p>
+      <p class="small muted" style="margin-top:8px">The equal-weight change in the basket from the last close before the call to the latest close, using split- and dividend-adjusted prices, before costs. <b>Call result</b> scores the call itself: for in/out calls it's the basket's move (sign flipped for OUT), for tilts it's the basket minus its benchmark (flipped for UNDERWEIGHT). Positive means the call was right so far. * marks a basket member with no price data.</p>
     </div>
     <div class="card card-pad">
       <h3>Verify it yourself</h3>

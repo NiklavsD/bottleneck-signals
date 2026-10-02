@@ -1,0 +1,18 @@
+# Proposed replacement for the three ai-market-analysis crontab lines (finding #9). NOT installed.
+# tools/run-job.sh cds to the project, exports .env, logs timestamped START/END lines to data/raw/<job>.log,
+# stops at the first failing step and posts an ntfy alert (topic OPS_NTFY_TOPIC from .env).
+#
+# monthly: monthly.py itself now refuses to log on a failed refresh step, stale data, a v4/snapshot mismatch
+# or a duplicate decision date, and exits non-zero, so every refusal alerts.
+15 6 17 * * /home/nik/projects/ai-market-analysis/tools/run-job.sh monthly -- .venv/bin/python pipeline/monthly.py --publish  # ai-market-analysis bottleneck signals (no LLM)
+#
+# daily: && semantics as before. If >3 tickers had to be carried over, fetch_universe_prices.py still writes the
+# merged (safe) file but exits 1, so build.py is skipped that day and the alert fires.
+40 22 * * 1-5 /home/nik/projects/ai-market-analysis/tools/run-job.sh daily -- .venv/bin/python pipeline/fetch_universe_prices.py -- .venv/bin/python engine/build.py  # ai-market-analysis daily prices for Leadtime site (no LLM)
+#
+# context: the three steps stay independent (a dead spot-price source must not block the press feed or the
+# build), so each is its own run-job.sh call chained with ';' -- each one alerts on its own failure.
+10 7 * * * /home/nik/projects/ai-market-analysis/tools/run-job.sh context -- .venv/bin/python pipeline/fetch_spot.py; /home/nik/projects/ai-market-analysis/tools/run-job.sh context -- .venv/bin/python engine/context.py --days 3; /home/nik/projects/ai-market-analysis/tools/run-job.sh context -- .venv/bin/python engine/build.py  # ai-market-analysis Leadtime press context + memory spot prices (GLM flat-rate)
+#
+# hourly uptime check: alerts when /healthz is not 200 (503 when prices/snapshot are stale)
+7 * * * * /home/nik/projects/ai-market-analysis/tools/healthcheck.sh  # ai-market-analysis Leadtime /healthz uptime check

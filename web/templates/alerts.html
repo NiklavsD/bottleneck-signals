@@ -19,7 +19,8 @@
       <div class="mine">
         <span>{{ icon(spec.icon) }}</span>
         <div><b>{{ c.label or spec.name }}</b> <span class="muted small mono">{{ c.display }}</span><br>
-          <span class="small {{ 'down' if c.last_error else 'muted' }}">{% if c.last_error %}Last test failed: {{ c.last_error }}{% elif c.last_ok_at %}Working · last delivery OK{% else %}Not tested yet{% endif %}</span></div>
+          <span class="small {{ 'down' if c.last_error else 'muted' }}">{% if c.last_error %}Last test failed: {{ c.last_error }}{% elif not c.verified %}Waiting for confirmation · no alerts until you enter the code{% elif c.last_ok_at %}Working · last delivery OK{% else %}Not tested yet{% endif %}</span>
+          {% if not c.verified %}<form class="form" method="post" action="/alerts/channel/{{ c.id }}/verify" style="grid-template-columns:auto auto;gap:8px;margin-top:8px;justify-content:start"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="text" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="6-digit code" required aria-label="Confirmation code for {{ spec.name }}" style="width:9em"><button class="btn btn-primary btn-sm" type="submit">Confirm</button></form>{% endif %}</div>
         <div style="display:flex;gap:8px">
           <form method="post" action="/alerts/channel/{{ c.id }}/test"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="btn btn-ghost btn-sm" type="submit">{{ icon('paper-plane-tilt') }} Test</button></form>
           <form method="post" action="/alerts/channel/{{ c.id }}/delete"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="btn btn-danger btn-sm" type="submit" aria-label="Remove {{ spec.name }}">{{ icon('trash') }}</button></form>
@@ -90,7 +91,8 @@
   <section class="two" style="align-items:start;margin-bottom:10px">
     <div class="card card-pad">
       <h3>Sign out</h3>
-      <form method="post" action="/logout" style="margin-top:12px"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="btn btn-ghost btn-sm" type="submit">{{ icon('sign-out') }} Sign out</button></form>
+      <p class="small muted" style="margin:8px 0">Signs you out on every device and browser, including any you have lost or left signed in.</p>
+      <form method="post" action="/logout" style="margin-top:12px"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="btn btn-ghost btn-sm" type="submit">{{ icon('sign-out') }} Sign out everywhere</button></form>
     </div>
     <div class="card card-pad">
       <h3>Delete account</h3>

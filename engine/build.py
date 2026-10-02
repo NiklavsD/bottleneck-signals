@@ -17,6 +17,22 @@ os.chdir(ROOT)
 OUT = "web/data/snapshot.json"
 TODAY = pd.Timestamp.today().normalize()
 OOS = (pd.Timestamp("2008-03-01"), pd.Timestamp("2017-02-28"))
+FROZEN_V6 = "backtest/v6_frozen_results.json"
+NOT_PREREGISTERED = "not in the v6 pre-registered set"
+DRIFT = []  # display-only diagnostics, filled by theme_block, written to snapshot["diagnostics"]["v6_drift"]
+
+
+def load_frozen(path=FROZEN_V6):
+    """The v6 OOS results exactly as published in RESULTS_v6.md (commit 48ee440), checked against their sha256.
+
+    Status (validated/monitoring) and the displayed OOS numbers come from here, never from a rebuild:
+    re-downloaded adjusted prices move razor-thin margins (switchgear 0.02 vs -0.02) and must not flip a call."""
+    raw = open(path, "rb").read()
+    want = open(os.path.splitext(path)[0] + ".sha256").read().split()[0]
+    got = hashlib.sha256(raw).hexdigest()
+    if got != want:
+        raise SystemExit(f"{path}: sha256 {got} != {want}; the frozen v6 results were edited")
+    return json.loads(raw)["themes"]
 
 THEMES = json.load(open("config/themes.json"))
 TW = pd.read_csv("data/processed/tw_revenue.csv", dtype={"code": str}, parse_dates=["month"])
@@ -117,6 +133,26 @@ def tilt_test(ind, b, bench, lo, hi):
             "pass": bool(sharpe(tilt) > sharpe(ex) and tilt.mean() > 0)}
 
 
+def v6_status(slug, frozen, recomputed_oos):
+    """Status for a v6 tilt theme from the frozen published result; the recomputed OOS test is diagnostic only.
+
+    Returns (status, oos_for_display, reason, drift). drift is a dict when today's recomputed pass/fail differs
+    from the frozen one (or can no longer be computed); it never changes status."""
+    f = frozen.get(slug)
+    if f is None:
+        return "monitoring", None, f"Monitoring: {NOT_PREREGISTERED}.", None
+    oos = dict(f["oos"], window=f["window"], source="frozen: RESULTS_v6.md (2026-09-23)") if f.get("oos") else None
+    reason = None if f["status"] == "validated" else (
+        "Tilt failed its out-of-sample test." if oos else "No out-of-sample window to validate on yet.")
+    drift = None
+    rec_pass = recomputed_oos["pass"] if recomputed_oos else None
+    if f.get("pass") is not None and rec_pass != f["pass"]:
+        drift = {"slug": slug, "frozen_pass": f["pass"], "recomputed_pass": rec_pass,
+                 "frozen": f["oos"], "recomputed": recomputed_oos,
+                 "note": "display-only: status stays as published in RESULTS_v6.md"}
+    return f["status"], oos, reason, drift
+
+
 def pct(a, b):
     return None if a is None or b is None or not np.isfinite(a) or not np.isfinite(b) or b == 0 else round((a / b - 1) * 100, 1)
 
@@ -146,7 +182,8 @@ def memory_rule(ind):
     return ~((ind.C > 0) & (ind.M < 0))
 
 
-def theme_block(t):
+def theme_block(t, frozen=None):
+    frozen = load_frozen() if frozen is None else frozen
     comps = components(t)
     tickers = [b["ticker"] for b in t["basket"]]
     b = basket_returns(tickers)
@@ -197,22 +234,29 @@ def theme_block(t):
     has_tw = "tw_revenue" in comps
     if t["slug"] == "memory":
         rule = memory_rule(live)
-        state = "IN" if bool(rule.iloc[-1]) else "OUT"
-        out.update(status="validated", call=state, rule="Rule M: stay in unless tight AND slowing (C>0, M<0)",
-                   test={"kind": "timing", "note": "Out-of-sample 2008–2017 PASS (v2/v4): CAGR 15.9% vs 13.0%, "
-                                                   "Sharpe 0.71 vs 0.60."})
+        f = frozen.get("memory", {})
+        validated = f.get("status") == "validated"
+        state = ("IN" if bool(rule.iloc[-1]) else "OUT") if validated else None
+        out.update(status="validated" if validated else "monitoring", call=state,
+                   rule="Rule M: stay in unless tight AND slowing (C>0, M<0)",
+                   reason=None if validated else f"Monitoring: {NOT_PREREGISTERED}.",
+                   test={"kind": "timing", "note": f.get("note")} if f else None)
         hist = pd.Series(rule.values, index=live.decision)
     else:
-        oos = tilt_test(ind, b, bench, *OOS) if has_tw else None
+        recomputed = tilt_test(ind, b, bench, *OOS) if has_tw else None
+        status, oos, reason, drift = v6_status(t["slug"], frozen, recomputed)
+        if drift:
+            DRIFT.append(drift)
         recent = tilt_test(ind, b, bench, pd.Timestamp("2016-01-01"), TODAY)
+        if recent:
+            recent["label"] = "in-sample/descriptive (recomputed each build, not a validation test)"
         test = {"kind": "tilt", "oos": oos, "since_2016": recent,
-                "window": "OOS 2008–2017" if oos else "No out-of-sample window (trade data starts 2013)"}
-        validated = bool(oos and oos["pass"])
+                "window": "OOS 2008–2017, frozen as published 2026-09-23" if oos else
+                          "No out-of-sample window (trade data starts 2013)"}
+        validated = status == "validated"
         state = ("OVERWEIGHT" if r.C > 0 else "UNDERWEIGHT") if validated else None
-        out.update(status="validated" if validated else "monitoring", call=state, test=test,
-                   rule="Tilt: overweight vs benchmark when C>0, underweight otherwise",
-                   reason=None if validated else ("Tilt failed its out-of-sample test." if oos else
-                                                  "No out-of-sample window to validate on yet."))
+        out.update(status=status, call=state, test=test, reason=reason,
+                   rule="Tilt: overweight vs benchmark when C>0, underweight otherwise")
         hist = pd.Series((live.C > 0).values, index=live.decision)
     # call changes over time (for the theme page timeline), last 10
     ch = hist[hist != hist.shift(1)]
@@ -262,8 +306,81 @@ def discovery():
     return {"items": items, "event_study": ev, "latest_month": str(f.month.max().date())}
 
 
-def track_record():
-    entries = [json.loads(l) for l in open("backtest/signal_log.jsonl") if l.strip()]
+def entry_close(series, logged_at):
+    """Reference close for a call: the last close dated strictly before the UTC calendar day of logged_at.
+
+    A call logged at 2026-09-23T02:10Z could not have seen the 23 Sep close (US had not opened), so using
+    asof(logged_at) would leak a post-call price. NaN if the series has no close before that day."""
+    ts = pd.Timestamp(logged_at)
+    day = (ts.tz_convert("UTC").tz_localize(None) if ts.tzinfo else ts).normalize()
+    s = series.dropna()
+    s = s[s.index < day]
+    return float(s.iloc[-1]) if len(s) else float("nan")
+
+
+def since_return(ticker, logged_at, stored, px):
+    """Percent return of one ticker from the call to the latest close, on the split/dividend-adjusted series.
+
+    Returns (pct or None, how) with how in {"adjusted", "stored", "missing"}. "stored" means the adjusted series
+    had no close before the call, so the price stored in the log (unadjusted) was used instead; it is flagged
+    because a split since the call would distort it."""
+    if ticker not in px or px[ticker].dropna().empty:
+        return None, "missing"
+    s = px[ticker].dropna()
+    last = float(s.iloc[-1])
+    ref = entry_close(s, logged_at)
+    if np.isfinite(ref):
+        return pct(last, ref), "adjusted"
+    if stored is not None:
+        return pct(last, float(stored)), "stored"
+    return None, "missing"
+
+
+def call_returns(call, logged_at, px):
+    """Track-record numbers for one logged call (all in percent, before costs).
+
+    basket_since_pct: equal-weight mean over the basket tickers (benchmark excluded) of each ticker's return
+        from the last close before the call to its latest close, on adjusted prices (see since_return).
+    bench_since_pct:  the same for the benchmark, if the call has one.
+    excess_pct:       basket_since_pct - bench_since_pct (percentage points); None without a benchmark.
+    call_return_pct:  the return earned by following the call. Tilt calls (with a benchmark) are scored on the
+        excess, timing calls (IN/OUT, no benchmark) on the basket itself; then
+        IN / OVERWEIGHT -> +that number, OUT / UNDERWEIGHT -> -that number.
+        Positive means the call has been right so far.
+    missing: tickers with no price at all (left out of the mean, listed here instead of silently dropped).
+    stored_price_fallback: tickers whose return used the logged (unadjusted) price, see since_return."""
+    bp = call.get("basket_prices", {})
+    bench = call.get("benchmark")
+    rets, missing, fallback = [], [], []
+    for k, v in bp.items():
+        if k == bench:
+            continue
+        r, how = since_return(k, logged_at, v, px)
+        if how == "missing" or r is None:
+            missing.append(k)
+            continue
+        if how == "stored":
+            fallback.append(k)
+        rets.append(r)
+    basket = round(float(np.mean(rets)), 1) if rets else None
+    bench_ret = None
+    if bench:
+        bench_ret, how = since_return(bench, logged_at, bp.get(bench), px)
+        if how == "missing":
+            missing.append(bench)
+        elif how == "stored":
+            fallback.append(bench)
+    excess = round(basket - bench_ret, 1) if basket is not None and bench_ret is not None else None
+    scored = excess if bench else basket
+    sign = {"IN": 1, "OVERWEIGHT": 1, "OUT": -1, "UNDERWEIGHT": -1}.get(call["state"])
+    call_ret = round(sign * scored, 1) if scored is not None and sign is not None else None
+    return {"basket_since_pct": basket, "bench": bench, "bench_since_pct": bench_ret, "excess_pct": excess,
+            "call_return_pct": call_ret, "missing": missing, "stored_price_fallback": fallback}
+
+
+def track_record(path="backtest/signal_log.jsonl", px=None):
+    px = PX if px is None else px
+    entries = [json.loads(l) for l in open(path) if l.strip()]
     ok, prev = True, "0" * 64
     for e in entries:
         body = {k: v for k, v in e.items() if k != "hash"}
@@ -276,16 +393,9 @@ def track_record():
             if c["state"] == "NO CALL":
                 no_call += 1
                 continue
-            bp = c.get("basket_prices", {})
-            bench = c.get("benchmark")
-            rets = [pct(float(PX[k].dropna().iloc[-1]), v) for k, v in bp.items()
-                    if k != bench and k in PX and not PX[k].dropna().empty]
-            rets = [x for x in rets if x is not None]
-            basket_ret = round(float(np.mean(rets)), 1) if rets else None
-            bench_ret = pct(float(PX[bench].dropna().iloc[-1]), bp[bench]) if bench and bench in bp and bench in PX else None
             rows.append({"logged_at": e["logged_at"], "hash": e["hash"], "bottleneck": c["bottleneck"],
                          "model": c["model"], "state": c["state"], "C": c["C"], "M": c["M"],
-                         "basket_since_pct": basket_ret, "bench": bench, "bench_since_pct": bench_ret})
+                         **call_returns(c, e["logged_at"], px)})
     return {"chain_ok": ok, "entries": len(entries), "head": entries[-1]["hash"] if entries else None,
             "rows": rows[::-1], "no_call": no_call, "repo": "https://github.com/NiklavsD/bottleneck-signals"}
 
@@ -360,13 +470,16 @@ def context():
 
 def main():
     os.makedirs("web/data", exist_ok=True)
-    themes = [theme_block(t) for t in THEMES]
+    frozen = load_frozen()
+    DRIFT.clear()
+    themes = [theme_block(t, frozen) for t in THEMES]
     snap = {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
             "prices_asof": str(PX.index.max().date()), "themes": themes, "discovery": discovery(), "context": context(),
             "track": track_record(),
             "universes": [{"slug": "ai", "name": "AI compute", "tagline": "Wafers, memory, packaging, optics and the data-centre stack."},
                           {"slug": "power", "name": "Power", "tagline": "Turbines, transformers, grid and delivered megawatts."},
-                          {"slug": "robotics", "name": "Robotics", "tagline": "Actuators, sensing and automation."}]}
+                          {"slug": "robotics", "name": "Robotics", "tagline": "Actuators, sensing and automation."}],
+            "diagnostics": {"v6_drift": list(DRIFT)}}
     tmp = OUT + ".tmp"
     json.dump(snap, open(tmp, "w"), default=lambda o: None if isinstance(o, float) and not np.isfinite(o) else str(o))
     os.replace(tmp, OUT)
@@ -375,6 +488,8 @@ def main():
           f"track entries {snap['track']['entries']} chain_ok={snap['track']['chain_ok']}")
     for t in themes:
         print(f"  {t['slug']:30s} {t['status']:10s} call={t['call']} C={t['C']} M={t['M']}")
+    for d in DRIFT:
+        print(f"  v6 drift (display-only): {d['slug']} frozen pass={d['frozen_pass']} recomputed pass={d['recomputed_pass']}")
 
 
 if __name__ == "__main__":

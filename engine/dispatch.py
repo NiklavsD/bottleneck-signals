@@ -5,7 +5,11 @@ Compares web/data/snapshot.json with the state saved at the last run (data/dispa
   - discovery flags published since last run -> one "flag" alert per channel, filtered by the user's prefs
   - --digest                                 -> one monthly summary
 
-Every (channel, event_key) is recorded in the deliveries table, so re-running never double-sends.
+Every (channel, event_key) is recorded in the deliveries table, so re-running never double-sends:
+a "pending" row (ok IS NULL) is committed before the send and finalised in its own short transaction after it.
+No transaction is held across a network send, so the website can keep writing meanwhile. A pending row left by
+a crash is never re-sent automatically (the message may already have gone out); it is logged for a manual check.
+Channels with verified = 0 are skipped (the column is optional).
 The first run only records state; it doesn't alert anyone about history.
 
     python engine/dispatch.py [--digest] [--dry-run]
@@ -13,6 +17,7 @@ The first run only records state; it doesn't alert anyone about history.
 import argparse
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -71,25 +76,88 @@ def wants_theme(prefs, themes):
     return prefs["themes"] == ["*"] or bool(set(prefs["themes"]) & set(themes))
 
 
-def deliver(con, ch, key, msg, dry):
-    if con.execute("SELECT 1 FROM deliveries WHERE channel_id=? AND event_key=?", (ch["id"], key)).fetchone():
-        return "skip"
+def ensure_deliveries_ok_nullable(con):
+    """Idempotent migration: make deliveries.ok nullable so ok IS NULL can mean "pending".
+
+    web/app/db.py (owned by the web app) creates deliveries with `ok INTEGER NOT NULL`; dispatch needs a pending
+    state, so it relaxes the constraint here rather than in the shared schema. SQLite cannot drop NOT NULL in
+    place, so the table is rebuilt from its own CREATE statement with only that constraint removed, all rows
+    and any extra columns/indexes preserved. No-op once ok is nullable (or if the schema already says so)."""
+    cols = con.execute("PRAGMA table_info(deliveries)").fetchall()
+    if not any(c[1] == "ok" and c[3] for c in cols):
+        return False
+    sql = con.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='deliveries'").fetchone()[0]
+    new_sql, n = re.subn(r"(\bok\s+INTEGER)\s+NOT\s+NULL", r"\1", sql, count=1, flags=re.I)
+    if n != 1:
+        raise RuntimeError(f"cannot relax deliveries.ok NOT NULL in: {sql}")
+    extra = [r[0] for r in con.execute("SELECT sql FROM sqlite_master WHERE tbl_name='deliveries' "
+                                       "AND type IN ('index','trigger') AND sql IS NOT NULL")]
+    names = ", ".join(f'"{c[1]}"' for c in cols)
+    con.commit()
+    con.execute("BEGIN IMMEDIATE")
+    try:
+        if not any(c[1] == "ok" and c[3] for c in con.execute("PRAGMA table_info(deliveries)")):
+            con.rollback()  # another process migrated it meanwhile
+            return False
+        con.execute(re.sub(r"(?i)CREATE TABLE\s+(IF NOT EXISTS\s+)?\"?deliveries\"?", "CREATE TABLE deliveries_mig",
+                           new_sql, count=1))
+        con.execute(f"INSERT INTO deliveries_mig ({names}) SELECT {names} FROM deliveries")
+        con.execute("DROP TABLE deliveries")
+        con.execute("ALTER TABLE deliveries_mig RENAME TO deliveries")
+        for x in extra:
+            con.execute(x)
+        con.commit()
+    except Exception:
+        con.rollback()
+        raise
+    return True
+
+
+def channel_active(ch):
+    """Skip channels whose owner hasn't verified them yet; older schemas without `verified` count as active."""
+    return "verified" not in ch.keys() or ch["verified"] is None or bool(ch["verified"])
+
+
+def deliver(ch, key, msg, dry):
+    """Send one (channel, event_key) at most once. Each DB step is its own short transaction; the send is not."""
     if dry:
+        con = db.connect()
+        try:
+            row = con.execute("SELECT ok FROM deliveries WHERE channel_id=? AND event_key=?", (ch["id"], key)).fetchone()
+        finally:
+            con.close()
+        if row is not None:
+            return "pending" if row["ok"] is None else "skip"
         print(f"  [dry] ch{ch['id']} {ch['kind']} {key}: {msg.title}")
         return "dry"
-    res = notify.send(ch["kind"], json.loads(ch["target"]), msg)
-    con.execute("INSERT INTO deliveries(channel_id, event_key, sent_at, ok, error) VALUES (?,?,?,?,?)",
-                (ch["id"], key, db.now(), int(res.ok), None if res.ok else (res.error or "failed")[:200]))
-    con.execute("UPDATE channels SET last_ok_at=COALESCE(?, last_ok_at), last_error=? WHERE id=?",
-                (db.now() if res.ok else None, None if res.ok else (res.error or "failed")[:200], ch["id"]))
-    return "ok" if res.ok else "fail"
+    with db.tx() as con:  # claim: a pending row (ok NULL), committed before anything leaves the machine
+        claimed = con.execute("INSERT OR IGNORE INTO deliveries(channel_id, event_key, sent_at, ok, error) "
+                              "VALUES (?,?,?,NULL,NULL)", (ch["id"], key, db.now())).rowcount == 1
+        row = None if claimed else con.execute("SELECT ok FROM deliveries WHERE channel_id=? AND event_key=?",
+                                               (ch["id"], key)).fetchone()
+    if not claimed:
+        if row is not None and row["ok"] is None:
+            print(f"  ch{ch['id']} {key}: pending from previous run, skipped — check manually")
+            return "pending"
+        return "skip"
+    try:
+        res = notify.send(ch["kind"], json.loads(ch["target"]), msg)
+        ok, err = bool(res.ok), None if res.ok else (res.error or "failed")[:200]
+    except Exception as e:  # notify.send returns failures as data; this is a last resort
+        ok, err = False, f"send raised {type(e).__name__}"
+    with db.tx() as con:
+        con.execute("UPDATE deliveries SET ok=?, error=?, sent_at=? WHERE channel_id=? AND event_key=?",
+                    (int(ok), err, db.now(), ch["id"], key))
+        con.execute("UPDATE channels SET last_ok_at=COALESCE(?, last_ok_at), last_error=? WHERE id=?",
+                    (db.now() if ok else None, err, ch["id"]))
+    return "ok" if ok else "fail"
 
 
-def main():
+def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--digest", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
-    a = ap.parse_args()
+    a = ap.parse_args(argv)
     snap = json.loads(SNAPSHOT.read_text())
     names = {t["slug"]: t["name"] for t in snap["themes"]}
     first = not STATE.exists()
@@ -97,12 +165,19 @@ def main():
     calls = call_events(snap, state)
     flags = new_flags(snap, state)
     period = snap["discovery"]["latest_month"][:7]
-    stats = {"ok": 0, "fail": 0, "skip": 0, "dry": 0}
+    stats = {"ok": 0, "fail": 0, "skip": 0, "dry": 0, "pending": 0, "unverified": 0}
     if first:
         print("first run: recording state, no alerts sent")
     else:
         db.init()
-        with db.tx() as con:
+        if not a.dry_run:  # a dry run only reads the ledger, so it leaves the schema alone
+            con = db.connect()
+            try:
+                ensure_deliveries_ok_nullable(con)
+            finally:
+                con.close()
+        jobs = []
+        with db.tx() as con:  # short: read users, prefs and channels (get_prefs may insert defaults)
             users = con.execute("SELECT id FROM users").fetchall()
             for u in users:
                 p = db.get_prefs(con, u["id"])
@@ -129,10 +204,15 @@ def main():
                 if a.digest and p["ev_digest"]:
                     todo.append((f"digest:{period}", digest_msg(snap), False))
                 for ch in chans:
+                    if not channel_active(ch):
+                        stats["unverified"] += 1
+                        continue
                     for key, msg, is_call in todo:
                         if ch["kind"] == "sms" and not is_call:
                             continue  # SMS carries call changes only
-                        stats[deliver(con, ch, key, msg, a.dry_run)] += 1
+                        jobs.append((dict(ch), key, msg))
+        for ch, key, msg in jobs:  # outside any transaction: each delivery commits on its own
+            stats[deliver(ch, key, msg, a.dry_run)] += 1
     if not a.dry_run:
         state = {"calls": {t["slug"]: t["call"] for t in snap["themes"] if t.get("call")},
                  "flags_published_through": max([state.get("flags_published_through", "")] +
