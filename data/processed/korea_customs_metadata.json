@@ -2,11 +2,11 @@
   "source": "Korea Customs Service, 수출입무역통계, 수출입 실적 / 품목별",
   "homepage": "https://tradedata.go.kr/cts/index.do",
   "endpoint": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
-  "started_at_utc": "2026-09-23T16:03:12.170670+00:00",
-  "completed_at_utc": "2026-09-23T16:05:08.946506+00:00",
+  "started_at_utc": "2026-10-17T07:01:36.486047+00:00",
+  "completed_at_utc": "2026-10-17T07:02:49.499044+00:00",
   "first_month": "2013-01-01",
-  "last_month": "2026-08-01",
-  "rows": 656,
+  "last_month": "2026-09-01",
+  "rows": 660,
   "hs_codes": [
     "8542",
     "854232",
@@ -18,7 +18,7 @@
   "usd_multiplier": 1000,
   "precision_note": "Source values are rounded to whole thousand USD.",
   "reference_file": "/home/nik/projects/ai-market-analysis/data/processed/korea_chip_exports.csv",
-  "reference_sha256": "b49b31dbf71b69c071c53c6b61e544375d46b62c2329d8bc9718776d3abda26d",
+  "reference_sha256": "e00a411dcd707eb85269aee55af5843df62718e416e3d1c4035bbcc5d8a26329",
   "validation_period": [
     "2013-01-01",
     "2025-12-01"
@@ -26,33 +26,29 @@
   "validation_formula": "100 * abs(customs_usd - comtrade_usd) / comtrade_usd",
   "validation": {
     "8542": {
-      "months": 155,
-      "missing_reference_months": [
-        "2015-12-01"
-      ],
-      "median_absolute_pct_difference": 3.3481946965096604e-06,
-      "median_signed_pct_difference": -7.069681158210453e-07,
+      "months": 156,
+      "missing_reference_months": [],
+      "median_absolute_pct_difference": 3.3680789973556115e-06,
+      "median_signed_pct_difference": -7.276472138390711e-07,
       "max_absolute_pct_difference": 0.0006490068333949973,
       "max_absolute_difference_usd": 30416.0,
-      "mean_signed_difference_usd": -329.43870967741935,
-      "months_within_1000_usd": 150
+      "mean_signed_difference_usd": -328.19871794871796,
+      "months_within_1000_usd": 151
     },
     "854232": {
-      "months": 155,
-      "missing_reference_months": [
-        "2015-12-01"
-      ],
-      "median_absolute_pct_difference": 5.51410709372946e-06,
-      "median_signed_pct_difference": -3.002522860826241e-07,
+      "months": 156,
+      "missing_reference_months": [],
+      "median_absolute_pct_difference": 5.7310162446306574e-06,
+      "median_signed_pct_difference": -2.1479668476158657e-07,
       "max_absolute_pct_difference": 0.0027545118997405367,
       "max_absolute_difference_usd": 68053.0,
-      "mean_signed_difference_usd": -460.78709677419357,
-      "months_within_1000_usd": 154
+      "mean_signed_difference_usd": -456.1730769230769,
+      "months_within_1000_usd": 155
     }
   },
   "requests": [
     {
-      "fetched_at_utc": "2026-09-23T16:03:31.629837+00:00",
+      "fetched_at_utc": "2026-10-17T07:01:43.356672+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -76,7 +72,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:03:39.160496+00:00",
+      "fetched_at_utc": "2026-10-17T07:01:47.828325+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -100,7 +96,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:03:47.436676+00:00",
+      "fetched_at_utc": "2026-10-17T07:01:52.228558+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -124,7 +120,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:03:54.511087+00:00",
+      "fetched_at_utc": "2026-10-17T07:01:55.293185+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -148,7 +144,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:03:59.543542+00:00",
+      "fetched_at_utc": "2026-10-17T07:01:58.985611+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -172,7 +168,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:06.877146+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:00.019872+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -196,7 +192,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:14.734854+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:04.363866+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -220,7 +216,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:21.783044+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:08.605720+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -244,7 +240,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:26.219125+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:12.240299+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -268,7 +264,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:28.929646+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:14.637027+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -292,7 +288,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:31.682689+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:17.274050+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -316,7 +312,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:35.859802+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:19.949853+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -340,7 +336,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:39.830753+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:22.493465+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -364,14 +360,14 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:41.845952+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:24.606864+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
         "tradeKind": "ETS_MNK_1020000A",
         "priodKind": "MON",
         "priodFr": "202601",
-        "priodTo": "202608",
+        "priodTo": "202609",
         "statsBase": "acptDd",
         "ttwgTpcd": "1000",
         "selectPaging": "1",
@@ -384,11 +380,11 @@
         "subHsSgn": ""
       },
       "raw_file": "data/raw/korea_customs/8542_2026.json",
-      "sha256": "995132996d573edf823fcb265828b80dfedde5f93885b14263e4590cdbfb8008",
-      "observations": 8
+      "sha256": "f25dcf382cc787bb7fe4a12e0f3920b87e4d30a590ab1e250a88d6cd72247eae",
+      "observations": 9
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:42.411660+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:24.891393+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -412,7 +408,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:42.748902+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:25.493181+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -436,7 +432,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:43.609734+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:26.089633+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -460,7 +456,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:43.952751+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:26.696207+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -484,7 +480,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:44.561008+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:27.551362+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -508,7 +504,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:45.148139+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:27.886689+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -532,7 +528,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:46.015017+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:28.491116+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -556,7 +552,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:46.357168+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:29.091619+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -580,7 +576,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:46.951345+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:29.941461+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -604,7 +600,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:47.544001+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:30.297927+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -628,7 +624,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:48.417293+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:31.140889+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -652,7 +648,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:48.747458+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:31.488646+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -676,7 +672,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:49.613980+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:32.343067+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -700,14 +696,14 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:49.942784+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:32.689387+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
         "tradeKind": "ETS_MNK_1020000A",
         "priodKind": "MON",
         "priodFr": "202601",
-        "priodTo": "202608",
+        "priodTo": "202609",
         "statsBase": "acptDd",
         "ttwgTpcd": "1000",
         "selectPaging": "1",
@@ -720,11 +716,11 @@
         "subHsSgn": ""
       },
       "raw_file": "data/raw/korea_customs/854232_2026.json",
-      "sha256": "fb9c7c809860219d993ac6c7400c971ed356d2b2d333958eeef824fd96ece3ee",
-      "observations": 8
+      "sha256": "cf17394415c783b2be65fc88212c4cb452888c1b5a1354defbd8d5c982ae31c8",
+      "observations": 9
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:50.541358+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:33.283528+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -748,7 +744,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:51.413786+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:33.884055+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -772,7 +768,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:51.742083+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:34.740855+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -796,7 +792,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:52.611114+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:35.082161+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -820,7 +816,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:52.943873+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:35.937495+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -844,7 +840,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:55.100120+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:36.292459+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -868,7 +864,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:55.662121+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:37.141535+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -892,7 +888,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:56.999551+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:37.486961+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -916,7 +912,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:57.831053+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:38.092590+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -940,7 +936,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:58.387544+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:38.936642+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -964,7 +960,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:58.991473+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:39.292117+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -988,7 +984,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:04:59.594657+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:39.885330+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1012,7 +1008,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:00.193231+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:40.739611+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1036,14 +1032,14 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:00.788119+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:41.091501+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
         "tradeKind": "ETS_MNK_1020000A",
         "priodKind": "MON",
         "priodFr": "202601",
-        "priodTo": "202608",
+        "priodTo": "202609",
         "statsBase": "acptDd",
         "ttwgTpcd": "1000",
         "selectPaging": "1",
@@ -1056,11 +1052,11 @@
         "subHsSgn": ""
       },
       "raw_file": "data/raw/korea_customs/850423_2026.json",
-      "sha256": "53060e0e105125fe6b7628972fdf8e34013c6e1625e578f3cda01872fb9f0bb2",
-      "observations": 8
+      "sha256": "8623daa639928d66d79db711171968d421bfc4945d55c6ac6ea830b118517b43",
+      "observations": 9
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:01.402671+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:41.939117+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1084,7 +1080,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:01.995413+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:42.303892+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1108,7 +1104,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:02.600637+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:42.891429+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1132,7 +1128,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:03.200903+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:43.487993+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1156,7 +1152,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:03.800915+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:44.345768+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1180,7 +1176,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:04.400305+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:44.692226+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1204,7 +1200,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:05.008894+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:45.291565+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1228,7 +1224,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:05.604527+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:45.894157+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1252,7 +1248,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:06.205895+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:46.749890+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1276,7 +1272,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:06.545738+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:47.094494+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1300,7 +1296,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:07.405875+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:47.691423+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1324,7 +1320,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:08.002118+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:48.292360+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1348,7 +1344,7 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:08.604059+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:49.145565+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
@@ -1372,14 +1368,14 @@
       "observations": 12
     },
     {
-      "fetched_at_utc": "2026-09-23T16:05:08.933307+00:00",
+      "fetched_at_utc": "2026-10-17T07:02:49.492226+00:00",
       "method": "POST",
       "url": "https://tradedata.go.kr/cts/hmpg/retrieveTrade.do",
       "parameters": {
         "tradeKind": "ETS_MNK_1020000A",
         "priodKind": "MON",
         "priodFr": "202601",
-        "priodTo": "202608",
+        "priodTo": "202609",
         "statsBase": "acptDd",
         "ttwgTpcd": "1000",
         "selectPaging": "1",
@@ -1392,8 +1388,8 @@
         "subHsSgn": ""
       },
       "raw_file": "data/raw/korea_customs/850760_2026.json",
-      "sha256": "e722a584ff96f80b4c22a42b645b7067f0ce7abbc6670d83f766d821014aead7",
-      "observations": 8
+      "sha256": "cde75451c68e2c96fb1d277552ab1c37f550cea78e18517eebda21d37cd172cf",
+      "observations": 9
     }
   ]
 }

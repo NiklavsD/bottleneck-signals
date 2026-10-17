@@ -27,6 +27,7 @@ code,industry,market
 1236,Food,sii
 1702,Food,sii
 1737,Food,sii
+7780,Food,sii
 1301,Plastics,sii
 1303,Plastics,sii
 1304,Plastics,sii
@@ -649,6 +650,7 @@ code,industry,market
 6805,Electronic components,sii
 6834,Electronic components,sii
 6835,Electronic components,sii
+7788,Electronic components,sii
 8039,Electronic components,sii
 8046,Electronic components,sii
 8103,Electronic components,sii
@@ -895,6 +897,7 @@ code,industry,market
 6994,Green energy,sii
 7610,Green energy,sii
 7740,Green energy,sii
+7786,Green energy,sii
 8341,Green energy,sii
 8422,Green energy,sii
 8438,Green energy,sii
@@ -977,9 +980,6 @@ code,industry,market
 9942,Other,sii
 9944,Other,sii
 9945,Other,sii
-7780,Food,sii
-7788,Electronic components,sii
-7786,Green energy,sii
 7791,Food,sii
 7799,Biotech & medical,sii
 7803,Biotech & medical,sii
@@ -992,6 +992,7 @@ code,industry,market
 3717,Automotive,sii
 7812,Communications & networking,sii
 7835,Digital cloud,sii
+8908,"Oil, power & gas",otc
 1264,Food,otc
 1294,Food,otc
 1295,Food,otc
@@ -1621,12 +1622,12 @@ code,industry,market
 6983,Other electronics,otc
 7703,Other electronics,otc
 7728,Other electronics,otc
+7792,Other electronics,otc
 8047,Other electronics,otc
 8085,Other electronics,otc
 8092,Other electronics,otc
 8183,Other electronics,otc
 8431,Other electronics,otc
-8908,"Oil, power & gas",otc
 8917,"Oil, power & gas",otc
 8927,"Oil, power & gas",otc
 8931,"Oil, power & gas",otc
@@ -1838,12 +1839,11 @@ code,industry,market
 6195,Home & living,otc
 6728,Home & living,otc
 6968,Home & living,otc
+7782,Home & living,otc
+7794,Home & living,otc
 8066,Home & living,otc
 8433,Home & living,otc
 8941,Home & living,otc
-7792,Other electronics,otc
-7782,Home & living,otc
-7794,Home & living,otc
 7814,Biotech & medical,otc
 7810,Semiconductors,otc
 7820,Green energy,otc
@@ -1855,3 +1855,5 @@ code,industry,market
 7839,Digital cloud,otc
 7856,Semiconductors,otc
 3718,Optoelectronics,otc
+7806,Food,otc
+6604,Electrical machinery,otc
